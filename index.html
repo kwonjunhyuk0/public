@@ -74,7 +74,7 @@ td.a{text-align:right;color:#9fb0bc}
   <div class="lbl">실 구성</div>
   <table id="rt"></table>
 </div>
-<div class="panel" id="hint">드래그 회전 · 휠 확대 · 우클릭 드래그로 이동 · 가구 클릭 시 정보</div>
+<div class="panel" id="hint">드래그 회전 · 휠 확대 · 우클릭(또는 Shift) 드래그로 이동 · 가구 클릭 시 정보</div>
 <div id="tip"></div>
 
 <script>
@@ -281,17 +281,29 @@ function apply(){
                       tgt.z+rad*Math.sin(ph)*Math.sin(th));
   camera.lookAt(tgt);
 }
+/* 화면 기준 방향 벡터 (수평면 투영)
+   right   = ( sin th, 0, -cos th)   화면 오른쪽
+   forward = (-cos th, 0, -sin th)   카메라 -> 대상 (화면 안쪽) */
+const RS = () => 2*Math.PI/innerHeight;          // 화면 높이 1회 드래그 = 360°
+const PS = () => 2*Math.tan(22.5*Math.PI/180)*rad/innerHeight;   // 1px 당 실제 거리
+
+/* 끌면 모형이 손가락을 따라온다 (three.js OrbitControls 와 동일한 감각) */
+function rotateBy(dx,dy){ th += dx*RS(); ph -= dy*RS(); apply(); }
+function panBy(dx,dy){
+  const s=PS(), st=Math.sin(th), ct=Math.cos(th);
+  tgt.x += -s*(dx*st + dy*ct);
+  tgt.z +=  s*(dx*ct - dy*st);
+  apply();
+}
+
 let drag=null,px=0,py=0,nTouch=0;
 cv.addEventListener('pointerdown',e=>{drag=(e.button===2||e.shiftKey)?'pan':'rot';px=e.clientX;py=e.clientY;cv.setPointerCapture(e.pointerId)});
 cv.addEventListener('pointerup',()=>drag=null);
 cv.addEventListener('contextmenu',e=>e.preventDefault());
 cv.addEventListener('pointermove',e=>{
-  if(!drag || nTouch>=2) return; const dx=e.clientX-px, dy=e.clientY-py; px=e.clientX; py=e.clientY;
-  if(drag==='rot'){ th-=dx*.006; ph-=dy*.006; }
-  else{ const s=rad*.0016;
-        tgt.x-= (Math.cos(th)*dx*-s + Math.sin(th)*dy*-s);
-        tgt.z-= (Math.sin(th)*dx*-s - Math.cos(th)*dy*-s); }
-  apply();
+  if(!drag || nTouch>=2) return;
+  const dx=e.clientX-px, dy=e.clientY-py; px=e.clientX; py=e.clientY;
+  (drag==='rot'? rotateBy : panBy)(dx,dy);
 });
 cv.addEventListener('wheel',e=>{e.preventDefault(); rad*=Math.pow(1.0016,e.deltaY); apply()},{passive:false});
 
@@ -305,11 +317,9 @@ cv.addEventListener('touchmove',e=>{
   if(e.touches.length!==2) return;
   e.preventDefault();
   const d=tDist(e.touches), c=tMid(e.touches);
-  if(pD>0) rad*=pD/d;
-  const dx=c.x-pC.x, dy=c.y-pC.y, s2=rad*.0016;
-  tgt.x-= (Math.cos(th)*dx*-s2 + Math.sin(th)*dy*-s2);
-  tgt.z-= (Math.sin(th)*dx*-s2 - Math.cos(th)*dy*-s2);
-  pD=d; pC=c; apply();
+  if(pD>0) rad=Math.max(2.2,Math.min(60,rad*pD/d));
+  panBy(c.x-pC.x, c.y-pC.y);
+  pD=d; pC=c;
 },{passive:false});
 cv.addEventListener('touchend',e=>{ nTouch=e.touches.length; if(nTouch<2) pD=0; },{passive:true});
 
