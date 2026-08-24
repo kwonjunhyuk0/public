@@ -48,7 +48,6 @@ textarea{min-height:72px;resize:vertical}
 .consent h3{font-size:13.5px;font-weight:800;margin-bottom:7px}
 .consent h3 em{font-style:normal;font-size:11px;padding:2px 7px;border-radius:5px;margin-left:6px;
   background:var(--warn);color:#fff;vertical-align:1px}
-.consent h3 em.opt{background:#8b939c}
 .consent p,.consent li{font-size:12.5px;color:#414a52;line-height:1.65}
 .consent ul{margin:5px 0 0 17px}
 .ck{display:flex;gap:10px;align-items:flex-start;margin-top:10px;cursor:pointer;
@@ -104,7 +103,7 @@ button.go:disabled{background:#c3ccd3}
     <div><label class="f">연락처 *</label><input type="tel" id="tel" placeholder="010-0000-0000"></div>
   </div>
   <div class="row2">
-    <div><label class="f">출생연도 *</label><input type="number" id="birth" placeholder="1990" min="1930" max="2026"></div>
+    <div><label class="f">생년월일 *</label><input type="date" id="birth" min="1930-01-01"></div>
     <div><label class="f">거주 / 소속</label>
       <select id="area">
         <option value="">선택</option>
@@ -241,7 +240,7 @@ button.go:disabled{background:#c3ccd3}
 
   <div class="consent req">
     <h3>② 개인정보 수집·이용 <em>필수</em></h3>
-    <p><b>항목</b> 성명, 연락처, 출생연도, 거주·소속 구분, 동반 방문 유형, 시술이력 및 디자인 기록<br>
+    <p><b>항목</b> 성명, 연락처, 생년월일, 거주·소속 구분, 동반 방문 유형, 시술이력 및 디자인 기록<br>
        <b>목적</b> 예약 확인, 시술 기록, 재방문 시 동일 디자인 재현, 시술 관련 안내<br>
        <b>보유기간</b> 최종 방문일로부터 <b>3년</b> · 이후 지체 없이 파기</p>
     <div class="ck" data-req="1"><i></i><span>개인정보 수집·이용에 동의합니다</span></div>
@@ -255,14 +254,6 @@ button.go:disabled{background:#c3ccd3}
        <b>보유기간</b> 최종 방문일로부터 <b>3년</b><br>
        동의하지 않으실 수 있으나, 그 경우 <b>안전 확인이 어려워 시술이 제한될 수 있습니다.</b></p>
     <div class="ck" data-req="1"><i></i><span>건강정보 수집·이용에 동의합니다</span></div>
-  </div>
-
-  <div class="consent">
-    <h3>④ 마케팅 안내 수신 <em class="opt">선택</em></h3>
-    <p>재방문 시기 알림, 이벤트·혜택 안내를 문자 또는 카카오톡으로 보내드립니다.
-       동의하지 않으셔도 시술 이용에 <b>아무런 제한이 없습니다.</b>
-       언제든 <b>수신거부</b>를 말씀하시거나 메시지 내 거부 링크로 해지하실 수 있습니다.</p>
-    <div class="ck"><i></i><span>마케팅 안내 수신에 동의합니다 (선택)</span></div>
   </div>
 
   <label class="f">서명 *</label>
@@ -312,11 +303,20 @@ $('#dz').addEventListener('click',e=>{
 });
 /* 동의 체크 */
 $$('.ck').forEach(k=>k.addEventListener('click',()=>{k.classList.toggle('on');prog()}));
-/* 미성년 안내 */
-$('#birth').addEventListener('input',e=>{
-  const y=+e.target.value, age=2026-y;
-  $('#minorNote').style.display=(y>1900&&age<14)?'block':'none'; prog();
-});
+/* 미성년 안내 — 생년월일 기준 만 나이 */
+{const t=new Date(),z=n=>String(n).padStart(2,'0');   // toISOString 은 UTC 라 오전에 하루 밀린다
+ $('#birth').max=t.getFullYear()+'-'+z(t.getMonth()+1)+'-'+z(t.getDate());}
+function ageOf(v){
+  const d=new Date(v+'T00:00:00'); if(isNaN(d)) return null;
+  const t=new Date(); let a=t.getFullYear()-d.getFullYear();
+  const m=t.getMonth()-d.getMonth();
+  if(m<0 || (m===0 && t.getDate()<d.getDate())) a--;
+  return a;
+}
+['input','change'].forEach(ev=>$('#birth').addEventListener(ev,e=>{
+  const a=ageOf(e.target.value);
+  $('#minorNote').style.display=(a!==null && a>=0 && a<14)?'block':'none'; prog();
+}));
 ['#name','#tel','#area'].forEach(s=>$(s).addEventListener('input',prog));
 
 /* 서명 */
@@ -377,18 +377,16 @@ function collect(){
     preg: preg ? pick('preg') : '',
     docnote: preg ? $('#docnote').value.trim() : '',
     agreeTx:'동의', agreePI:'동의', agreeHealth:'동의',
-    agreeMkt: $$('.ck:not([data-req])')[0].classList.contains('on')?'동의':'미동의',
     signature: cv.toDataURL('image/png')
   };
 }
 function showSummary(v){
-  const rows=[['성함',v.name],['연락처',v.tel],['출생연도',v.birth],['거주·소속',v.area||'—'],
+  const rows=[['성함',v.name],['연락처',v.tel],['생년월일',v.birth],['거주·소속',v.area||'—'],
     ['동반 방문',v.party],['브라질리언',(v.brazilian||'—')+' / '+v.brOpt],
     ['얼굴',v.face],['바디',v.body],['속눈썹·반영구',v.etc],
     ['신경 쓰이는 점',v.worry||'—'],['안전 확인',v.health],['상세',v.hdetail||'—'],
     ['최근 제모',v.shave||'—']];
   if(v.week||v.preg) rows.push(['임신 주차',(v.week||'—')+'주'],['임산부 특이',v.preg],['의사 주의사항',v.docnote||'—']);
-  rows.push(['마케팅 수신',v.agreeMkt]);
   $('#sum').innerHTML=rows.map(r=>'<div><b>'+r[0]+'</b> '+String(r[1]).replace(/</g,'&lt;')+'</div>').join('')
     +'<div style="margin-top:14px"><b>서명</b><br><img src="'+v.signature+'" style="height:70px;margin-top:5px"></div>'
     +'<div style="margin-top:10px;font-size:12px;color:#6f7a85">접수번호 '+v.cid+' &middot; 작성일 '+new Date().toLocaleString('ko-KR')+'</div>';
