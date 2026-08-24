@@ -23,6 +23,15 @@ h2 b{width:23px;height:23px;background:var(--ac);color:#fff;border-radius:7px;fo
      display:flex;align-items:center;justify-content:center;flex:none}
 .hint{font-size:12.5px;color:var(--sub);margin-bottom:14px}
 label.f{display:block;font-size:13px;font-weight:700;margin:14px 0 6px}
+.sl{font-size:12px;font-weight:700;color:var(--sub);margin:10px 0 4px}
+.dd{width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;
+  padding:12px 13px;border:1.5px solid var(--line);border-radius:10px;font-size:16px;
+  font-family:inherit;background:#fdfcfa;color:inherit;text-align:left;cursor:pointer}
+.dd.has{border-color:var(--ac);background:var(--acbg)}
+.dd i{width:8px;height:8px;border:solid #8b939c;border-width:0 2px 2px 0;flex:none;
+  transform:rotate(45deg) translateY(-3px);transition:transform .18s}
+.dd.open i{transform:rotate(-135deg) translateY(2px)}
+.ddp{margin-top:2px}
 input[type=text],input[type=tel],input[type=number],textarea,select{
   width:100%;padding:12px 13px;border:1.5px solid var(--line);border-radius:10px;
   font-size:16px;font-family:inherit;background:#fdfcfa}
@@ -41,7 +50,7 @@ textarea{min-height:72px;resize:vertical}
 .dz.on{border-color:var(--ac);background:var(--acbg)}
 .dz svg{width:100%;height:78px;display:block}
 .dz .nm{font-size:13.5px;font-weight:700;margin-top:6px}
-.dz .ds{font-size:11px;color:var(--sub);line-height:1.4}
+.dz .ds{font-size:11px;color:var(--sub);line-height:1.4;word-break:keep-all}
 
 .consent{border:1.5px solid var(--line);border-radius:12px;padding:14px;margin-bottom:11px;background:#fdfcfa}
 .consent.req{border-color:#d8c9a8;background:#fdfaf2}
@@ -103,7 +112,9 @@ button.go:disabled{background:#c3ccd3}
     <div><label class="f">연락처 *</label><input type="tel" id="tel" placeholder="010-0000-0000"></div>
   </div>
   <div class="row2">
-    <div><label class="f">생년월일 *</label><input type="date" id="birth" min="1930-01-01"></div>
+    <div><label class="f">생년월일 *</label>
+      <input type="tel" id="birth" inputmode="numeric" maxlength="6" placeholder="예: 900503">
+      <div class="hint" id="birthEcho" style="margin:6px 0 0"></div></div>
     <div><label class="f">거주 / 소속</label>
       <select id="area">
         <option value="">선택</option>
@@ -117,6 +128,43 @@ button.go:disabled{background:#c3ccd3}
   <div class="note" id="minorNote" style="display:none">
     만 14세 미만은 법정대리인 동의가 필요합니다. 원장에게 알려주세요.
   </div>
+  <label class="f">시술 목적</label>
+  <select id="purpose">
+    <option value="">선택</option>
+    <option>위생</option>
+    <option>수영 / 운동 / 촬영 / 여행</option>
+    <option>데이트 / 커플</option>
+    <option>임신 / 출산준비</option>
+    <option>미용</option>
+    <option>주변 추천</option>
+    <option>지인 소개</option>
+  </select>
+  <div id="referSec" style="display:none">
+    <div class="row2" style="margin-top:10px">
+      <div><label class="f" style="margin-top:0">소개해주신 분 성함</label>
+        <input type="text" id="refName"></div>
+      <div><label class="f" style="margin-top:0">연락처</label>
+        <input type="tel" id="refTel" placeholder="010-0000-0000"></div>
+    </div>
+    <div class="hint" style="margin:8px 0 0">소개 적립 확인에만 사용합니다.</div>
+  </div>
+
+  <label class="f">관심있는 시술</label>
+  <div class="hint" style="margin:-2px 0 6px">오늘 받지는 않지만 관심있는 시술을 체크해주세요.
+    <b>선택 사항입니다.</b></div>
+  <button type="button" class="dd" id="ddBtn" aria-expanded="false">
+    <span id="ddLabel">선택 안 함</span><i></i>
+  </button>
+  <div class="ddp" id="ddPanel" hidden>
+    <div class="chips" data-g="interest">
+      <div class="chip">브라질리언 왁싱</div><div class="chip">페이스 왁싱</div>
+      <div class="chip">바디 왁싱</div><div class="chip">케어 프로그램</div>
+      <div class="chip">속눈썹 연장</div><div class="chip">속눈썹 펌</div>
+      <div class="chip">브로우리프트</div><div class="chip">눈썹 문신</div>
+      <div class="chip">아이라인/헤어라인</div><div class="chip">상담 희망</div>
+    </div>
+  </div>
+
   <label class="f">오늘 함께 오셨나요?</label>
   <div class="chips" data-g="party">
     <div class="chip">혼자</div><div class="chip">부부</div><div class="chip">커플</div>
@@ -124,9 +172,34 @@ button.go:disabled{background:#c3ccd3}
   </div>
   <div class="hint" style="margin:8px 0 0">동반 적립 처리에만 사용하며,
     <b>혼인 여부 등은 따로 기록하거나 보관하지 않습니다.</b></div>
+
+  <label class="f">방문 편하신 시간대</label>
+  <div class="chips" data-g="visit">
+    <div class="chip">평일</div><div class="chip">주말</div><div class="chip">오전</div>
+    <div class="chip">오후</div><div class="chip">저녁</div><div class="chip">교대근무</div>
+    <div class="chip">일정하지 않음</div><div class="chip">기타</div>
+  </div>
+  <div class="hint" style="margin:8px 0 0">다음 예약을 잡을 때 참고합니다. 여러 개 선택하셔도 됩니다.</div>
+
+  <label class="f">받아보신 적 있는 시술</label>
+  <div class="hint" style="margin:-2px 0 0">경험이 있는 항목만 눌러주세요.
+    처음이시면 <b>비워두셔도 됩니다.</b></div>
+  <div class="sl">왁싱</div>
+  <div class="chips" data-g="exWax">
+    <div class="chip">브라질리언</div><div class="chip">페이스</div><div class="chip">바디</div>
+  </div>
+  <div class="sl">속눈썹</div>
+  <div class="chips" data-g="exLash">
+    <div class="chip">속눈썹연장</div><div class="chip">속눈썹펌</div>
+  </div>
+  <div class="sl">반영구시술</div>
+  <div class="chips" data-g="exSemi">
+    <div class="chip">눈썹문신</div><div class="chip">아이라인</div><div class="chip">헤어라인</div>
+    <div class="chip">입술</div><div class="chip">기타</div>
+  </div>
 </section>
 
-<section>
+<section id="svc">
   <h2><b>2</b>오늘 받으실 시술</h2>
   <div class="hint">해당하는 항목을 눌러주세요. 여러 개 선택할 수 있습니다.</div>
 
@@ -136,43 +209,99 @@ button.go:disabled{background:#c3ccd3}
       <svg viewBox="0 0 90 78"><defs><pattern id="h1" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#2f7d95" stroke-width="2.4"/></pattern></defs>
         <path d="M18 10 H72 L58 46 Q45 66 32 46 Z" fill="none" stroke="#c3ccd3" stroke-width="2" stroke-dasharray="4 3"/>
         <path d="M25 14 H65 L54 44 Q45 60 36 44 Z" fill="url(#h1)" opacity=".85"/></svg>
-      <div class="nm">비키니</div><div class="ds">옆 라인만 정리<br>중앙은 남김</div>
+      <div class="nm">비키니</div><div class="ds">길이 정리 없는 간단한 라인 제모</div>
     </div>
-    <div class="dz" data-v="내추럴">
+    <div class="dz" data-v="디자인">
       <svg viewBox="0 0 90 78"><defs><pattern id="h2" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#2f7d95" stroke-width="2.4"/></pattern></defs>
         <path d="M18 10 H72 L58 46 Q45 66 32 46 Z" fill="none" stroke="#c3ccd3" stroke-width="2" stroke-dasharray="4 3"/>
         <rect x="38" y="13" width="14" height="30" rx="5" fill="url(#h2)" opacity=".85"/></svg>
-      <div class="nm">내추럴</div><div class="ds">중앙에 좁게<br>남기는 디자인</div>
+      <div class="nm">디자인</div><div class="ds">Y존 정리 후 고환, 대음순, 항문 제모</div>
     </div>
     <div class="dz" data-v="올누드">
       <svg viewBox="0 0 90 78">
         <path d="M18 10 H72 L58 46 Q45 66 32 46 Z" fill="none" stroke="#c3ccd3" stroke-width="2" stroke-dasharray="4 3"/>
         <text x="45" y="36" text-anchor="middle" font-size="12" fill="#8b939c" font-family="sans-serif">전체 제거</text></svg>
-      <div class="nm">올누드</div><div class="ds">모두 제거</div>
+      <div class="nm">올누드</div><div class="ds">Y존 전체와 고환, 대음순, 항문 제모</div>
     </div>
   </div>
   <div class="chips" style="margin-top:10px" data-g="br2">
-    <div class="chip">항문 포함</div><div class="chip">슈가링으로</div><div class="chip">브라질리언 안 함</div>
+    <div class="chip">항문 안할게요</div><div class="chip">항문만 시술</div><div class="chip">슈가링으로 변경</div>
   </div>
 
-  <label class="f">얼굴</label>
+  <label class="f">페이스</label>
   <div class="chips" data-g="face">
     <div class="chip">헤어라인</div><div class="chip">이마</div><div class="chip">눈썹</div>
     <div class="chip">인중</div><div class="chip">턱</div><div class="chip">구레나룻</div>
-    <div class="chip">콧털</div><div class="chip">뒷목</div><div class="chip">풀페이스</div>
+    <div class="chip">콧털</div><div class="chip">풀페이스</div>
   </div>
 
   <label class="f">바디</label>
   <div class="chips" data-g="body">
     <div class="chip">겨드랑이</div><div class="chip">팔 전체</div><div class="chip">팔 반</div>
     <div class="chip">다리 전체</div><div class="chip">다리 반</div><div class="chip">배</div>
-    <div class="chip">가슴</div><div class="chip">엉덩이</div><div class="chip">손·발</div>
+    <div class="chip">등</div><div class="chip">가슴</div><div class="chip">엉덩이</div>
+    <div class="chip">뒷목</div><div class="chip">손·발</div>
   </div>
 
-  <label class="f">속눈썹 · 반영구</label>
+  <label class="f">집중케어를 원하시는 부분이 있나요?</label>
+  <div class="chips" data-g="care">
+    <div class="chip">붉은기</div><div class="chip">통증</div><div class="chip">열감</div>
+    <div class="chip">빠른진정</div><div class="chip">미백</div><div class="chip">탄력</div>
+    <div class="chip">보습</div><div class="chip">인그로운</div>
+  </div>
+
+  <label class="f">속눈썹 연장</label>
+  <div class="sl">컬</div>
+  <div class="designs" id="lz">
+    <div class="dz" data-v="JC컬">
+      <svg viewBox="0 0 90 78">
+        <path d="M7 64 Q25 72 45 69" fill="none" stroke="#c3ccd3" stroke-width="3.4" stroke-linecap="round"/>
+        <path d="M19 64 C36 55 54 46 72 39" fill="none" stroke="#2f7d95" stroke-width="3.2" stroke-linecap="round"/></svg>
+      <div class="nm">JC컬</div><div class="ds">완만하게 올린 자연스러운 컬</div>
+    </div>
+    <div class="dz" data-v="C컬">
+      <svg viewBox="0 0 90 78">
+        <path d="M7 64 Q25 72 45 69" fill="none" stroke="#c3ccd3" stroke-width="3.4" stroke-linecap="round"/>
+        <path d="M19 64 C41 60 60 52 65 30" fill="none" stroke="#2f7d95" stroke-width="3.2" stroke-linecap="round"/></svg>
+      <div class="nm">C컬</div><div class="ds">JC컬보다 더 올려 또렷한 컬</div>
+    </div>
+    <div class="dz" data-v="특수컬">
+      <svg viewBox="0 0 90 78">
+        <path d="M7 64 Q25 72 45 69" fill="none" stroke="#c3ccd3" stroke-width="3.4" stroke-linecap="round"/>
+        <path d="M19 64 C45 64 66 55 55 24" fill="none" stroke="#2f7d95" stroke-width="3.2" stroke-linecap="round"/></svg>
+      <div class="nm">특수컬 <span style="font-weight:600">CC·LC</span></div><div class="ds">처진 눈매·짧은 속눈썹 보완</div>
+    </div>
+  </div>
+  <div class="sl">길이</div>
+  <div class="chips" data-g="lashLen">
+    <div class="chip">8mm</div><div class="chip">9mm</div><div class="chip">10mm</div>
+    <div class="chip">11mm</div><div class="chip">12mm</div><div class="chip">13mm</div>
+  </div>
+  <div class="sl">숱</div>
+  <div class="chips" data-g="lashVol">
+    <div class="chip">자연스럽게</div><div class="chip">풍성하게</div>
+  </div>
+  <div class="sl">모질</div>
+  <div class="chips" data-g="lashFib">
+    <div class="chip">베이직 클래식</div><div class="chip">프리미엄 플랫</div>
+    <div class="chip">프리미엄 슬림 플랫</div><div class="chip">내추럴 브라운</div>
+    <div class="chip">언더래쉬</div>
+  </div>
+
+  <label class="f">속눈썹 펌</label>
+  <div class="sl">펌 종류</div>
+  <div class="chips" data-g="permType">
+    <div class="chip">베이직펌</div><div class="chip">블랙/초코틴팅펌</div>
+    <div class="chip">언더래쉬펌</div><div class="chip">브로우리프트펌</div>
+  </div>
+  <div class="sl">추가시술</div>
+  <div class="chips" data-g="permAdd">
+    <div class="chip">클리닉 추가</div><div class="chip">노글루 추가</div>
+  </div>
+
+  <label class="f">반영구 · 기타</label>
   <div class="chips" data-g="etc">
-    <div class="chip">속눈썹 연장</div><div class="chip">속눈썹 펌</div>
-    <div class="chip">브로우리프트</div><div class="chip">눈썹 반영구</div><div class="chip">상담 희망</div>
+    <div class="chip">눈썹 반영구</div><div class="chip">상담 희망</div>
   </div>
 
   <label class="f">특히 신경 쓰이는 점이 있으신가요?</label>
@@ -240,7 +369,8 @@ button.go:disabled{background:#c3ccd3}
 
   <div class="consent req">
     <h3>② 개인정보 수집·이용 <em>필수</em></h3>
-    <p><b>항목</b> 성명, 연락처, 생년월일, 거주·소속 구분, 동반 방문 유형, 시술이력 및 디자인 기록<br>
+    <p><b>항목</b> 성명, 연락처, 생년월일, 거주·소속 구분, 동반 방문 유형, 시술이력 및 디자인 기록,
+       소개자 성함·연락처(지인 소개를 선택하신 경우)<br>
        <b>목적</b> 예약 확인, 시술 기록, 재방문 시 동일 디자인 재현, 시술 관련 안내<br>
        <b>보유기간</b> 최종 방문일로부터 <b>3년</b> · 이후 지체 없이 파기</p>
     <div class="ck" data-req="1"><i></i><span>개인정보 수집·이용에 동의합니다</span></div>
@@ -296,28 +426,60 @@ $$('.chips').forEach(g=>g.addEventListener('click',e=>{
   } else c.classList.toggle('on');
   prog();
 }));
-/* 디자인 단일선택 */
-$('#dz').addEventListener('click',e=>{
-  const d=e.target.closest('.dz'); if(!d)return;
-  $$('#dz .dz').forEach(x=>x.classList.remove('on')); d.classList.add('on'); prog();
-});
+/* 카드 단일선택 — 같은 카드를 다시 누르면 해제 */
+$$('.designs').forEach(g=>g.addEventListener('click',e=>{
+  const d=e.target.closest('.dz'); if(!d || !g.contains(d)) return;
+  const was=d.classList.contains('on');
+  [...g.querySelectorAll('.dz')].forEach(x=>x.classList.remove('on'));
+  if(!was) d.classList.add('on');
+  prog();
+}));
 /* 동의 체크 */
 $$('.ck').forEach(k=>k.addEventListener('click',()=>{k.classList.toggle('on');prog()}));
-/* 미성년 안내 — 생년월일 기준 만 나이 */
-{const t=new Date(),z=n=>String(n).padStart(2,'0');   // toISOString 은 UTC 라 오전에 하루 밀린다
- $('#birth').max=t.getFullYear()+'-'+z(t.getMonth()+1)+'-'+z(t.getDate());}
-function ageOf(v){
-  const d=new Date(v+'T00:00:00'); if(isNaN(d)) return null;
-  const t=new Date(); let a=t.getFullYear()-d.getFullYear();
-  const m=t.getMonth()-d.getMonth();
-  if(m<0 || (m===0 && t.getDate()<d.getDate())) a--;
-  return a;
+/* 생년월일 — 숫자 6자리(YYMMDD). 100 이하 두 자리라 세기를 추정한다 */
+function parseBirth(v){
+  if(!/^\d{6}$/.test(v)) return null;
+  const yy=+v.slice(0,2), mm=+v.slice(2,4), dd=+v.slice(4,6);
+  if(mm<1||mm>12||dd<1||dd>31) return null;
+  const t=new Date(), ok=(y)=>{ const d=new Date(y,mm-1,dd);
+    return (d.getMonth()===mm-1 && d.getDate()===dd) ? d : null; };
+  let y=2000+yy, d=ok(y);
+  if(!d) return null;
+  if(d>t){ y=1900+yy; d=ok(y); if(!d) return null; }   // 아직 오지 않은 날짜면 19xx
+  let a=t.getFullYear()-y;
+  if(t.getMonth()<mm-1 || (t.getMonth()===mm-1 && t.getDate()<dd)) a--;
+  const z=n=>String(n).padStart(2,'0');
+  return { iso:y+'-'+z(mm)+'-'+z(dd), age:a, label:y+'년 '+mm+'월 '+dd+'일 · 만 '+a+'세' };
 }
-['input','change'].forEach(ev=>$('#birth').addEventListener(ev,e=>{
-  const a=ageOf(e.target.value);
-  $('#minorNote').style.display=(a!==null && a>=0 && a<14)?'block':'none'; prog();
-}));
+$('#birth').addEventListener('input',e=>{
+  e.target.value=e.target.value.replace(/\D/g,'').slice(0,6);
+  const b=parseBirth(e.target.value), full=e.target.value.length===6;
+  $('#birthEcho').textContent = b ? b.label : (full ? '날짜를 다시 확인해주세요' : '');
+  $('#birthEcho').style.color = (!b && full) ? '#c0392b' : '';
+  $('#minorNote').style.display = (b && b.age<14) ? 'block' : 'none';
+  prog();
+});
 ['#name','#tel','#area'].forEach(s=>$(s).addEventListener('input',prog));
+
+/* 시술 목적 — 지인 소개일 때만 소개자 입력칸 */
+$('#purpose').addEventListener('change',()=>{
+  $('#referSec').style.display = $('#purpose').value==='지인 소개' ? 'block' : 'none';
+  prog();
+});
+
+/* 관심있는 시술 — 접히는 드롭다운 안의 다중 선택 */
+$('#ddBtn').addEventListener('click',()=>{
+  const open=$('#ddPanel').hasAttribute('hidden');
+  if(open) $('#ddPanel').removeAttribute('hidden'); else $('#ddPanel').setAttribute('hidden','');
+  $('#ddBtn').classList.toggle('open',open);
+  $('#ddBtn').setAttribute('aria-expanded',String(open));
+});
+function ddSync(){
+  const on=$$('.chips[data-g="interest"] .chip.on').map(x=>x.textContent);
+  $('#ddLabel').textContent = !on.length ? '선택 안 함'
+    : on.length===1 ? on[0] : on[0]+' 외 '+(on.length-1)+'개';
+  $('#ddBtn').classList.toggle('has', on.length>0);
+}
 
 /* 서명 */
 const cv=$('#sig'), cx=cv.getContext('2d'); let drew=false,down=false;
@@ -333,8 +495,8 @@ $('#clr').onclick=()=>{cx.clearRect(0,0,cv.width,cv.height);drew=false;$('#sigph
 
 /* 진행률 */
 function reqOk(){
-  return [$('#name').value.trim()!=='', $('#tel').value.trim()!=='', $('#birth').value!=='',
-    ($$('#dz .dz.on').length>0 || $$('.chips .chip.on').length>0),
+  return [$('#name').value.trim()!=='', $('#tel').value.trim()!=='', parseBirth($('#birth').value)!==null,
+    ($$('#svc .dz.on').length>0 || $$('#svc .chips .chip.on').length>0),
     $$('#health .chip.on').length>0,
     $$('.ck[data-req].on').length===3, drew];
 }
@@ -349,6 +511,7 @@ function prog(){
   if(!o[5])miss.push('필수 동의');
   if(!o[6])miss.push('서명');
   $('#msg').textContent=miss.length?('남은 항목: '+miss.join(' · ')):'';
+  ddSync();
   $('#submit').disabled=miss.length>0;
 }
 const pick=g=>$$('.chips[data-g="'+g+'"] .chip.on').map(x=>x.textContent).join(', ')||'—';
@@ -361,15 +524,24 @@ function makeCid(){
         +p(Math.floor(Math.random()*100));
 }
 function collect(){
-  const d=$('#dz .dz.on');
+  const d=$('#dz .dz.on'), lc=$('#lz .dz.on');
   const preg = $('#pregSec').style.display==='block';
   return {
     token:TOKEN, cid:curCid,
     name:$('#name').value.trim(), tel:$('#tel').value.trim(),
-    birth:$('#birth').value, area:$('#area').value||'',
-    party:pick('party'),
+    birth:(parseBirth($('#birth').value)||{}).iso||'', area:$('#area').value||'',
+    purpose:$('#purpose').value||'',
+    refName: $('#purpose').value==='지인 소개' ? $('#refName').value.trim() : '',
+    refTel:  $('#purpose').value==='지인 소개' ? $('#refTel').value.trim() : '',
+    interest:pick('interest'),
+    party:pick('party'), visit:pick('visit'),
+    exWax:pick('exWax'), exLash:pick('exLash'), exSemi:pick('exSemi'),
     brazilian:(d?d.dataset.v:''), brOpt:pick('br2'),
-    face:pick('face'), body:pick('body'), etc:pick('etc'),
+    face:pick('face'), body:pick('body'), care:pick('care'),
+    lashCurl:(lc?lc.dataset.v:''), lashLen:pick('lashLen'),
+    lashVol:pick('lashVol'), lashFib:pick('lashFib'),
+    permType:pick('permType'), permAdd:pick('permAdd'),
+    etc:pick('etc'),
     worry:$('#worry').value.trim(),
     health:pick('health'), hdetail:$('#hdetail').value.trim(),
     shave:$('#shave').value.trim(),
@@ -382,8 +554,16 @@ function collect(){
 }
 function showSummary(v){
   const rows=[['성함',v.name],['연락처',v.tel],['생년월일',v.birth],['거주·소속',v.area||'—'],
-    ['동반 방문',v.party],['브라질리언',(v.brazilian||'—')+' / '+v.brOpt],
-    ['얼굴',v.face],['바디',v.body],['속눈썹·반영구',v.etc],
+    ['시술 목적',v.purpose||'—'],
+    ['소개자',(v.refName||v.refTel) ? (v.refName+' '+v.refTel).trim() : '—'],
+    ['관심 시술',v.interest],
+    ['동반 방문',v.party],['방문 시간대',v.visit],
+    ['왁싱 경험',v.exWax],['속눈썹 경험',v.exLash],['반영구 경험',v.exSemi],['브라질리언',(v.brazilian||'—')+' / '+v.brOpt],
+    ['페이스',v.face],['바디',v.body],['집중케어',v.care],
+    ['연장 컬',v.lashCurl||'—'],['연장 길이',v.lashLen],
+    ['연장 숱',v.lashVol],['연장 모질',v.lashFib],
+    ['펌 종류',v.permType],['펌 추가시술',v.permAdd],
+    ['반영구·기타',v.etc],
     ['신경 쓰이는 점',v.worry||'—'],['안전 확인',v.health],['상세',v.hdetail||'—'],
     ['최근 제모',v.shave||'—']];
   if(v.week||v.preg) rows.push(['임신 주차',(v.week||'—')+'주'],['임산부 특이',v.preg],['의사 주의사항',v.docnote||'—']);

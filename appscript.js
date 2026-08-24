@@ -14,8 +14,13 @@ const TOKEN     = 'gureum-2026-x7k9qpjeifnqzmskvmbr';           // HTML 의 TOKE
 const SHEET_NAME = '고객카드';
 
 const HEADERS = [
-  '접수시각','접수ID','성함','연락처','생년월일','거주·소속','동반방문',
-  '브라질리언','브라질리언 옵션','얼굴','바디','속눈썹·반영구','신경쓰이는 점',
+  '접수시각','접수ID','성함','연락처','생년월일','거주·소속',
+  '시술목적','소개자 성함','소개자 연락처',
+  '동반방문','방문시간대',
+  '시술경험 왁싱','시술경험 속눈썹','시술경험 반영구','관심 시술',
+  '브라질리언','브라질리언 옵션','페이스','바디','집중케어',
+  '연장 컬','연장 길이','연장 숱','연장 모질','펌 종류','펌 추가시술',
+  '반영구·기타','신경쓰이는 점',
   '안전확인','안전확인 상세','최근 제모',
   '임신주차','임산부 특이사항','의사 주의사항',
   '시술동의','개인정보동의','건강정보동의',
@@ -54,9 +59,18 @@ function doPost(e) {
       '접수시각': Utilities.formatDate(now, 'Asia/Seoul', 'yyyy-MM-dd HH:mm:ss'),
       '접수ID': id,
       '성함': p.name || '', '연락처': p.tel || '',
-      '생년월일': p.birth || '', '거주·소속': p.area || '', '동반방문': p.party || '',
+      '생년월일': p.birth || '', '거주·소속': p.area || '',
+      '시술목적': p.purpose || '',
+      '소개자 성함': p.refName || '', '소개자 연락처': p.refTel || '',
+      '동반방문': p.party || '', '방문시간대': p.visit || '',
+      '시술경험 왁싱': p.exWax || '', '시술경험 속눈썹': p.exLash || '',
+      '시술경험 반영구': p.exSemi || '', '관심 시술': p.interest || '',
       '브라질리언': p.brazilian || '', '브라질리언 옵션': p.brOpt || '',
-      '얼굴': p.face || '', '바디': p.body || '', '속눈썹·반영구': p.etc || '',
+      '페이스': p.face || '', '바디': p.body || '', '집중케어': p.care || '',
+      '연장 컬': p.lashCurl || '', '연장 길이': p.lashLen || '',
+      '연장 숱': p.lashVol || '', '연장 모질': p.lashFib || '',
+      '펌 종류': p.permType || '', '펌 추가시술': p.permAdd || '',
+      '반영구·기타': p.etc || '',
       '신경쓰이는 점': p.worry || '',
       '안전확인': p.health || '', '안전확인 상세': p.hdetail || '', '최근 제모': p.shave || '',
       '임신주차': p.week || '', '임산부 특이사항': p.preg || '', '의사 주의사항': p.docnote || '',
@@ -64,6 +78,8 @@ function doPost(e) {
       '서명': sigUrl, '원장확인': ''
     };
     rec['출생연도'] = rec['생년월일'];   // 아직 열 이름을 안 바꾼 시트 호환
+    rec['얼굴']          = rec['페이스'];
+    rec['속눈썹·반영구'] = rec['반영구·기타'];
 
     const sh = getSheet_();
     sh.appendRow(rowFor_(sh, rec));
@@ -114,13 +130,42 @@ function findId_(id) {
 }
 
 /**
+ * HEADERS 에 있는데 시트에 없는 열을 만들어 넣는다.
+ * 폼에 항목이 추가돼도 값이 조용히 버려지지 않는다.
+ * 넣는 자리는 HEADERS 기준 바로 앞 열의 뒤 — 원장이 옮겨도 이름으로 찾으므로 상관없다.
+ */
+function ensureHeaders_(sh) {
+  const head = sh.getRange(1, 1, 1, Math.max(sh.getLastColumn(), 1))
+                 .getDisplayValues()[0].map(function (x) { return String(x).trim(); });
+  let changed = false;
+
+  for (let i = 0; i < HEADERS.length; i++) {
+    const h = HEADERS[i];
+    if (head.indexOf(h) >= 0) continue;
+
+    let at = 0;                                   // 0 = 맨 앞
+    for (let j = i - 1; j >= 0; j--) {
+      const k = head.indexOf(HEADERS[j]);
+      if (k >= 0) { at = k + 1; break; }
+    }
+    if (at === 0) sh.insertColumnBefore(1); else sh.insertColumnAfter(at);
+    sh.getRange(1, at + 1).setValue(h);
+    head.splice(at, 0, h);
+    changed = true;
+  }
+  if (changed) {
+    sh.getRange(1, 1, 1, head.length).setFontWeight('bold').setBackground('#f0ece3');
+    Logger.log('헤더 보정 완료: ' + head.join(' | '));
+  }
+  return head;
+}
+
+/**
  * 시트에 실제로 적혀 있는 헤더 순서에 맞춰 한 행을 만든다.
  * 열을 더하거나 빼도 값이 밀리지 않는다 — 모르는 열은 빈칸으로 남긴다.
  */
 function rowFor_(sh, rec) {
-  const w = Math.max(sh.getLastColumn(), HEADERS.length);
-  const head = sh.getRange(1, 1, 1, w).getDisplayValues()[0];
-  return head.map(function (h) {
+  return ensureHeaders_(sh).map(function (h) {
     const k = String(h).trim();
     return Object.prototype.hasOwnProperty.call(rec, k) ? rec[k] : '';
   });
@@ -136,15 +181,21 @@ function 시트열정리() {
   const head = sh.getRange(1, 1, 1, sh.getLastColumn()).getDisplayValues()[0]
                  .map(function (x) { return String(x).trim(); });
 
-  const i = head.indexOf('출생연도');
-  if (i >= 0) { sh.getRange(1, i + 1).setValue('생년월일'); head[i] = '생년월일';
-                Logger.log("열 이름 변경: '출생연도' → '생년월일'"); }
-  else        { Logger.log("'출생연도' 열 없음 — 이미 정리됨"); }
+  const RENAME = [['출생연도', '생년월일'], ['얼굴', '페이스'],
+                  ['속눈썹·반영구', '반영구·기타']];
+  RENAME.forEach(function (r) {
+    const i = head.indexOf(r[0]);
+    if (i < 0) { Logger.log("'" + r[0] + "' 열 없음 — 이미 정리됨"); return; }
+    sh.getRange(1, i + 1).setValue(r[1]); head[i] = r[1];
+    Logger.log("열 이름 변경: '" + r[0] + "' → '" + r[1] + "'");
+  });
 
-  const m = head.indexOf('마케팅동의');
-  if (m >= 0) Logger.log("'마케팅동의' 열은 과거 기록 보존을 위해 남겨둡니다 (새 행은 빈칸). " +
-                         '정말 지우려면 마케팅동의열삭제() 를 실행하세요.');
-  Logger.log('현재 헤더(' + head.length + '): ' + head.join(' | '));
+  const now = ensureHeaders_(sh);   // 새로 생긴 열(방문시간대 등)을 만들어 넣는다
+
+  if (now.indexOf('마케팅동의') >= 0)
+    Logger.log("'마케팅동의' 열은 과거 기록 보존을 위해 남겨둡니다 (새 행은 빈칸). " +
+               '정말 지우려면 마케팅동의열삭제() 를 실행하세요.');
+  Logger.log('현재 헤더(' + now.length + '): ' + now.join(' | '));
 }
 
 /** 과거 마케팅 동의 기록까지 완전히 삭제한다 — 되돌릴 수 없다 */
