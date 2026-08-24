@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>구름왁싱 고객카드</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--ink:#1e2328;--sub:#6f7a85;--line:#e2ddd3;--bg:#f7f5f0;--card:#fff;
+      --ac:#2f7d95;--acbg:#eaf4f7;--warn:#b8503f;--warnbg:#fdf1ef}
+body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+     background:var(--bg);color:var(--ink);line-height:1.6;font-size:16px}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px 120px}
+header{padding:26px 0 16px;text-align:center}
+h1{font-size:22px;font-weight:800;letter-spacing:-.4px}
+.sub{font-size:13px;color:var(--sub);margin-top:6px}
+.prog{height:4px;background:#e6e1d6;border-radius:3px;margin:16px 0 4px;overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:var(--ac);transition:width .3s}
+.ptxt{font-size:11.5px;color:var(--sub);text-align:right}
+
+section{background:var(--card);border:1px solid var(--line);border-radius:14px;
+        padding:20px;margin-bottom:14px}
+h2{font-size:16px;font-weight:800;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+h2 b{width:23px;height:23px;background:var(--ac);color:#fff;border-radius:7px;font-size:12px;
+     display:flex;align-items:center;justify-content:center;flex:none}
+.hint{font-size:12.5px;color:var(--sub);margin-bottom:14px}
+label.f{display:block;font-size:13px;font-weight:700;margin:14px 0 6px}
+input[type=text],input[type=tel],input[type=number],textarea,select{
+  width:100%;padding:12px 13px;border:1.5px solid var(--line);border-radius:10px;
+  font-size:16px;font-family:inherit;background:#fdfcfa}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--ac)}
+textarea{min-height:72px;resize:vertical}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.chip{border:1.5px solid var(--line);background:#fdfcfa;border-radius:10px;
+      padding:9px 14px;font-size:14px;cursor:pointer;user-select:none}
+.chip.on{background:var(--ac);border-color:var(--ac);color:#fff;font-weight:700}
+.chip.warn.on{background:var(--warn);border-color:var(--warn)}
+
+.designs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px}
+.dz{border:2px solid var(--line);border-radius:12px;padding:12px 8px;text-align:center;cursor:pointer;background:#fdfcfa}
+.dz.on{border-color:var(--ac);background:var(--acbg)}
+.dz svg{width:100%;height:78px;display:block}
+.dz .nm{font-size:13.5px;font-weight:700;margin-top:6px}
+.dz .ds{font-size:11px;color:var(--sub);line-height:1.4}
+
+.consent{border:1.5px solid var(--line);border-radius:12px;padding:14px;margin-bottom:11px;background:#fdfcfa}
+.consent.req{border-color:#d8c9a8;background:#fdfaf2}
+.consent h3{font-size:13.5px;font-weight:800;margin-bottom:7px}
+.consent h3 em{font-style:normal;font-size:11px;padding:2px 7px;border-radius:5px;margin-left:6px;
+  background:var(--warn);color:#fff;vertical-align:1px}
+.consent h3 em.opt{background:#8b939c}
+.consent p,.consent li{font-size:12.5px;color:#414a52;line-height:1.65}
+.consent ul{margin:5px 0 0 17px}
+.ck{display:flex;gap:10px;align-items:flex-start;margin-top:10px;cursor:pointer;
+    padding:9px 11px;border-radius:9px;background:#fff;border:1.5px solid var(--line)}
+.ck.on{border-color:var(--ac);background:var(--acbg)}
+.ck i{width:20px;height:20px;border:2px solid #b6bfc7;border-radius:6px;flex:none;position:relative;background:#fff;margin-top:1px}
+.ck.on i{background:var(--ac);border-color:var(--ac)}
+.ck.on i:after{content:'';position:absolute;left:6px;top:2px;width:5px;height:10px;
+  border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
+.ck span{font-size:13.5px;font-weight:600}
+
+#sigwrap{border:1.5px dashed #c3ccd3;border-radius:12px;background:#fff;position:relative}
+#sig{width:100%;height:150px;display:block;touch-action:none;border-radius:12px}
+#sigph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  color:#b6bfc7;font-size:14px;pointer-events:none}
+.mini{background:none;border:none;color:var(--ac);font-size:12.5px;font-weight:700;
+  cursor:pointer;padding:6px 0}
+
+.bar{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.97);
+  border-top:1px solid var(--line);padding:12px 16px;backdrop-filter:blur(8px);z-index:20}
+.bar .in{max-width:760px;margin:0 auto;display:flex;gap:10px;align-items:center}
+.bar .msg{flex:1;font-size:12.5px;color:var(--warn);font-weight:600}
+button.go{background:var(--ac);color:#fff;border:none;border-radius:11px;
+  padding:14px 26px;font-size:15.5px;font-weight:800;font-family:inherit;cursor:pointer}
+button.go:disabled{background:#c3ccd3}
+.note{background:var(--warnbg);border:1px solid #f0d5cf;border-radius:11px;padding:12px 14px;
+  font-size:12.5px;color:#7d3d31;margin-top:12px}
+#done{display:none}
+#done section{border-color:var(--ac)}
+#stat{font-size:13.5px;font-weight:700;padding:10px 13px;border-radius:9px;margin-bottom:13px;
+  background:#eef2f5;color:#4a5560;border:1px solid #dfe5ea}
+#stat.ok{background:#eef6ef;color:#2f6b3d;border-color:#cfe3d3}
+#stat.err{background:#fdf1ef;color:#8f3a2c;border-color:#f0d5cf}
+.sum{font-size:14px;line-height:1.9}
+.sum b{display:inline-block;min-width:96px;color:var(--sub);font-weight:700;font-size:12.5px}
+@media print{.bar,#form,.mini{display:none}#done{display:block!important}body{background:#fff}}
+</style></head><body>
+<div class="wrap">
+<header>
+  <h1>☁️ 구름왁싱 고객카드</h1>
+  <div class="sub">안전한 시술을 위한 필수 항목입니다 · 약 2분</div>
+  <div class="prog"><i id="pg"></i></div>
+  <div class="ptxt" id="pt">0 / 5</div>
+</header>
+
+<div id="form">
+<section>
+  <h2><b>1</b>기본 정보</h2>
+  <div class="hint">예약 확인과 시술 기록에 사용됩니다.</div>
+  <div class="row2">
+    <div><label class="f">성함 *</label><input type="text" id="name" autocomplete="name"></div>
+    <div><label class="f">연락처 *</label><input type="tel" id="tel" placeholder="010-0000-0000"></div>
+  </div>
+  <div class="row2">
+    <div><label class="f">출생연도 *</label><input type="number" id="birth" placeholder="1990" min="1930" max="2026"></div>
+    <div><label class="f">거주 / 소속</label>
+      <select id="area">
+        <option value="">선택</option>
+        <option>해링턴플레이스 (아파트)</option>
+        <option>해링턴플레이스 (오피스텔)</option>
+        <option>인천성모병원 근무</option>
+        <option>부평 인근</option>
+        <option>기타</option>
+      </select></div>
+  </div>
+  <div class="note" id="minorNote" style="display:none">
+    만 14세 미만은 법정대리인 동의가 필요합니다. 원장에게 알려주세요.
+  </div>
+  <label class="f">오늘 함께 오셨나요?</label>
+  <div class="chips" data-g="party">
+    <div class="chip">혼자</div><div class="chip">부부</div><div class="chip">커플</div>
+    <div class="chip">가족</div><div class="chip">친구</div>
+  </div>
+  <div class="hint" style="margin:8px 0 0">동반 적립 처리에만 사용하며,
+    <b>혼인 여부 등은 따로 기록하거나 보관하지 않습니다.</b></div>
+</section>
+
+<section>
+  <h2><b>2</b>오늘 받으실 시술</h2>
+  <div class="hint">해당하는 항목을 눌러주세요. 여러 개 선택할 수 있습니다.</div>
+
+  <label class="f">브라질리언 — 디자인 선택</label>
+  <div class="designs" id="dz">
+    <div class="dz" data-v="비키니">
+      <svg viewBox="0 0 90 78"><defs><pattern id="h1" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#2f7d95" stroke-width="2.4"/></pattern></defs>
+        <path d="M18 10 H72 L58 46 Q45 66 32 46 Z" fill="none" stroke="#c3ccd3" stroke-width="2" stroke-dasharray="4 3"/>
+        <path d="M25 14 H65 L54 44 Q45 60 36 44 Z" fill="url(#h1)" opacity=".85"/></svg>
+      <div class="nm">비키니</div><div class="ds">옆 라인만 정리<br>중앙은 남김</div>
+    </div>
+    <div class="dz" data-v="내추럴">
+      <svg viewBox="0 0 90 78"><defs><pattern id="h2" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#2f7d95" stroke-width="2.4"/></pattern></defs>
+        <path d="M18 10 H72 L58 46 Q45 66 32 46 Z" fill="none" stroke="#c3ccd3" stroke-width="2" stroke-dasharray="4 3"/>
+        <rect x="38" y="13" width="14" height="30" rx="5" fill="url(#h2)" opacity=".85"/></svg>
+      <div class="nm">내추럴</div><div class="ds">중앙에 좁게<br>남기는 디자인</div>
+    </div>
+    <div class="dz" data-v="올누드">
+      <svg viewBox="0 0 90 78">
+        <path d="M18 10 H72 L58 46 Q45 66 32 46 Z" fill="none" stroke="#c3ccd3" stroke-width="2" stroke-dasharray="4 3"/>
+        <text x="45" y="36" text-anchor="middle" font-size="12" fill="#8b939c" font-family="sans-serif">전체 제거</text></svg>
+      <div class="nm">올누드</div><div class="ds">모두 제거</div>
+    </div>
+  </div>
+  <div class="chips" style="margin-top:10px" data-g="br2">
+    <div class="chip">항문 포함</div><div class="chip">슈가링으로</div><div class="chip">브라질리언 안 함</div>
+  </div>
+
+  <label class="f">얼굴</label>
+  <div class="chips" data-g="face">
+    <div class="chip">헤어라인</div><div class="chip">이마</div><div class="chip">눈썹</div>
+    <div class="chip">인중</div><div class="chip">턱</div><div class="chip">구레나룻</div>
+    <div class="chip">콧털</div><div class="chip">뒷목</div><div class="chip">풀페이스</div>
+  </div>
+
+  <label class="f">바디</label>
+  <div class="chips" data-g="body">
+    <div class="chip">겨드랑이</div><div class="chip">팔 전체</div><div class="chip">팔 반</div>
+    <div class="chip">다리 전체</div><div class="chip">다리 반</div><div class="chip">배</div>
+    <div class="chip">가슴</div><div class="chip">엉덩이</div><div class="chip">손·발</div>
+  </div>
+
+  <label class="f">속눈썹 · 반영구</label>
+  <div class="chips" data-g="etc">
+    <div class="chip">속눈썹 연장</div><div class="chip">속눈썹 펌</div>
+    <div class="chip">브로우리프트</div><div class="chip">눈썹 반영구</div><div class="chip">상담 희망</div>
+  </div>
+
+  <label class="f">특히 신경 쓰이는 점이 있으신가요?</label>
+  <textarea id="worry" placeholder="편하게 적어주세요. 없으시면 비워두셔도 됩니다."></textarea>
+</section>
+
+<section>
+  <h2><b>3</b>안전 확인</h2>
+  <div class="hint">시술 가능 여부와 방식을 정하는 데 꼭 필요한 항목입니다.
+    해당사항이 없으면 <b>해당 없음</b>을 눌러주세요.</div>
+  <div class="chips" data-g="health" id="health">
+    <div class="chip warn" data-preg="1">임신 중</div>
+    <div class="chip warn">수유 중</div>
+    <div class="chip warn">알레르기 있음</div>
+    <div class="chip warn">복용 중인 약</div>
+    <div class="chip warn">피부질환 치료 중</div>
+    <div class="chip warn">최근 레이저·필링·시술</div>
+    <div class="chip warn">피부 연고 사용 중</div>
+    <div class="chip warn">켈로이드성 피부</div>
+    <div class="chip warn">과거 시술 후 이상반응</div>
+    <div class="chip warn">시술 부위 상처·염증</div>
+    <div class="chip" data-none="1">해당 없음</div>
+  </div>
+  <label class="f">체크하신 항목이 있다면 구체적으로</label>
+  <textarea id="hdetail" placeholder="예: 페니실린 알레르기 / 이소트레티노인 복용 중"></textarea>
+  <label class="f">최근 면도 또는 제모를 하셨다면</label>
+  <input type="text" id="shave" placeholder="예: 3일 전 면도">
+</section>
+
+<section id="pregSec" style="display:none">
+  <h2><b>4</b>임산부 문진</h2>
+  <div class="hint">더 편안한 자세와 속도로 진행하기 위한 항목입니다.
+    <b>구름왁싱은 임산부라고 추가 요금을 받지 않습니다.</b></div>
+  <label class="f">현재 임신 주차</label>
+  <input type="number" id="week" placeholder="예: 28" min="1" max="42" style="max-width:160px">
+  <label class="f">해당하는 항목</label>
+  <div class="chips" data-g="preg">
+    <div class="chip">현재 특별한 이상 없음</div><div class="chip">오래 같은 자세가 불편</div>
+    <div class="chip">바로 눕는 자세가 불편</div><div class="chip">중간 휴식이 필요</div>
+    <div class="chip">피부가 전보다 민감해짐</div>
+  </div>
+  <label class="f">담당 의사에게 특별히 주의받은 사항이 있다면</label>
+  <textarea id="docnote" placeholder="없으시면 비워두셔도 됩니다."></textarea>
+  <div class="note" style="background:var(--acbg);border-color:#cfe2e9;color:#245a6b">
+    <b>중단 약속</b> — 시술 중 어지러움·통증·불편함이 있으면 <b>손을 들어주세요.</b>
+    이유를 묻지 않고 즉시 멈춥니다. 자세를 바꾸거나 쉬었다 진행할 수 있습니다.
+  </div>
+</section>
+
+<section>
+  <h2><b>5</b>동의</h2>
+  <div class="consent req">
+    <h3>① 시술 동의 <em>필수</em></h3>
+    <ul>
+      <li>현재 피부상태·복용약·알레르기·질환 등을 사실대로 알렸습니다.</li>
+      <li>개인의 피부상태와 체질에 따라 일시적인 붉음·열감·가려움·따가움·부종·트러블이
+          생길 수 있다는 설명을 들었습니다.</li>
+      <li>시술자가 안전상 부적절하다고 판단하면 시술의 일부 또는 전체를 제한하거나
+          중단할 수 있습니다.</li>
+      <li>시술 중 이상이나 불편함이 있으면 즉시 알리겠습니다.</li>
+      <li>시술 전후 주의사항과 홈케어 방법을 안내받았습니다.</li>
+    </ul>
+    <div class="ck" data-req="1"><i></i><span>위 내용을 확인하고 시술에 동의합니다</span></div>
+  </div>
+
+  <div class="consent req">
+    <h3>② 개인정보 수집·이용 <em>필수</em></h3>
+    <p><b>항목</b> 성명, 연락처, 출생연도, 거주·소속 구분, 동반 방문 유형, 시술이력 및 디자인 기록<br>
+       <b>목적</b> 예약 확인, 시술 기록, 재방문 시 동일 디자인 재현, 시술 관련 안내<br>
+       <b>보유기간</b> 최종 방문일로부터 <b>3년</b> · 이후 지체 없이 파기</p>
+    <div class="ck" data-req="1"><i></i><span>개인정보 수집·이용에 동의합니다</span></div>
+  </div>
+
+  <div class="consent req">
+    <h3>③ 건강정보 수집·이용 <em>필수</em></h3>
+    <p>임신 여부, 복용 약, 알레르기, 피부질환 등 <b>건강에 관한 정보</b>는
+       다른 개인정보와 분리하여 별도로 동의를 받습니다.<br>
+       <b>목적</b> 시술 가능 여부 판단 및 안전한 시술 방식 결정 (오직 이 목적으로만 사용)<br>
+       <b>보유기간</b> 최종 방문일로부터 <b>3년</b><br>
+       동의하지 않으실 수 있으나, 그 경우 <b>안전 확인이 어려워 시술이 제한될 수 있습니다.</b></p>
+    <div class="ck" data-req="1"><i></i><span>건강정보 수집·이용에 동의합니다</span></div>
+  </div>
+
+  <div class="consent">
+    <h3>④ 마케팅 안내 수신 <em class="opt">선택</em></h3>
+    <p>재방문 시기 알림, 이벤트·혜택 안내를 문자 또는 카카오톡으로 보내드립니다.
+       동의하지 않으셔도 시술 이용에 <b>아무런 제한이 없습니다.</b>
+       언제든 <b>수신거부</b>를 말씀하시거나 메시지 내 거부 링크로 해지하실 수 있습니다.</p>
+    <div class="ck"><i></i><span>마케팅 안내 수신에 동의합니다 (선택)</span></div>
+  </div>
+
+  <label class="f">서명 *</label>
+  <div id="sigwrap"><canvas id="sig"></canvas><div id="sigph">여기에 서명해주세요</div></div>
+  <button class="mini" id="clr">서명 지우기</button>
+</section>
+</div>
+
+<div id="done">
+  <section>
+    <h2><b>✓</b>작성이 완료되었습니다</h2>
+    <div class="hint">원장에게 태블릿을 전달해주세요.</div>
+    <div id="stat"></div>
+    <div class="sum" id="sum"></div>
+  </section>
+</div>
+</div>
+
+<div class="bar"><div class="in">
+  <div class="msg" id="msg"></div>
+  <button class="go" id="submit">작성 완료</button>
+</div></div>
+
+<iframe name="sink" id="sink" style="display:none"></iframe>
+<script>
+/* ══════ 설정 — 이 두 줄만 바꾸세요 ══════ */
+const ENDPOINT = 'https://script.google.com/macros/s/AKfycbzFimtvTdB1gW1ePpEYumTA0dyGSMwCa-lTf6z7BJL9M8wsoVkvdaBKJR1DuDwCUWom/exec';
+const TOKEN    = 'gureum-2026-x7k9qpjeifnqzmskvmbr';   // Code.gs 의 TOKEN 과 동일하게
+/* ═══════════════════════════════════════ */
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+
+/* 칩 토글 */
+$$('.chips').forEach(g=>g.addEventListener('click',e=>{
+  const c=e.target.closest('.chip'); if(!c)return;
+  if(g.id==='health'){
+    if(c.dataset.none){ $$('#health .chip').forEach(x=>x.classList.remove('on')); c.classList.add('on'); }
+    else { c.classList.toggle('on'); $$('#health .chip[data-none]').forEach(x=>x.classList.remove('on')); }
+    $('#pregSec').style.display =
+      $$('#health .chip[data-preg].on').length ? 'block' : 'none';
+  } else c.classList.toggle('on');
+  prog();
+}));
+/* 디자인 단일선택 */
+$('#dz').addEventListener('click',e=>{
+  const d=e.target.closest('.dz'); if(!d)return;
+  $$('#dz .dz').forEach(x=>x.classList.remove('on')); d.classList.add('on'); prog();
+});
+/* 동의 체크 */
+$$('.ck').forEach(k=>k.addEventListener('click',()=>{k.classList.toggle('on');prog()}));
+/* 미성년 안내 */
+$('#birth').addEventListener('input',e=>{
+  const y=+e.target.value, age=2026-y;
+  $('#minorNote').style.display=(y>1900&&age<14)?'block':'none'; prog();
+});
+['#name','#tel','#area'].forEach(s=>$(s).addEventListener('input',prog));
+
+/* 서명 */
+const cv=$('#sig'), cx=cv.getContext('2d'); let drew=false,down=false;
+function fit(){const r=cv.getBoundingClientRect();cv.width=r.width*2;cv.height=r.height*2;
+  cx.scale(2,2);cx.lineWidth=2.2;cx.lineCap='round';cx.strokeStyle='#1e2328';}
+addEventListener('resize',()=>{fit();drew=false;$('#sigph').style.display='flex'});fit();
+const pos=e=>{const r=cv.getBoundingClientRect();return[e.clientX-r.left,e.clientY-r.top]};
+cv.addEventListener('pointerdown',e=>{down=true;drew=true;$('#sigph').style.display='none';
+  cx.beginPath();cx.moveTo(...pos(e));cv.setPointerCapture(e.pointerId);prog()});
+cv.addEventListener('pointermove',e=>{if(!down)return;e.preventDefault();cx.lineTo(...pos(e));cx.stroke()});
+addEventListener('pointerup',()=>down=false);
+$('#clr').onclick=()=>{cx.clearRect(0,0,cv.width,cv.height);drew=false;$('#sigph').style.display='flex';prog()};
+
+/* 진행률 */
+function reqOk(){
+  return [$('#name').value.trim()!=='', $('#tel').value.trim()!=='', $('#birth').value!=='',
+    ($$('#dz .dz.on').length>0 || $$('.chips .chip.on').length>0),
+    $$('#health .chip.on').length>0,
+    $$('.ck[data-req].on').length===3, drew];
+}
+function prog(){
+  const o=reqOk(), n=o.filter(Boolean).length;
+  $('#pg').style.width=(n/o.length*100)+'%';
+  $('#pt').textContent=n+' / '+o.length;
+  const miss=[];
+  if(!o[0]||!o[1]||!o[2])miss.push('기본정보');
+  if(!o[3])miss.push('시술 선택');
+  if(!o[4])miss.push('안전 확인');
+  if(!o[5])miss.push('필수 동의');
+  if(!o[6])miss.push('서명');
+  $('#msg').textContent=miss.length?('남은 항목: '+miss.join(' · ')):'';
+  $('#submit').disabled=miss.length>0;
+}
+const pick=g=>$$('.chips[data-g="'+g+'"] .chip.on').map(x=>x.textContent).join(', ')||'—';
+let sending=false;
+function collect(){
+  const d=$('#dz .dz.on');
+  const preg = $('#pregSec').style.display==='block';
+  return {
+    token:TOKEN,
+    name:$('#name').value.trim(), tel:$('#tel').value.trim(),
+    birth:$('#birth').value, area:$('#area').value||'',
+    party:pick('party'),
+    brazilian:(d?d.dataset.v:''), brOpt:pick('br2'),
+    face:pick('face'), body:pick('body'), etc:pick('etc'),
+    worry:$('#worry').value.trim(),
+    health:pick('health'), hdetail:$('#hdetail').value.trim(),
+    shave:$('#shave').value.trim(),
+    week: preg ? ($('#week').value||'') : '',
+    preg: preg ? pick('preg') : '',
+    docnote: preg ? $('#docnote').value.trim() : '',
+    agreeTx:'동의', agreePI:'동의', agreeHealth:'동의',
+    agreeMkt: $$('.ck:not([data-req])')[0].classList.contains('on')?'동의':'미동의',
+    signature: cv.toDataURL('image/png')
+  };
+}
+function showSummary(v){
+  const rows=[['성함',v.name],['연락처',v.tel],['출생연도',v.birth],['거주·소속',v.area||'—'],
+    ['동반 방문',v.party],['브라질리언',(v.brazilian||'—')+' / '+v.brOpt],
+    ['얼굴',v.face],['바디',v.body],['속눈썹·반영구',v.etc],
+    ['신경 쓰이는 점',v.worry||'—'],['안전 확인',v.health],['상세',v.hdetail||'—'],
+    ['최근 제모',v.shave||'—']];
+  if(v.week||v.preg) rows.push(['임신 주차',(v.week||'—')+'주'],['임산부 특이',v.preg],['의사 주의사항',v.docnote||'—']);
+  rows.push(['마케팅 수신',v.agreeMkt]);
+  $('#sum').innerHTML=rows.map(r=>'<div><b>'+r[0]+'</b> '+String(r[1]).replace(/</g,'&lt;')+'</div>').join('')
+    +'<div style="margin-top:14px"><b>서명</b><br><img src="'+v.signature+'" style="height:70px;margin-top:5px"></div>'
+    +'<div style="margin-top:10px;font-size:12px;color:#6f7a85">작성일 '+new Date().toLocaleString('ko-KR')+'</div>';
+  $('#form').style.display='none'; $('#done').style.display='block';
+  $('.bar').style.display='none'; scrollTo(0,0);
+}
+addEventListener('message',e=>{
+  let r; try{ r=JSON.parse(typeof e.data==='string'?e.data:'{}'); }catch(x){ return; }
+  if(typeof r.ok==='undefined') return;
+  clearTimeout(window.__to); sending=false;
+  if(r.ok){ $('#stat').innerHTML='접수 완료 &middot; 번호 <b>'+r.id+'</b>'; $('#stat').className='ok'; }
+  else    { $('#stat').textContent='전송 실패: '+(r.msg||'알 수 없음')+' — 원장에게 알려주세요'; $('#stat').className='err'; }
+});
+$('#submit').onclick=()=>{
+  if(sending) return;
+  const v=collect();
+  if(ENDPOINT.indexOf('여기에')>=0){
+    showSummary(v);
+    $('#stat').textContent='전송 설정 전입니다 (ENDPOINT 미설정). 화면을 원장에게 보여주세요.';
+    $('#stat').className='err'; return;
+  }
+  sending=true; $('#submit').disabled=true;
+  const f=document.createElement('form');
+  f.method='POST'; f.action=ENDPOINT; f.target='sink'; f.style.display='none';
+  Object.keys(v).forEach(k=>{ const i=document.createElement('input');
+    i.type='hidden'; i.name=k; i.value=v[k]; f.appendChild(i); });
+  document.body.appendChild(f);
+  showSummary(v);
+  $('#stat').textContent='전송 중…'; $('#stat').className='';
+  f.submit(); setTimeout(()=>f.remove(),1500);
+  window.__to=setTimeout(()=>{ if(sending){ sending=false;
+    $('#stat').textContent='응답이 없습니다. 네트워크를 확인하고 화면을 원장에게 보여주세요.';
+    $('#stat').className='err'; } },12000);
+};
+prog();
+</script></body></html>
