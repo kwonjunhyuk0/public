@@ -411,9 +411,9 @@ $('#submit').onclick=()=>{
   showSummary(v);
   $('#stat').textContent='전송 중…'; $('#stat').className='';
   f.submit(); setTimeout(()=>f.remove(),1500);
-  window.__to=setTimeout(()=>{ if(sending){ sending=false;
-    $('#stat').textContent='응답이 없습니다. 네트워크를 확인하고 화면을 원장에게 보여주세요.';
-    $('#stat').className='err'; } },12000);
+  // window.__to=setTimeout(()=>{ if(sending){ sending=false;
+  //   $('#stat').textContent='응답이 없습니다. 네트워크를 확인하고 화면을 원장에게 보여주세요.';
+  //   $('#stat').className='err'; } },12000);
 };
 prog();
 </script></body></html>
