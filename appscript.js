@@ -28,11 +28,16 @@ function doPost(e) {
     lock.waitLock(20000);
     const p = (e && e.parameter) || {};
 
-    if (p.token !== TOKEN) return reply({ ok: false, msg: '인증 실패' });
-    if (!p.name || !p.tel)  return reply({ ok: false, msg: '필수 항목 누락' });
+    if (p.token !== TOKEN) return reply({ ok: false, msg: '인증 실패', cid: p.cid || '' });
+    if (!p.name || !p.tel)  return reply({ ok: false, msg: '필수 항목 누락', cid: p.cid || '' });
 
     const now = new Date();
-    const id  = Utilities.formatDate(now, 'Asia/Seoul', 'yyMMdd-HHmmss');
+    // 접수번호는 클라이언트가 만들어 보낸다. 없으면(구버전 폼) 서버에서 생성
+    const id  = String(p.cid || '').trim()
+              || Utilities.formatDate(now, 'Asia/Seoul', 'yyMMdd-HHmmss');
+
+    // 같은 접수번호가 이미 있으면 재전송이므로 다시 쓰지 않는다
+    if (p.cid && findId_(id)) return reply({ ok: true, id: id, cid: id, dup: true });
 
     // 서명 이미지는 Drive 에 저장하고 시트에는 링크만 (셀 5만자 제한 회피)
     let sigUrl = '';
@@ -55,18 +60,50 @@ function doPost(e) {
       p.agreeTx || '', p.agreePI || '', p.agreeHealth || '', p.agreeMkt || '',
       sigUrl, ''
     ]);
-    return reply({ ok: true, id: id });
+    return reply({ ok: true, id: id, cid: id });
 
   } catch (err) {
-    return reply({ ok: false, msg: String(err) });
+    return reply({ ok: false, msg: String(err), cid: (e && e.parameter && e.parameter.cid) || '' });
   } finally {
     try { lock.releaseLock(); } catch (e2) {}
   }
 }
 
-/** 브라우저에서 URL 을 직접 열었을 때 — 데이터는 절대 노출하지 않습니다 */
-function doGet() {
+/**
+ * GET — 두 가지 용도
+ *  1) ?token=..&check=<접수번호>&callback=<함수명>  : 저장 여부만 JSONP 로 알려준다
+ *     (폼의 postMessage 응답이 유실됐을 때의 확인 경로. CORS 를 안 타려고 JSONP 를 쓴다)
+ *  2) 그 외 — 사람이 URL 을 직접 연 경우. 데이터는 절대 노출하지 않는다
+ */
+function doGet(e) {
+  const p = (e && e.parameter) || {};
+  const cb = String(p.callback || '');
+
+  if (cb && p.check) {
+    // 콜백 이름을 그대로 붙이므로 반드시 걸러낸다
+    if (!/^[A-Za-z0-9_$]{1,40}$/.test(cb)) {
+      return ContentService.createTextOutput('')
+        .setMimeType(ContentService.MimeType.JAVASCRIPT);
+    }
+    let out;
+    if (p.token !== TOKEN) out = { ok: false, msg: '인증 실패' };
+    else out = { ok: true, id: String(p.check), found: findId_(String(p.check)) };
+    return ContentService
+      .createTextOutput(cb + '(' + JSON.stringify(out) + ');')
+      .setMimeType(ContentService.MimeType.JAVASCRIPT);
+  }
   return HtmlService.createHtmlOutput('<p style="font-family:sans-serif">OK</p>');
+}
+
+/** 접수ID(B열)에 해당 번호가 이미 있는지 */
+function findId_(id) {
+  if (!id) return false;
+  const sh = getSheet_();
+  const n = sh.getLastRow() - 1;
+  if (n < 1) return false;
+  const col = sh.getRange(2, 2, n, 1).getDisplayValues();
+  for (let i = 0; i < col.length; i++) if (String(col[i][0]).trim() === id) return true;
+  return false;
 }
 
 function getSheet_() {
@@ -82,12 +119,25 @@ function getSheet_() {
   return sh;
 }
 
-/** iframe 안에서 부모창으로 결과를 알려주는 응답 */
+/**
+ * iframe 안에서 결과를 알려주는 응답.
+ *
+ * ★ Apps Script 는 이 HTML 을 자기 샌드박스 iframe(googleusercontent.com)으로
+ *   한 번 더 감싼다. 그래서 이 스크립트에서 parent 는 우리 폼이 아니라
+ *   script.google.com 의 exec 페이지다. parent 한 곳에만 보내면 폼에는
+ *   영원히 도달하지 않는다 — 조상 창을 끝까지 거슬러 올라가며 전부 보낸다.
+ */
 function reply(obj) {
   const payload = JSON.stringify(obj).replace(/</g, '\\u003c');
+  const js =
+    '(function(){var m=' + JSON.stringify(payload) + ',seen=[];' +
+    'function send(w){if(!w)return;for(var i=0;i<seen.length;i++)if(seen[i]===w)return;' +
+    'seen.push(w);try{w.postMessage(m,"*")}catch(e){}}' +
+    'var w=window;for(var i=0;i<10;i++){var q;try{q=w.parent}catch(e){break}' +
+    'if(!q||q===w)break;w=q;send(w)}' +
+    'try{send(window.top)}catch(e){}})();';
   return HtmlService
-    .createHtmlOutput('<script>parent.postMessage(' +
-      JSON.stringify(payload) + ',"*")<\/script>')
+    .createHtmlOutput('<script>' + js + '<\/script>')
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
 }
 

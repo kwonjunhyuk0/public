@@ -288,7 +288,7 @@ button.go:disabled{background:#c3ccd3}
 <iframe name="sink" id="sink" style="display:none"></iframe>
 <script>
 /* ══════ 설정 — 이 두 줄만 바꾸세요 ══════ */
-const ENDPOINT = 'https://script.google.com/macros/s/AKfycbzFimtvTdB1gW1ePpEYumTA0dyGSMwCa-lTf6z7BJL9M8wsoVkvdaBKJR1DuDwCUWom/exec';
+const ENDPOINT = 'https://script.google.com/macros/s/AKfycbzgNke9EWUUbyu5cUP6OHHBr6ZmNVKQWtIb90YiY2I0Nq56JVJNwZGmy8cMaum1uWjTkQ/exec';
 const TOKEN    = 'gureum-2026-x7k9qpjeifnqzmskvmbr';   // Code.gs 의 TOKEN 과 동일하게
 /* ═══════════════════════════════════════ */
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
@@ -351,12 +351,19 @@ function prog(){
   $('#submit').disabled=miss.length>0;
 }
 const pick=g=>$$('.chips[data-g="'+g+'"] .chip.on').map(x=>x.textContent).join(', ')||'—';
-let sending=false;
+let sending=false, curCid='';
+/* 접수번호는 클라이언트에서 생성한다 — 응답이 유실돼도 시트에서 찾을 수 있어야 하므로 */
+function makeCid(){
+  const d=new Date(), p=n=>String(n).padStart(2,'0');
+  return p(d.getFullYear()%100)+p(d.getMonth()+1)+p(d.getDate())+'-'
+        +p(d.getHours())+p(d.getMinutes())+p(d.getSeconds())+'-'
+        +p(Math.floor(Math.random()*100));
+}
 function collect(){
   const d=$('#dz .dz.on');
   const preg = $('#pregSec').style.display==='block';
   return {
-    token:TOKEN,
+    token:TOKEN, cid:curCid,
     name:$('#name').value.trim(), tel:$('#tel').value.trim(),
     birth:$('#birth').value, area:$('#area').value||'',
     party:pick('party'),
@@ -383,19 +390,54 @@ function showSummary(v){
   rows.push(['마케팅 수신',v.agreeMkt]);
   $('#sum').innerHTML=rows.map(r=>'<div><b>'+r[0]+'</b> '+String(r[1]).replace(/</g,'&lt;')+'</div>').join('')
     +'<div style="margin-top:14px"><b>서명</b><br><img src="'+v.signature+'" style="height:70px;margin-top:5px"></div>'
-    +'<div style="margin-top:10px;font-size:12px;color:#6f7a85">작성일 '+new Date().toLocaleString('ko-KR')+'</div>';
+    +'<div style="margin-top:10px;font-size:12px;color:#6f7a85">접수번호 '+v.cid+' &middot; 작성일 '+new Date().toLocaleString('ko-KR')+'</div>';
   $('#form').style.display='none'; $('#done').style.display='block';
   $('.bar').style.display='none'; scrollTo(0,0);
 }
+/* 결과 확정 — postMessage 든 JSONP 확인이든 여기 한 곳으로 모은다 */
+function finish(r){
+  if(!sending) return;
+  sending=false; clearTimeout(window.__to);
+  if(r && r.ok){
+    $('#stat').innerHTML='접수 완료 &middot; 번호 <b>'+(r.id||curCid)+'</b>';
+    $('#stat').className='ok';
+  }else{
+    $('#stat').textContent='전송 실패: '+((r&&r.msg)||'알 수 없음')
+      +' — 접수번호 '+curCid+' 를 원장에게 알려주세요';
+    $('#stat').className='err';
+  }
+}
+/* 응답이 안 올 때 GET(JSONP)으로 실제 저장 여부를 되묻는다.
+   CORS 를 타지 않으려고 script 태그를 쓴다 — fetch 는 여전히 불가 */
+function confirmSaved(cid, cb){
+  const name='__cb'+Math.random().toString(36).slice(2);
+  const s=document.createElement('script');
+  const t=setTimeout(()=>{ done(null) },10000);
+  let fired=false;
+  function done(r){ if(fired) return; fired=true;
+    clearTimeout(t); try{ delete window[name] }catch(x){ window[name]=undefined }
+    s.remove(); cb(r); }
+  window[name]=r=>done(r);
+  s.onerror=()=>done(null);
+  s.src=ENDPOINT+'?token='+encodeURIComponent(TOKEN)
+       +'&check='+encodeURIComponent(cid)+'&callback='+name;
+  document.body.appendChild(s);
+}
+/* Apps Script 응답은 googleusercontent.com 샌드박스에서 온다 */
+const OK_ORIGIN=/(^|\.)googleusercontent\.com$|(^|\.)google\.com$/;
 addEventListener('message',e=>{
   let r; try{ r=JSON.parse(typeof e.data==='string'?e.data:'{}'); }catch(x){ return; }
   if(typeof r.ok==='undefined') return;
-  clearTimeout(window.__to); sending=false;
-  if(r.ok){ $('#stat').innerHTML='접수 완료 &middot; 번호 <b>'+r.id+'</b>'; $('#stat').className='ok'; }
-  else    { $('#stat').textContent='전송 실패: '+(r.msg||'알 수 없음')+' — 원장에게 알려주세요'; $('#stat').className='err'; }
+  if(!curCid || r.cid!==curCid){
+    // 접수번호가 안 맞으면, 출처가 확실한 경우에만 받아들인다 (구버전 Code.gs 대비)
+    let host=''; try{ host=new URL(e.origin).hostname }catch(x){}
+    if(!OK_ORIGIN.test(host) || r.cid) return;
+  }
+  finish(r);
 });
 $('#submit').onclick=()=>{
   if(sending) return;
+  curCid=makeCid();
   const v=collect();
   if(ENDPOINT.indexOf('여기에')>=0){
     showSummary(v);
@@ -411,9 +453,19 @@ $('#submit').onclick=()=>{
   showSummary(v);
   $('#stat').textContent='전송 중…'; $('#stat').className='';
   f.submit(); setTimeout(()=>f.remove(),1500);
-  // window.__to=setTimeout(()=>{ if(sending){ sending=false;
-  //   $('#stat').textContent='응답이 없습니다. 네트워크를 확인하고 화면을 원장에게 보여주세요.';
-  //   $('#stat').className='err'; } },12000);
+  /* 응답이 늦으면 실패로 단정하지 않고, 저장됐는지 먼저 되묻는다 */
+  window.__to=setTimeout(()=>{
+    if(!sending) return;
+    $('#stat').textContent='저장 여부를 확인하는 중…'; $('#stat').className='';
+    confirmSaved(curCid,r=>{
+      if(!sending) return;
+      if(r && r.ok && r.found){ finish({ok:true,id:curCid}); return; }
+      sending=false;
+      $('#stat').textContent='응답이 없습니다. 접수번호 '+curCid
+        +' 를 원장에게 알려주세요. (네트워크 확인 필요)';
+      $('#stat').className='err';
+    });
+  },15000);
 };
 prog();
 </script></body></html>
