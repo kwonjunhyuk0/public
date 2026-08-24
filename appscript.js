@@ -13,6 +13,14 @@ const TOKEN     = 'gureum-2026-x7k9qpjeifnqzmskvmbr';           // HTML 의 TOKE
 
 const SHEET_NAME = '고객카드';
 
+/* 배포된 코드가 무엇인지 확인하는 도장.
+   저장(⌘S)만 하면 /exec 는 여전히 옛 버전을 돌린다 — 반드시 새 버전으로 배포해야 한다.
+   ENDPOINT 주소를 브라우저로 열면 여기 적힌 값이 보인다. */
+const VERSION = '2026-08-25 · 39열';
+
+/* 열 이름이 바뀐 이력. ensureHeaders_ 가 먼저 적용해 중복 열이 생기지 않게 한다 */
+const RENAME = [['출생연도', '생년월일'], ['얼굴', '페이스'], ['속눈썹·반영구', '반영구·기타']];
+
 const HEADERS = [
   '접수시각','접수ID','성함','연락처','생년월일','거주·소속',
   '시술목적','소개자 성함','소개자 연락처',
@@ -42,7 +50,7 @@ function doPost(e) {
               || Utilities.formatDate(now, 'Asia/Seoul', 'yyMMdd-HHmmss');
 
     // 같은 접수번호가 이미 있으면 재전송이므로 다시 쓰지 않는다
-    if (p.cid && findId_(id)) return reply({ ok: true, id: id, cid: id, dup: true });
+    if (p.cid && findId_(id)) return reply({ ok: true, id: id, cid: id, dup: true, ver: VERSION });
 
     // 서명 이미지는 Drive 에 저장하고 시트에는 링크만 (셀 5만자 제한 회피)
     let sigUrl = '';
@@ -83,7 +91,7 @@ function doPost(e) {
 
     const sh = getSheet_();
     sh.appendRow(rowFor_(sh, rec));
-    return reply({ ok: true, id: id, cid: id });
+    return reply({ ok: true, id: id, cid: id, ver: VERSION });
 
   } catch (err) {
     return reply({ ok: false, msg: String(err), cid: (e && e.parameter && e.parameter.cid) || '' });
@@ -110,12 +118,13 @@ function doGet(e) {
     }
     let out;
     if (p.token !== TOKEN) out = { ok: false, msg: '인증 실패' };
-    else out = { ok: true, id: String(p.check), found: findId_(String(p.check)) };
+    else out = { ok: true, id: String(p.check), found: findId_(String(p.check)), ver: VERSION };
     return ContentService
       .createTextOutput(cb + '(' + JSON.stringify(out) + ');')
       .setMimeType(ContentService.MimeType.JAVASCRIPT);
   }
-  return HtmlService.createHtmlOutput('<p style="font-family:sans-serif">OK</p>');
+  return HtmlService.createHtmlOutput(
+    '<p style="font-family:sans-serif">OK &middot; ' + VERSION + '</p>');
 }
 
 /** 접수ID(B열)에 해당 번호가 이미 있는지 */
@@ -138,6 +147,20 @@ function ensureHeaders_(sh) {
   const head = sh.getRange(1, 1, 1, Math.max(sh.getLastColumn(), 1))
                  .getDisplayValues()[0].map(function (x) { return String(x).trim(); });
   let changed = false;
+
+  // 옛 이름을 먼저 새 이름으로 바꾼다. 이걸 나중에 하면 아래 루프가
+  // '페이스' 열을 새로 끼워 넣어 '얼굴' 과 중복되고, 값이 두 열로 나뉜다.
+  RENAME.forEach(function (r) {
+    const i = head.indexOf(r[0]);
+    if (i < 0) return;
+    if (head.indexOf(r[1]) >= 0) {          // 새 이름이 이미 있으면 바꾸는 순간 중복이 된다
+      Logger.log("'" + r[0] + "' 와 '" + r[1] + "' 가 둘 다 있습니다 — 수동 확인 필요");
+      return;
+    }
+    sh.getRange(1, i + 1).setValue(r[1]);
+    head[i] = r[1]; changed = true;
+    Logger.log("열 이름 변경: '" + r[0] + "' → '" + r[1] + "'");
+  });
 
   for (let i = 0; i < HEADERS.length; i++) {
     const h = HEADERS[i];
@@ -178,24 +201,75 @@ function rowFor_(sh, rec) {
  */
 function 시트열정리() {
   const sh = getSheet_();
-  const head = sh.getRange(1, 1, 1, sh.getLastColumn()).getDisplayValues()[0]
-                 .map(function (x) { return String(x).trim(); });
+  const now = ensureHeaders_(sh);   // 이름 변경 + 빠진 열 생성
 
-  const RENAME = [['출생연도', '생년월일'], ['얼굴', '페이스'],
-                  ['속눈썹·반영구', '반영구·기타']];
-  RENAME.forEach(function (r) {
-    const i = head.indexOf(r[0]);
-    if (i < 0) { Logger.log("'" + r[0] + "' 열 없음 — 이미 정리됨"); return; }
-    sh.getRange(1, i + 1).setValue(r[1]); head[i] = r[1];
-    Logger.log("열 이름 변경: '" + r[0] + "' → '" + r[1] + "'");
-  });
-
-  const now = ensureHeaders_(sh);   // 새로 생긴 열(방문시간대 등)을 만들어 넣는다
-
+  Logger.log('편집기에서 실행 중인 코드 버전: ' + VERSION);
+  Logger.log('※ 이 버전이 /exec 에도 반영되려면 [배포 관리 → 연필 → 새 버전] 이 필요합니다');
   if (now.indexOf('마케팅동의') >= 0)
     Logger.log("'마케팅동의' 열은 과거 기록 보존을 위해 남겨둡니다 (새 행은 빈칸). " +
                '정말 지우려면 마케팅동의열삭제() 를 실행하세요.');
   Logger.log('현재 헤더(' + now.length + '): ' + now.join(' | '));
+}
+
+/* ───────────────────────────────────────────────────────────
+   옛 배포본이 쓴 행 복구
+
+   /exec 에 새 버전을 배포하지 않으면, 시트 헤더는 새 39열인데
+   기록은 옛 25열 순서로 들어간다. 그 행들을 지금 헤더에 맞게 옮긴다.
+   ─────────────────────────────────────────────────────────── */
+const OLD_ORDER = [
+  '접수시각','접수ID','성함','연락처','출생연도','거주·소속','동반방문',
+  '브라질리언','브라질리언 옵션','얼굴','바디','속눈썹·반영구','신경쓰이는 점',
+  '안전확인','안전확인 상세','최근 제모',
+  '임신주차','임산부 특이사항','의사 주의사항',
+  '시술동의','개인정보동의','건강정보동의','마케팅동의',
+  '서명','원장확인'
+];
+
+/** 옛 순서로 쓰인 행인지 — 시술동의('동의')가 옛 자리에만 있으면 그렇다 */
+function isOldRow_(vals) {
+  const oldAt = OLD_ORDER.indexOf('시술동의');          // 19
+  const newAt = HEADERS.indexOf('시술동의');            // 34
+  return String(vals[1] || '').trim() !== ''
+      && String(vals[oldAt] || '').trim() === '동의'
+      && String(vals[newAt] || '').trim() !== '동의';
+}
+
+function 옛행복구_미리보기() { 옛행복구_(false); }
+function 옛행복구_실행()   { 옛행복구_(true); }
+
+function 옛행복구_(apply) {
+  const sh   = getSheet_();
+  const head = ensureHeaders_(sh);
+  const map  = {}; RENAME.forEach(function (r) { map[r[0]] = r[1]; });
+  const last = sh.getLastRow();
+  if (last < 2) { Logger.log('데이터 행이 없습니다'); return; }
+
+  const width = Math.max(sh.getLastColumn(), head.length);
+  const data  = sh.getRange(2, 1, last - 1, width).getValues();
+  let n = 0;
+
+  for (let i = 0; i < data.length; i++) {
+    const vals = data[i];
+    if (!isOldRow_(vals)) continue;
+    n++;
+
+    const rec = {};
+    for (let j = 0; j < OLD_ORDER.length; j++) {
+      const key = map[OLD_ORDER[j]] || OLD_ORDER[j];
+      rec[key] = vals[j];
+    }
+    const row = head.map(function (h) {
+      return Object.prototype.hasOwnProperty.call(rec, h) ? rec[h] : '';
+    });
+    Logger.log((apply ? '복구' : '대상') + ' ' + (i + 2) + '행 · ' +
+               rec['접수ID'] + ' · ' + rec['성함']);
+    if (apply) sh.getRange(i + 2, 1, 1, row.length).setValues([row]);
+  }
+
+  Logger.log(n === 0 ? '옛 순서로 쓰인 행이 없습니다 — 손댈 것 없음'
+                     : (apply ? n + '행을 현재 헤더에 맞게 옮겼습니다'
+                              : n + '행이 대상입니다. 맞으면 옛행복구_실행() 을 실행하세요'));
 }
 
 /** 과거 마케팅 동의 기록까지 완전히 삭제한다 — 되돌릴 수 없다 */
