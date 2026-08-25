@@ -134,19 +134,12 @@ button.go:disabled{background:#c3ccd3}
     만 14세 미만은 법정대리인 동의가 필요합니다. 원장에게 알려주세요.
   </div>
   <label class="f">시술 목적</label>
-  <select id="purpose">
-    <option value="">선택</option>
-    <option>위생</option>
-    <option>여행</option>
-    <option>수영</option>
-    <option>운동</option>
-    <option>촬영</option>
-    <option>데이트 / 커플</option>
-    <option>임신 / 출산준비</option>
-    <option>미용</option>
-    <option>주변 추천</option>
-    <option>지인 소개</option>
-  </select>
+  <div class="chips" data-g="purpose">
+    <div class="chip">위생</div><div class="chip">여행</div><div class="chip">수영</div>
+    <div class="chip">운동</div><div class="chip">촬영</div><div class="chip">데이트 / 커플</div>
+    <div class="chip">임신 / 출산준비</div><div class="chip">미용</div>
+    <div class="chip">주변 추천</div><div class="chip">지인 소개</div>
+  </div>
   <div id="referSec" style="display:none">
     <div class="row2" style="margin-top:10px">
       <div><label class="f" style="margin-top:0">소개해주신 분 성함</label>
@@ -472,11 +465,10 @@ $('#birth').addEventListener('input',e=>{
 });
 ['#name','#tel','#area'].forEach(s=>$(s).addEventListener('input',prog));
 
-/* 시술 목적 — 지인 소개일 때만 소개자 입력칸 */
-$('#purpose').addEventListener('change',()=>{
-  $('#referSec').style.display = $('#purpose').value==='지인 소개' ? 'block' : 'none';
-  prog();
-});
+/* 시술 목적 — 다중 선택. '지인 소개' 를 고른 경우에만 소개자 입력칸 */
+const isRefer=()=>$$('.chips[data-g="purpose"] .chip.on')
+  .some(x=>x.textContent.trim()==='지인 소개');
+function purposeSync(){ $('#referSec').style.display = isRefer() ? 'block' : 'none'; }
 
 /* 관심있는 시술 — 접히는 드롭다운 안의 다중 선택 */
 $('#ddBtn').addEventListener('click',()=>{
@@ -522,7 +514,7 @@ function prog(){
   if(!o[5])miss.push('필수 동의');
   if(!o[6])miss.push('서명');
   $('#msg').textContent=miss.length?('남은 항목: '+miss.join(' · ')):'';
-  ddSync();
+  ddSync(); purposeSync();
   $('#submit').disabled=miss.length>0;
 }
 const pick=g=>$$('.chips[data-g="'+g+'"] .chip.on').map(x=>x.textContent).join(', ')||'—';
@@ -541,9 +533,9 @@ function collect(){
     token:TOKEN, cid:curCid,
     name:$('#name').value.trim(), tel:$('#tel').value.trim(),
     birth:(parseBirth($('#birth').value)||{}).iso||'', area:$('#area').value||'',
-    purpose:$('#purpose').value||'',
-    refName: $('#purpose').value==='지인 소개' ? $('#refName').value.trim() : '',
-    refTel:  $('#purpose').value==='지인 소개' ? $('#refTel').value.trim() : '',
+    purpose:pick('purpose'),
+    refName: isRefer() ? $('#refName').value.trim() : '',
+    refTel:  isRefer() ? $('#refTel').value.trim() : '',
     interest:pick('interest'),
     party:pick('party'), visit:pick('visit'),
     exWax:pick('exWax'), exLash:pick('exLash'), exSemi:pick('exSemi'),
@@ -565,7 +557,7 @@ function collect(){
 }
 function showSummary(v){
   const rows=[['성함',v.name],['연락처',v.tel],['생년월일',v.birth],['거주·소속',v.area||'—'],
-    ['시술 목적',v.purpose||'—'],
+    ['시술 목적',v.purpose],
     ['소개자',(v.refName||v.refTel) ? (v.refName+' '+v.refTel).trim() : '—'],
     ['관심 시술',v.interest],
     ['동반 방문',v.party],['방문 시간대',v.visit],
