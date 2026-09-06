@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>고객카드 → Google Sheet 연결 가이드</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--ink:#1c1f23;--sub:#6b7480;--line:#e3ded4;--bg:#f7f5f0;--card:#fff;
+  --ac:#1f6f8b;--acbg:#eaf3f6;--warn:#b8503f;--warnbg:#fdf1ef;--good:#3f7d4e;--goodbg:#eef6ef}
+body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+  background:var(--bg);color:var(--ink);line-height:1.72;font-size:15px}
+.wrap{max-width:800px;margin:0 auto;padding:0 18px 70px}
+header{padding:40px 0 20px;border-bottom:2px solid var(--ink);margin-bottom:26px}
+h1{font-size:25px;font-weight:800;letter-spacing:-.4px}
+.sub{font-size:12.5px;color:var(--sub);margin-top:9px}
+h2{font-size:18px;font-weight:800;margin:34px 0 12px;display:flex;align-items:center;gap:10px}
+h2 .n{font-size:12px;color:#fff;background:var(--ac);width:24px;height:24px;border-radius:7px;
+  display:inline-flex;align-items:center;justify-content:center;flex:none;font-weight:700}
+h3{font-size:15px;font-weight:700;margin:20px 0 7px}
+p{margin-bottom:11px;font-size:14.5px}
+ol,ul{margin:0 0 13px 20px}li{font-size:14.5px;margin-bottom:6px}
+code{background:#ece7dd;padding:1.5px 6px;border-radius:4px;font-size:13px;
+  font-family:ui-monospace,Menlo,monospace;word-break:break-all}
+pre{background:#1e2429;color:#dfe6ec;padding:14px 16px;border-radius:10px;overflow-x:auto;
+  font-size:12.7px;line-height:1.7;margin:10px 0 14px;font-family:ui-monospace,Menlo,monospace}
+pre b{color:#7fd0e8;font-weight:600}
+.box{border-radius:11px;padding:14px 17px;margin:15px 0;font-size:14.2px;border:1px solid}
+.box h4{font-size:13.5px;font-weight:800;margin-bottom:6px}
+.box p:last-child,.box ul:last-child{margin-bottom:0}
+.box.warn{background:var(--warnbg);border-color:#f0d5cf}.box.warn h4{color:var(--warn)}
+.box.note{background:var(--acbg);border-color:#cfe2e9}.box.note h4{color:var(--ac)}
+.box.good{background:var(--goodbg);border-color:#cfe3d3}.box.good h4{color:var(--good)}
+table{width:100%;border-collapse:collapse;margin:12px 0 16px;font-size:13.4px;
+  background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+th{background:#f0ece3;text-align:left;padding:9px 11px;font-size:11.8px;color:#4a525c;
+  border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:9px 11px;border-bottom:1px solid #f0ede7;vertical-align:top}
+tr:last-child td{border-bottom:none}
+</style></head><body><div class="wrap">
+<header>
+  <h1>고객카드 → Google Sheet 연결</h1>
+  <div class="sub">GitHub Pages 정적 페이지 · 서버 없이 Apps Script 중계 · 약 15분</div>
+</header>
+
+<div class="box note">
+<h4>전체 흐름</h4>
+<p style="margin-bottom:0">태블릿에서 <b>github.io 폼 작성</b> → 숨은 iframe 으로 <b>Apps Script 웹앱에 POST</b>
+→ Apps Script 가 <b>서명은 Drive 에 PNG 로</b>, <b>나머지는 Sheet 한 줄로</b> 저장 → 접수번호를 폼에 되돌려줌.<br>
+서버도, 데이터베이스도, 월 비용도 없습니다.</p>
+</div>
+
+<h2><span class="n">1</span>스프레드시트와 폴더 만들기</h2>
+<ol>
+<li>Google Drive 에서 <b>새 스프레드시트</b> 생성 → 이름 예: <code>구름왁싱 고객카드</code></li>
+<li>주소창에서 <b>ID</b> 를 복사합니다.<br>
+  <code>docs.google.com/spreadsheets/d/<b>1AbC...XyZ</b>/edit</code> → 굵은 부분</li>
+<li>Drive 에 <b>새 폴더</b> 생성 → 이름 예: <code>고객서명</code></li>
+<li>폴더를 열고 주소창에서 ID 복사.<br>
+  <code>drive.google.com/drive/folders/<b>1DeF...UvW</b></code> → 굵은 부분</li>
+</ol>
+<div class="box warn">
+<p style="margin-bottom:0"><b>폴더와 시트는 절대 "링크가 있는 모든 사용자"로 공유하지 마세요.</b>
+본인 계정만 접근 가능한 기본 상태로 두면 됩니다. Apps Script 는 소유자 권한으로 실행되므로
+공유하지 않아도 정상 저장됩니다.</p>
+</div>
+
+<h2><span class="n">2</span>Apps Script 붙여넣기</h2>
+<ol>
+<li>스프레드시트에서 <b>확장 프로그램 → Apps Script</b></li>
+<li>기존 코드를 전부 지우고 <b>Code.gs</b> 파일 내용을 붙여넣습니다</li>
+<li>맨 위 세 줄을 채웁니다</li>
+</ol>
+<pre>const SHEET_ID  = '<b>1AbC...XyZ</b>';        // 1단계에서 복사한 시트 ID
+const FOLDER_ID = '<b>1DeF...UvW</b>';        // 1단계에서 복사한 폴더 ID
+const TOKEN     = '<b>gureum-2026-x7k9qp</b>'; // 아무 문자열, 20자 이상 권장</pre>
+<ol start="4">
+<li>저장 후 함수 목록에서 <code>설치테스트</code> 를 골라 <b>실행</b></li>
+<li>권한 승인 창이 뜹니다 → <b>고급 → (안전하지 않음) 이동</b> → 허용<br>
+  <span style="color:var(--sub);font-size:13px">본인이 만든 스크립트라 정상입니다</span></li>
+<li>실행 로그에 <code>시트 연결 OK</code> / <code>폴더 연결 OK</code> 가 나오면 성공</li>
+</ol>
+
+<h2><span class="n">3</span>웹앱으로 배포</h2>
+<ol>
+<li>우측 상단 <b>배포 → 새 배포</b></li>
+<li>톱니바퀴 → <b>웹 앱</b> 선택</li>
+</ol>
+<table>
+<tr><th>항목</th><th>설정값</th><th>이유</th></tr>
+<tr><td>설명</td><td>고객카드 v1</td><td>—</td></tr>
+<tr><td><b>실행 계정</b></td><td><b>나</b></td><td>시트·폴더 접근 권한이 필요</td></tr>
+<tr><td><b>액세스 권한</b></td><td><b>모든 사용자</b></td><td>고객이 로그인 없이 제출해야 함</td></tr>
+</table>
+<ol start="3">
+<li><b>배포</b> → 나오는 <b>웹 앱 URL</b> 을 복사<br>
+  <code>https://script.google.com/macros/s/AKfy.../exec</code></li>
+</ol>
+<div class="box warn">
+<h4>코드를 고칠 때마다 재배포해야 합니다</h4>
+<p style="margin-bottom:0"><b>배포 → 배포 관리 → 연필(수정) → 버전: 새 버전 → 배포</b><br>
+"새 배포"로 만들면 URL 이 바뀌어 폼도 같이 고쳐야 하니, 수정할 때는 <em>기존 배포를 수정</em>하세요.</p>
+</div>
+
+<h2><span class="n">4</span>폼에 URL 넣고 올리기</h2>
+<p><code>card_form.html</code> 을 편집기로 열고 위쪽 두 줄을 바꿉니다.</p>
+<pre>const ENDPOINT = '<b>https://script.google.com/macros/s/AKfy.../exec</b>';
+const TOKEN    = '<b>gureum-2026-x7k9qp</b>';   // 2단계와 똑같이</pre>
+<p>저장 후 GitHub 저장소에 올립니다. 기존 구조에 맞추면:</p>
+<pre>kwonjunhyuk0/public/
+├─ 3d/home/index.html
+├─ 3d/store/index.html
+└─ card/index.html      <b>← card_form.html 을 이 이름으로</b></pre>
+<p>주소는 <code>kwonjunhyuk0.github.io/public/card/</code> 가 됩니다.
+태블릿 홈 화면에 추가해두면 앱처럼 열립니다.</p>
+
+<h2><span class="n">5</span>동작 확인</h2>
+<ol>
+<li>폼을 열고 아무 이름으로 한 번 제출</li>
+<li>완료 화면에 <b>접수 완료 · 번호 260823-143052</b> 가 뜨는지 확인</li>
+<li>시트에 한 줄 쌓였는지, 서명 열의 링크가 열리는지 확인</li>
+</ol>
+<div class="box note">
+<h4>안 될 때</h4>
+<table style="margin-bottom:0">
+<tr><th>증상</th><th>원인 · 조치</th></tr>
+<tr><td>전송 설정 전입니다</td><td>ENDPOINT 를 안 바꿈</td></tr>
+<tr><td>인증 실패</td><td>HTML 과 Code.gs 의 TOKEN 이 다름</td></tr>
+<tr><td>응답이 없습니다</td><td>배포 액세스가 "모든 사용자"가 아님 · 재배포 안 함</td></tr>
+<tr><td>서명 저장실패</td><td>FOLDER_ID 오타 · 폴더를 휴지통에 버림</td></tr>
+</table>
+</div>
+
+<h2><span class="n">6</span>꼭 알아두실 것</h2>
+
+<div class="box warn">
+<h4>이 폼은 건강정보를 다룹니다</h4>
+<p>임신 여부, 복용 약, 알레르기, 피부질환은 <b>개인정보보호법상 민감정보</b>로 분류될 가능성이 높습니다.
+폼에서 별도 동의를 받도록 만들어두었지만, 실제 운영에는 두 가지가 더 필요합니다.</p>
+<ul style="margin-bottom:0">
+<li><b>국외 이전 고지</b> — Google 서버는 해외에 있습니다. 개인정보 처리방침에 이전 국가·목적·항목을 적어야 합니다</li>
+<li><b>개인정보 처리방침 게시</b> — 폼에서 링크로 연결되어야 합니다</li>
+</ul>
+</div>
+
+<div class="box warn">
+<h4>URL 을 아는 사람은 누구나 제출할 수 있습니다</h4>
+<p style="margin-bottom:0">TOKEN 이 HTML 소스에 들어 있으므로 <b>완벽한 인증이 아닙니다</b>.
+자동 봇 스팸은 막지만, 소스를 본 사람은 가짜 데이터를 넣을 수 있습니다.
+시트에 이상한 줄이 쌓이면 <b>TOKEN 을 바꾸고 재배포</b>하세요 (HTML 도 같이).</p>
+</div>
+
+<div class="box warn">
+<h4>보관 기간을 지키셔야 합니다</h4>
+<p style="margin-bottom:0">폼에 <b>"최종 방문일로부터 3년"</b> 이라고 고지했습니다.
+3년 지난 행과 서명 파일은 실제로 지우셔야 합니다.
+시트에 <code>접수시각</code> 열이 있으니 정렬해서 주기적으로 정리하세요.</p>
+</div>
+
+<div class="box good">
+<h4>잘 만들어진 부분</h4>
+<ul style="margin-bottom:0">
+<li><b>서명을 시트에 넣지 않고 Drive 링크로</b> — 셀 5만자 제한을 넘지 않습니다</li>
+<li><b>LockService</b> — 두 명이 동시에 제출해도 줄이 섞이지 않습니다</li>
+<li><b>doGet 은 OK 만 반환</b> — URL 을 직접 열어도 데이터가 새지 않습니다</li>
+<li><b>실패해도 요약 화면이 남습니다</b> — 전송이 안 되면 화면을 원장에게 보여주면 됩니다</li>
+</ul>
+</div>
+
+<div class="box note">
+<h4>법률·세무 자문이 아닙니다</h4>
+<p style="margin-bottom:0">위 개인정보 관련 내용은 일반적인 주의사항입니다.
+민감정보 수집과 국외 이전은 전문가 확인을 받고 오픈하세요.</p>
+</div>
+
+</div></body></html>
