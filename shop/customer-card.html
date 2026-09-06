@@ -196,7 +196,12 @@ button.go:disabled{background:#c3ccd3}
   <div class="sl">반영구시술</div>
   <div class="chips" data-g="exSemi">
     <div class="chip">눈썹문신</div><div class="chip">아이라인</div><div class="chip">헤어라인</div>
-    <div class="chip">입술</div><div class="chip">기타</div>
+    <div class="chip">입술</div>
+  </div>
+  <div class="sl">기타</div>
+  <div class="chips" data-g="exEtc">
+    <div class="chip">레이저 제모</div><div class="chip">성형수술</div>
+    <div class="chip">보톡스</div><div class="chip">필러</div>
   </div>
 </section>
 
@@ -538,7 +543,7 @@ function collect(){
     refTel:  isRefer() ? $('#refTel').value.trim() : '',
     interest:pick('interest'),
     party:pick('party'), visit:pick('visit'),
-    exWax:pick('exWax'), exLash:pick('exLash'), exSemi:pick('exSemi'),
+    exWax:pick('exWax'), exLash:pick('exLash'), exSemi:pick('exSemi'), exEtc:pick('exEtc'),
     brazilian:(d?d.dataset.v:''), brOpt:pick('br2'),
     face:pick('face'), body:pick('body'), care:pick('care'),
     lashCurl:(lc?lc.dataset.v:''), lashLen:pick('lashLen'),
@@ -561,7 +566,8 @@ function showSummary(v){
     ['소개자',(v.refName||v.refTel) ? (v.refName+' '+v.refTel).trim() : '—'],
     ['관심 시술',v.interest],
     ['동반 방문',v.party],['방문 시간대',v.visit],
-    ['왁싱 경험',v.exWax],['속눈썹 경험',v.exLash],['반영구 경험',v.exSemi],['브라질리언',(v.brazilian||'—')+' / '+v.brOpt],
+    ['왁싱 경험',v.exWax],['속눈썹 경험',v.exLash],
+    ['반영구 경험',v.exSemi],['기타 경험',v.exEtc],['브라질리언',(v.brazilian||'—')+' / '+v.brOpt],
     ['페이스',v.face],['바디',v.body],['집중케어',v.care],
     ['연장 컬',v.lashCurl||'—'],['연장 길이',v.lashLen],
     ['연장 숱',v.lashVol],['연장 모질',v.lashFib],
