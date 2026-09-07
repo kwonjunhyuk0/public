@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="googlebot" content="noindex, nofollow, noarchive">
+<meta name="referrer" content="no-referrer">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>매장 평면도 · Rev.1</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" as="style" crossorigin
+  href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --paper:#f2f0eb; --sheet:#fffefb; --ink:#20262c; --sub:#6d7883; --faint:#9aa5af;
+  --line:#d8d3c8; --wall:#20262c; --part:#2f7d95; --door:#1f7a4d;
+  --dimc:#c0503c; --fire:#8a6a4a;
+}
+body{
+  font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic Neo',sans-serif;
+  background:var(--paper); color:var(--ink); line-height:1.55; font-size:15px;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1240px;margin:0 auto;padding:22px 18px 60px}
+header{border-bottom:1.5px solid var(--ink);padding-bottom:12px;margin-bottom:18px}
+h1{font-size:21px;font-weight:800;letter-spacing:-.3px}
+.sub{font-size:12.5px;color:var(--sub);margin-top:4px}
+
+.cols{display:flex;gap:22px;align-items:flex-start;flex-wrap:wrap}
+.sheet{
+  flex:1 1 420px; min-width:320px; background:var(--sheet);
+  border:1px solid var(--line); border-radius:10px; padding:10px;
+}
+.sheet svg{display:block;width:100%;height:auto}
+aside{flex:0 1 320px;min-width:260px;display:flex;flex-direction:column;gap:16px}
+
+.card{background:var(--sheet);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+h2{font-size:12px;font-weight:800;letter-spacing:.08em;color:var(--sub);
+   text-transform:uppercase;margin-bottom:9px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+td{padding:4px 0;vertical-align:top}
+td.n{text-align:right;color:var(--sub);font-variant-numeric:tabular-nums;white-space:nowrap}
+tr+tr td{border-top:1px solid #efece5}
+tfoot td{border-top:1.5px solid var(--line);font-weight:700;padding-top:6px}
+.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:7px;vertical-align:-1px}
+.lg{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--sub);padding:2.5px 0}
+.lg b{color:var(--ink);font-weight:600}
+.note{font-size:12px;color:var(--sub)}
+.note li{margin-left:15px;margin-top:3px}
+
+.tools{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+button{background:var(--sheet);color:var(--ink);border:1px solid var(--line);border-radius:7px;
+  padding:6px 11px;font-size:12.5px;cursor:pointer;font-family:inherit}
+button:hover{background:#f6f3ec}
+button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+button:focus-visible,.btn:focus-visible{outline:2px solid var(--part);outline-offset:2px}
+.btn{background:var(--sheet);color:var(--ink);border:1px solid var(--line);border-radius:7px;
+  padding:6px 11px;font-size:12.5px;text-decoration:none;display:inline-flex;align-items:center}
+.btn:hover{background:#f6f3ec}
+
+@media print{
+  body{background:#fff}
+  .wrap{max-width:none;padding:0}
+  .tools{display:none}
+  .cols{display:block}
+  .sheet{border:0;padding:0;page-break-after:always}
+  aside{margin-top:14px}
+  @page{size:A4 portrait;margin:12mm}
+}
+</style></head><body>
+<div class="wrap">
+
+<header>
+  <h1>구름 왁싱 · 속눈썹 &nbsp;매장 평면도</h1>
+  <div class="sub">Rev.1 · 단위 mm · 전용 실측면적 35.11㎡ (약 10.6평) · 층고 2,400
+    &nbsp;·&nbsp; <span id="stamp"></span></div>
+</header>
+
+<div class="tools">
+  <button data-t="furn" class="on">가구</button>
+  <button data-t="dim"  class="on">치수</button>
+  <button data-t="fire" class="on">소방</button>
+  <button data-t="lbl"  class="on">실 이름</button>
+  <button id="prt">인쇄</button>
+  <a class="btn" href="../store/">3D 뷰어</a>
+</div>
+
+<div class="cols">
+  <div class="sheet"><svg id="plan" xmlns="http://www.w3.org/2000/svg" role="img"
+       aria-label="매장 평면도 — 세척·소독실, 반영구방, 왁싱방, 복도, 로비"></svg></div>
+
+  <aside>
+    <div class="card">
+      <h2>실 구성</h2>
+      <table id="rt"></table>
+    </div>
+    <div class="card">
+      <h2>범례</h2>
+      <div class="lg"><span class="sw" style="background:var(--wall)"></span><b>외벽</b> t150 (가정)</div>
+      <div class="lg"><span class="sw" style="background:var(--part)"></span><b>내부 가벽</b> t100 · H2,100</div>
+      <div class="lg"><span class="sw" style="background:var(--door)"></span><b>미닫이문</b></div>
+      <div class="lg"><span class="sw" style="background:#8ED4EA"></span><b>설비</b> 싱크·소독기·샤워·창호</div>
+      <div class="lg"><span class="sw" style="background:#C68C4E"></span><b>가구</b></div>
+      <div class="lg"><span class="sw" style="background:#8A5A2B"></span><b>수납</b> 보관함·락커·선반</div>
+      <div class="lg"><span class="sw" style="background:var(--fire)"></span><b>⊙ 감지기 · ⊗ 스프링클러</b></div>
+    </div>
+    <div class="card">
+      <h2>확인 필요</h2>
+      <ul class="note">
+        <li>벽체 두께 실측값 없음 → 150 가정. 실제 두께에 따라 유효치수 변동</li>
+        <li>가구 위치는 현장 스케치를 축척 환산한 값 (±100 내외)</li>
+        <li>세척·소독실 벽 위치는 추정. 실측 확정 필요</li>
+        <li>감지기·스프링클러는 개략 표기. 가벽 신설 시 소방 감리 협의 필수</li>
+        <li>전면 창호 분할 미확정</li>
+      </ul>
+    </div>
+  </aside>
+</div>
+</div>
+
+<script id="geo" type="application/json">{"W":3500,"D":10360,"H":2400,"WT":150,"PT":100,"PH":2100,"UP":{"w":2980,"d":2220,"offL":140},"shell":[[140,0],[3120,0],[3120,2220],[3500,2220],[3500,10360],[0,10360],[0,2220],[140,2220]],"partitions":[{"id":"P1","x1":950,"z1":2750,"x2":3500,"z2":2750},{"id":"P2a","x1":950,"z1":2750,"x2":950,"z2":2900},{"id":"P2b","x1":950,"z1":4080,"x2":950,"z2":5700},{"id":"P3","x1":950,"z1":5700,"x2":3500,"z2":5700},{"id":"P4a","x1":1600,"z1":1170,"x2":1600,"z2":2000},{"id":"P4b","x1":1600,"z1":2700,"x2":1600,"z2":2750},{"id":"P5","x1":940,"z1":2000,"x2":1600,"z2":2000},{"id":"P6","x1":140,"z1":2000,"x2":190,"z2":2000}],"sliders":[{"id":"SD1","x1":1600,"z1":2050,"x2":1600,"z2":2700,"w":650,"h":2050,"note":"복도 → 반영구방 · 미닫이"},{"id":"SD2","x1":950,"z1":2900,"x2":950,"z2":4080,"w":1180,"note":"복도 → 왁싱방"},{"id":"SD3","x1":0,"z1":5700,"x2":950,"z2":5700,"w":950,"type":"archwall","ow":900,"oh":1980,"note":"로비 ↔ 복도 · 아치형 가벽"},{"id":"SD4","x1":1600,"z1":160,"x2":1600,"z2":1170,"w":1010,"note":"세척·소독실 → 반영구방"},{"id":"SD5","x1":190,"z1":2000,"x2":940,"z2":2000,"w":750,"note":"세척·소독실 → 복도"}],"rooms":[{"name":"세척·소독실","use":"싱크 → 세척·소독 → 보관","pts":[[140,0],[1600,0],[1600,1950],[140,1950]],"color":"#C08C7A","dim":[1460,2000],"area":2.85},{"name":"반영구방","use":"수면 · 락커","pts":[[1650,0],[3120,0],[3120,2220],[3500,2220],[3500,2700],[1650,2700]],"color":"#C8A882","dim":[3500,2700],"area":4.15},{"name":"왁싱방","use":"시술 · 샤워","pts":[[1000,2800],[3500,2800],[3500,5650],[1000,5650]],"color":"#C8A882","dim":[2500,2850],"area":7.12},{"name":"복도","use":"연결 동선","pts":[[140,2050],[1550,2050],[1550,2700],[900,2700],[900,5650],[0,5650],[0,2220],[140,2220]],"color":"#8E6238","dim":[900,3600],"area":3.64},{"name":"로비","use":"네일 · 카운터 · 대기","pts":[[0,5750],[3500,5750],[3500,10360],[0,10360]],"color":"#E2C79C","dim":[3500,4610],"area":16.14}],"items":[{"no":1,"name":"세탁기","spec":"800 × 800","type":"washer","cx":555,"cz":500,"w":800,"d":800,"h":850,"color":"#8ED4EA","kind":"eq","room":"세척·소독실"},{"no":2,"name":"싱크대","spec":"560 × 500","type":"basin","cx":1290,"cz":420,"w":560,"d":500,"h":850,"color":"#8ED4EA","kind":"eq","room":"세척·소독실"},{"no":3,"name":"소독기 · 세척기","spec":"500 × 700","type":"cabinet","cx":1290,"cz":1570,"w":500,"d":700,"h":900,"color":"#8ED4EA","kind":"eq","room":"세척·소독실"},{"no":4,"name":"보관함","spec":"450 × 400","type":"cabinet","cx":420,"cz":1730,"w":450,"d":400,"h":1600,"color":"#8A5A2B","kind":"sf","room":"세척·소독실"},{"name":"창문","spec":"1,100 × 900","type":"window","cx":700,"cz":75,"w":1100,"d":100,"h":900,"y0":1150,"color":"#8ED4EA","kind":"eq","room":"세척·소독실","no":5},{"name":"환풍기","spec":"Ø300","type":"vent","cx":1430,"cz":110,"w":300,"d":200,"h":300,"y0":1850,"color":"#8ED4EA","kind":"eq","room":"세척·소독실","no":6},{"no":7,"name":"베드","spec":"750 × 1850","type":"bed","cx":2740,"cz":1050,"w":750,"d":1850,"h":700,"color":"#C68C4E","kind":"fx","room":"반영구방"},{"no":8,"name":"락커","spec":"400 × 300","type":"cabinet","cx":3300,"cz":2410,"w":400,"d":300,"h":1800,"color":"#8A5A2B","kind":"sf","room":"반영구방"},{"no":9,"name":"샤워부스","spec":"800 × 800","type":"shower","cx":3050,"cz":3250,"w":800,"d":800,"h":2000,"color":"#8ED4EA","kind":"eq","room":"왁싱방"},{"no":10,"name":"서랍장","spec":"800 × 800","type":"cabinet","cx":3080,"cz":4100,"w":800,"d":800,"h":800,"color":"#8A5A2B","kind":"sf","room":"왁싱방"},{"no":11,"name":"베드","spec":"750 × 1850","type":"bed","cx":1550,"cz":4640,"w":750,"d":1850,"h":700,"color":"#C68C4E","kind":"fx","room":"왁싱방"},{"no":12,"name":"원형의자","spec":"Ø400","type":"stool","cx":3120,"cz":4700,"w":400,"d":400,"h":460,"color":"#C68C4E","kind":"fx","room":"왁싱방"},{"no":13,"name":"원형탁자","spec":"Ø600","type":"rtable","cx":2900,"cz":5300,"w":600,"d":600,"h":740,"color":"#C68C4E","kind":"fx","room":"왁싱방"},{"no":14,"name":"원형의자","spec":"Ø400","type":"stool","cx":2400,"cz":5250,"w":400,"d":400,"h":460,"color":"#C68C4E","kind":"fx","room":"왁싱방"},{"no":15,"name":"원형의자","spec":"Ø400","type":"stool","cx":1845,"cz":6090,"w":400,"d":400,"h":460,"color":"#C68C4E","kind":"fx","room":"로비"},{"no":16,"name":"원형의자","spec":"Ø400","type":"stool","cx":2950,"cz":6050,"w":400,"d":400,"h":460,"color":"#C68C4E","kind":"fx","room":"로비"},{"no":17,"name":"카운터","spec":"2400 × 600","type":"desk","cx":2280,"cz":6820,"w":2400,"d":600,"h":900,"color":"#C68C4E","kind":"fx","room":"로비"},{"no":18,"name":"세면대","spec":"600 × 600","type":"basin","cx":3170,"cz":7550,"w":600,"d":600,"h":850,"color":"#8ED4EA","kind":"eq","room":"로비"},{"no":19,"name":"벤치","spec":"400 × 1000","type":"bench","cx":300,"cz":8540,"w":400,"d":1000,"h":450,"color":"#C68C4E","kind":"fx","room":"로비"},{"no":20,"name":"네일데스크","spec":"400 × 800","type":"desk","cx":2510,"cz":8390,"w":400,"d":800,"h":750,"color":"#C68C4E","kind":"fx","room":"로비"},{"no":21,"name":"네일데스크","spec":"400 × 800","type":"desk","cx":2510,"cz":9570,"w":400,"d":800,"h":750,"color":"#C68C4E","kind":"fx","room":"로비"},{"no":22,"name":"원형의자","spec":"Ø400","type":"stool","cx":2010,"cz":8390,"w":400,"d":400,"h":460,"color":"#C68C4E","kind":"fx","room":"로비"},{"no":23,"name":"원형의자","spec":"Ø400","type":"stool","cx":2980,"cz":8390,"w":400,"d":400,"h":460,"color":"#C68C4E","kind":"fx","room":"로비"},{"no":24,"name":"원형의자","spec":"Ø400","type":"stool","cx":2010,"cz":9570,"w":400,"d":400,"h":460,"color":"#C68C4E","kind":"fx","room":"로비"},{"no":25,"name":"원형의자","spec":"Ø400","type":"stool","cx":2980,"cz":9570,"w":400,"d":400,"h":460,"color":"#C68C4E","kind":"fx","room":"로비"},{"no":26,"name":"네일선반","spec":"300 × 2000","type":"cabinet","cx":3350,"cz":8980,"w":300,"d":2000,"h":1800,"color":"#8A5A2B","kind":"sf","room":"로비"}],"detectors":[[740,1840],[2400,1840],[740,3820],[2380,3820]],"sprinklers":[[740,6130],[2380,6130],[740,8380],[2380,8380]],"doorW":1060}</script>
+<script>
+const D = JSON.parse(document.getElementById('geo').textContent);
+const NS = 'http://www.w3.org/2000/svg';
+const svg = document.getElementById('plan');
+
+/* ── 도면 영역 : 실측 0..3500 × 0..10360, 사방에 치수선 여백 ── */
+const VB = {x:-1000, y:-980, w:5950, h:12980};   // 사방 치수선이 잘리지 않는 최소 여백
+svg.setAttribute('viewBox', `${VB.x} ${VB.y} ${VB.w} ${VB.h}`);
+
+const el = (t, a, parent) => {
+  const n = document.createElementNS(NS, t);
+  for (const k in a) n.setAttribute(k, a[k]);
+  (parent || svg).appendChild(n); return n;
+};
+const g = id => el('g', {id});
+const G = {floor:g('floor'), wall:g('wall'), part:g('part'), door:g('door'),
+           furn:g('furn'), fire:g('fire'), dim:g('dim'), lbl:g('lbl')};
+const pts = a => a.map(p => p.join(',')).join(' ');
+const fmt = n => n.toLocaleString('ko-KR');
+
+/* ── 바닥 · 실 ── */
+el('polygon', {points:pts(D.shell), fill:'#faf8f3'}, G.floor);
+D.rooms.forEach(r => {
+  el('polygon', {points:pts(r.pts), fill:r.color, 'fill-opacity':.30,
+                 stroke:'#00000012', 'stroke-width':6}, G.floor);
+});
+
+/* ── 외벽 : 셸 윤곽을 두께만큼 굵게 ── */
+el('polygon', {points:pts(D.shell), fill:'none', stroke:'var(--wall)',
+               'stroke-width':D.WT, 'stroke-linejoin':'miter'}, G.wall);
+
+/* ── 전면 창호 (남측) ── */
+const y0 = D.D;
+el('line', {x1:0, y1:y0, x2:D.doorW, y2:y0, stroke:'#a9754a', 'stroke-width':D.WT}, G.wall);
+el('line', {x1:D.doorW, y1:y0, x2:D.W, y2:y0, stroke:'#8ED4EA', 'stroke-width':D.WT}, G.wall);
+el('path', {d:`M ${D.doorW} ${y0} A ${D.doorW} ${D.doorW} 0 0 1 0 ${y0-D.doorW}`,
+            fill:'none', stroke:'#a9754a', 'stroke-width':18,
+            'stroke-dasharray':'70 55'}, G.wall);
+
+/* ── 내부 가벽 ── */
+D.partitions.forEach(p => el('line',
+  {x1:p.x1, y1:p.z1, x2:p.x2, y2:p.z2, stroke:'var(--part)',
+   'stroke-width':D.PT, 'stroke-linecap':'square'}, G.part));
+
+/* ── 문 ── */
+D.sliders.forEach(s => {
+  const horiz = s.z1 === s.z2;
+  const L = Math.abs(horiz ? s.x2-s.x1 : s.z2-s.z1);
+  const cx = (s.x1+s.x2)/2, cz = (s.z1+s.z2)/2;
+
+  if (s.type === 'archwall') {                       // 아치형 개구부를 낸 가벽
+    el('line', {x1:s.x1, y1:s.z1, x2:s.x2, y2:s.z2, stroke:'var(--part)',
+                'stroke-width':D.PT, 'stroke-linecap':'square'}, G.door);
+    const r = (s.ow||900)/2;
+    el('path', {d:`M ${cx-r} ${cz} A ${r} ${r} 0 0 1 ${cx+r} ${cz}`, fill:'none',
+                stroke:'var(--door)', 'stroke-width':26, 'stroke-dasharray':'60 46'}, G.door);
+    el('line', {x1:cx-r, y1:cz, x2:cx+r, y2:cz, stroke:'var(--door)', 'stroke-width':34}, G.door);
+    return;
+  }
+  /* 미닫이 : 벽 양옆으로 어긋난 두 짝 */
+  for (let i=0; i<2; i++) {
+    const off = (i ? 1 : -1) * D.PT * 0.62;
+    const sh  = (i ? .245 : -.245) * L;
+    const len = L * .53;
+    const a = horiz ? {x1:cx+sh-len/2, y1:cz+off, x2:cx+sh+len/2, y2:cz+off}
+                    : {x1:cx+off, y1:cz+sh-len/2, x2:cx+off, y2:cz+sh+len/2};
+    el('line', Object.assign(a, {stroke:'var(--door)', 'stroke-width':46,
+                                 'stroke-linecap':'round'}), G.door);
+  }
+});
+
+/* ── 가구 · 설비 ── */
+D.items.forEach(it => {
+  const round = it.type === 'stool' || it.type === 'rtable';
+  const op = it.y0 ? .55 : .85;                       // 벽에 다는 설비는 흐리게
+  if (round) el('circle', {cx:it.cx, cy:it.cz, r:it.w/2, fill:it.color,
+                           'fill-opacity':op, stroke:'#00000030', 'stroke-width':10}, G.furn);
+  else el('rect', {x:it.cx-it.w/2, y:it.cz-it.d/2, width:it.w, height:it.d, rx:16,
+                   fill:it.color, 'fill-opacity':op, stroke:'#00000030', 'stroke-width':10}, G.furn);
+
+  if (Math.min(it.w, it.d) < 420) return;             // 너무 작으면 이름 생략
+  const t = el('text', {x:it.cx, y:it.cz, 'text-anchor':'middle',
+                        'font-size':108, fill:'#3b4249'}, G.furn);
+  const two = it.d >= 700;
+  el('tspan', {x:it.cx, dy:two ? -6 : 38}, t).textContent = it.name;
+  if (two) el('tspan', {x:it.cx, dy:130, 'font-size':94, fill:'#6d7883'}, t)
+             .textContent = it.spec;
+});
+
+/* ── 소방 ── */
+const fireMark = (p, kind) => {
+  el('circle', {cx:p[0], cy:p[1], r:95, fill:'#fff', stroke:'var(--fire)',
+                'stroke-width':22}, G.fire);
+  if (kind === 'd') el('circle', {cx:p[0], cy:p[1], r:34, fill:'var(--fire)'}, G.fire);
+  else [[-1,-1],[-1,1]].forEach(v => el('line',
+    {x1:p[0]+v[0]*62, y1:p[1]+v[1]*62, x2:p[0]-v[0]*62, y2:p[1]-v[1]*62,
+     stroke:'var(--fire)', 'stroke-width':22}, G.fire));
+};
+D.detectors.forEach(p => fireMark(p, 'd'));
+D.sprinklers.forEach(p => fireMark(p, 's'));
+
+/* ── 실 이름 ── */
+D.rooms.forEach(r => {
+  const xs = r.pts.map(p => p[0]), zs = r.pts.map(p => p[1]);
+  const cx = (Math.min(...xs)+Math.max(...xs))/2, cz = (Math.min(...zs)+Math.max(...zs))/2;
+  const t = el('text', {x:cx, y:cz, 'text-anchor':'middle'}, G.lbl);
+  el('tspan', {x:cx, dy:0, 'font-size':190, 'font-weight':800,
+               fill:'#242b31'}, t).textContent = r.name;
+  el('tspan', {x:cx, dy:200, 'font-size':122, fill:'#5d6870'}, t)
+    .textContent = `${fmt(r.dim[0])}×${fmt(r.dim[1])} · ${r.area}㎡`;
+});
+
+/* ── 치수선 ── */
+function dim(x1, y1, x2, y2, txt, side) {
+  const horiz = y1 === y2;
+  el('line', {x1, y1, x2, y2, stroke:'var(--dimc)', 'stroke-width':13}, G.dim);
+  [[x1,y1],[x2,y2]].forEach(p => el('line',
+    {x1:p[0]-(horiz?0:70), y1:p[1]-(horiz?70:0),
+     x2:p[0]+(horiz?0:70), y2:p[1]+(horiz?70:0),
+     stroke:'var(--dimc)', 'stroke-width':13}, G.dim));
+  const mx = (x1+x2)/2, my = (y1+y2)/2;
+  const t = el('text', {'text-anchor':'middle', 'font-size':148, 'font-weight':600,
+                        fill:'var(--dimc)'}, G.dim);
+  if (horiz) { t.setAttribute('x', mx); t.setAttribute('y', my + (side === 'up' ? -70 : 200)); }
+  else { t.setAttribute('x', 0); t.setAttribute('y', 0);
+         t.setAttribute('transform', `translate(${mx + (side === 'left' ? -70 : 190)},${my}) rotate(-90)`); }
+  t.textContent = fmt(txt);
+}
+const UP = D.UP, UL = UP.offL, UR = UP.offL + UP.w;
+/* 상부 폭 */
+dim(UL, -560, UR, -560, UP.w, 'up');
+dim(0, -560, UL, -560, UL, 'up');
+dim(UR, -560, D.W, -560, D.W-UR, 'up');
+/* 전면 */
+dim(0, D.D+560, D.doorW, D.D+560, D.doorW, 'dn');
+dim(D.doorW, D.D+560, D.W, D.D+560, D.W-D.doorW, 'dn');
+dim(0, D.D+1080, D.W, D.D+1080, D.W, 'dn');
+/* 우측 깊이 */
+dim(D.W+560, 0, D.W+560, UP.d, UP.d, 'right');
+dim(D.W+560, UP.d, D.W+560, D.D, D.D-UP.d, 'right');
+dim(D.W+1120, 0, D.W+1120, D.D, D.D, 'right');
+/* 좌측 실 깊이 체인 */
+[[0,2000],[2000,2750],[2750,5700],[5700,D.D]].forEach(s =>
+  dim(-620, s[0], -620, s[1], s[1]-s[0], 'left'));
+
+/* 방위 */
+el('path', {d:'M 4300 -560 L 4180 -160 L 4300 -250 L 4420 -160 Z',
+            fill:'var(--ink)'}, G.dim);
+el('text', {x:4300, y:-680, 'text-anchor':'middle', 'font-size':150,
+            'font-weight':700, fill:'var(--ink)'}, G.dim).textContent = 'N';
+el('text', {x:4300, y:130, 'text-anchor':'middle', 'font-size':100,
+            fill:'var(--faint)'}, G.dim).textContent = '스케치 기준';
+
+/* ── 실 구성표 ── */
+const rt = document.getElementById('rt');
+let tot = 0;
+D.rooms.forEach(r => {
+  tot += r.area;
+  rt.insertAdjacentHTML('beforeend',
+    `<tr><td><span class="sw" style="background:${r.color}"></span>${r.name}</td>` +
+    `<td class="n">${fmt(r.dim[0])}×${fmt(r.dim[1])}</td>` +
+    `<td class="n"><b>${r.area.toFixed(2)}</b>㎡</td></tr>`);
+});
+rt.insertAdjacentHTML('beforeend',
+  `<tfoot><tr><td>합계 (벽체 제외)</td><td class="n"></td>` +
+  `<td class="n">${tot.toFixed(2)}㎡</td></tr></tfoot>`);
+
+/* ── 표시 토글 · 인쇄 ── */
+const MAP = {furn:[G.furn], dim:[G.dim], fire:[G.fire], lbl:[G.lbl]};
+document.querySelectorAll('button[data-t]').forEach(b =>
+  b.addEventListener('click', () => {
+    b.classList.toggle('on');
+    MAP[b.dataset.t].forEach(x => x.style.display = b.classList.contains('on') ? '' : 'none');
+  }));
+document.getElementById('prt').addEventListener('click', () => print());
+
+const d = new Date(), z = n => String(n).padStart(2, '0');
+document.getElementById('stamp').textContent =
+  `출력 ${d.getFullYear()}-${z(d.getMonth()+1)}-${z(d.getDate())}`;
+</script>
+</body></html>
