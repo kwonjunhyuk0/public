@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="googlebot" content="noindex, nofollow, noarchive">
+<meta name="referrer" content="no-referrer">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>매장 주석 평면도 · v2</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" as="style" crossorigin
+  href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --paper:#f2f0eb; --sheet:#fffefb; --ink:#20262c; --sub:#6d7883; --faint:#9aa5af;
+  --line:#d8d3c8; --wall:#20262c; --part:#2f7d95; --door:#1f7a4d; --dimc:#c0503c;
+  --fire:#8a6a4a; --pipe:#2f6fb0;
+  --ok:#2f6fb0;   --okbg:#e8f0f9;      /* 확정 */
+  --rev:#b0820f;  --revbg:#faf2dc;     /* 검토중 */
+  --urg:#c0392b;  --urgbg:#fbe8e5;     /* 데이터 필요 */
+}
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic Neo',sans-serif;
+     background:var(--paper);color:var(--ink);line-height:1.6;font-size:15px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:2000px;margin:0 auto;padding:26px 22px 80px}
+
+header{border-bottom:2px solid var(--ink);padding-bottom:14px;margin-bottom:20px}
+h1{font-size:26px;font-weight:800;letter-spacing:-.4px}
+.sub{font-size:13px;color:var(--sub);margin-top:5px}
+.warn{margin-top:12px;border-left:3px solid var(--urg);background:var(--urgbg);
+      border-radius:0 8px 8px 0;padding:11px 15px;font-size:13px;max-width:1000px}
+.warn b{color:var(--urg)}
+
+.tools{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+button,.btn{background:var(--sheet);color:var(--ink);border:1px solid var(--line);border-radius:8px;
+  padding:7px 13px;font-size:13px;cursor:pointer;font-family:inherit;text-decoration:none;
+  display:inline-flex;align-items:center}
+button:hover,.btn:hover{background:#f6f3ec}
+button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+button:focus-visible,.btn:focus-visible{outline:2px solid var(--part);outline-offset:2px}
+.chip{font-size:12px;padding:4px 10px;border-radius:20px;font-weight:700}
+.c-ok{background:var(--okbg);color:var(--ok)} .c-rev{background:var(--revbg);color:var(--rev)}
+.c-urg{background:var(--urgbg);color:var(--urg)}
+
+.cols{display:flex;gap:26px;align-items:flex-start;flex-wrap:wrap}
+.sheet{flex:1 1 640px;min-width:340px;background:var(--sheet);border:1px solid var(--line);
+       border-radius:12px;padding:14px}
+.sheet svg{display:block;width:100%;height:auto}
+aside{flex:1 1 420px;min-width:300px;display:flex;flex-direction:column;gap:18px}
+
+.card{background:var(--sheet);border:1px solid var(--line);border-radius:12px;padding:17px 19px}
+h2{font-size:12.5px;font-weight:800;letter-spacing:.09em;color:var(--sub);
+   text-transform:uppercase;margin-bottom:11px}
+h3{font-size:13px;font-weight:800;margin:15px 0 7px;color:var(--ink)}
+h3:first-of-type{margin-top:0}
+
+.co{display:grid;grid-template-columns:52px 1fr;gap:4px 12px;padding:9px 0;border-top:1px solid #efece5}
+.co:first-of-type{border-top:0}
+.no{font-size:12px;font-weight:800;letter-spacing:.02em;text-align:center;padding:3px 0;
+    border-radius:6px;height:fit-content}
+.n-ok{background:var(--okbg);color:var(--ok)} .n-rev{background:var(--revbg);color:var(--rev)}
+.n-urg{background:var(--urgbg);color:var(--urg)}
+.co .h{font-size:13.5px;font-weight:700}
+.co .h em{font-style:normal;font-weight:500;color:var(--sub);margin-left:6px;font-size:12.5px}
+.co .d{grid-column:2;font-size:13px;color:var(--sub);max-width:56ch}
+.co .d b{color:var(--ink);font-weight:700}
+
+table{width:100%;border-collapse:collapse;font-size:13px}
+td{padding:5px 0}
+td.n{text-align:right;color:var(--sub);font-variant-numeric:tabular-nums;white-space:nowrap}
+tr+tr td{border-top:1px solid #efece5}
+tfoot td{border-top:1.5px solid var(--line);font-weight:700;padding-top:7px}
+.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:8px;vertical-align:-1px}
+.lg{display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--sub);padding:3px 0}
+.lg b{color:var(--ink);font-weight:600}
+ul{list-style:none;display:flex;flex-direction:column;gap:6px}
+ul li{position:relative;padding-left:17px;font-size:13px;color:var(--sub);max-width:60ch}
+ul li::before{content:'';position:absolute;left:2px;top:9px;width:5px;height:5px;border-radius:1px;background:var(--line)}
+ul li b{color:var(--ink);font-weight:700}
+.flow{font-size:13px;color:var(--sub);line-height:1.9}
+.flow b{color:var(--ink)}
+
+@media print{
+  body{background:#fff}
+  .wrap{max-width:none;padding:0}
+  .tools{display:none}
+  .cols{display:block}
+  .sheet{border:0;padding:0;page-break-after:always}
+  aside{margin-top:16px}
+  @page{size:A3 portrait;margin:10mm}
+}
+</style></head><body>
+<div class="wrap">
+
+<header>
+  <h1>구름 왁싱 · 속눈썹 &nbsp;매장 주석 평면도</h1>
+  <div class="sub">v2 · 단위 mm · 전용 실측면적 35.11㎡ (약 10.6평) · 층고 2,400
+    &nbsp;·&nbsp; 도면 치수 확정본 &nbsp;·&nbsp; <span id="stamp"></span></div>
+  <div class="warn"><b>지시서(9/7)의 공간 치수표와 다릅니다.</b>
+    이후 협의로 복도 900·왁싱방 2,500·반영구방 2,850·로비 4,360 으로 확정됐습니다.
+    이 도면은 <b>확정본</b> 기준이며, 아래 실 구성표에 두 값을 함께 적었습니다.</div>
+</header>
+
+<div class="tools">
+  <button data-t="co"   class="on">주석</button>
+  <button data-t="pipe" class="on">상하수</button>
+  <button data-t="furn" class="on">가구</button>
+  <button data-t="dim"  class="on">치수</button>
+  <button data-t="fire" class="on">소방</button>
+  <button data-t="lbl"  class="on">실 이름</button>
+  <button id="prt">인쇄</button>
+  <a class="btn" href="../../store/">기본 평면도</a>
+  <a class="btn" href="../../../3d/store/">3D 뷰어</a>
+  <span class="chip c-ok">확정</span>
+  <span class="chip c-rev">검토중</span>
+  <span class="chip c-urg">9/7 밤까지 데이터 필요</span>
+</div>
+
+<div class="cols">
+  <div class="sheet"><svg id="plan" xmlns="http://www.w3.org/2000/svg" role="img"
+       aria-label="주석 평면도 — 세척·소독실, 반영구방, 왁싱방, 복도, 로비의 오브젝트별 지시선"></svg></div>
+
+  <aside>
+    <div class="card">
+      <h2>콜아웃 · 구역별</h2>
+      <div id="colist"></div>
+    </div>
+
+    <div class="card">
+      <h2>도면 밖 · 외부</h2>
+      <div class="co"><span class="no n-ok">X1</span>
+        <div class="h">외부 간판 <em>확정</em></div>
+        <div class="d">글자 적게 · 크게 · 멀리서 보이게.</div></div>
+      <div class="co"><span class="no n-ok">X2</span>
+        <div class="h">외부 배너 <em>확정</em></div>
+        <div class="d">야간 스포트라이트. 간판업체와 협의.</div></div>
+    </div>
+
+    <div class="card">
+      <h2>전체 공통</h2>
+      <ul>
+        <li><b>바닥</b> 대리석 느낌 타일 (진짜 대리석 불필요)</li>
+        <li><b>벽</b> 화이트. 벽 타일은 안 함 — 차갑고 과하며 못 박기 불편.
+            거울·그림·선반·조명·소품이 덮는다</li>
+        <li><b>조명</b> 사무실형 천장등 제거 → 원형 매입 LED.
+            디밍 + 색온도 3계열(따뜻/중간/차가운 백색) 지원 제품</li>
+        <li><b>컬러</b> 화이트 + 미스트 하늘색 포인트 (렌더링의 회색은 렌더 문제)</li>
+        <li><b>기간</b> 최소 1주 이상</li>
+      </ul>
+      <h3>공정 순서</h3>
+      <div class="flow">실측·먹줄 → <b>상하수 위치</b> → 전기 → 배관 → <b>가벽</b> →
+        장 → 카운터 → 타일·페인트 → 조명·니치·거울 → 간판</div>
+    </div>
+
+    <div class="card">
+      <h2>도면에 아직 오브젝트가 없는 항목</h2>
+      <div class="d" style="font-size:13px;color:var(--sub);margin-bottom:8px">
+        자리부터 잡아야 지시선을 정확히 걸 수 있습니다. 현재는 인접 위치에 임시로 걸어 두었습니다.</div>
+      <ul>
+        <li><b>거울</b> (L3) · <b>니치</b> (L2) — 로비 서측 벽에 임시 표기</li>
+        <li><b>온수기 2대</b> (S2) — 왁싱방 동측 벽에 임시 표기</li>
+        <li><b>세탁기·건조기장</b> (C4) — 세탁기 위치에 표기. 장 치수 미정</li>
+        <li><b>샤워부스</b> (S1) — 현재 900×1,000 가정. 완제품 확정 시 갱신</li>
+        <li><b>환풍기 덕트 연결점</b> (C3) — 천장 환풍기 위치만 표기</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>실 구성</h2>
+      <table id="rt"></table>
+    </div>
+
+    <div class="card">
+      <h2>범례</h2>
+      <div class="lg"><span class="sw" style="background:var(--wall)"></span><b>외벽</b> t150 (가정)</div>
+      <div class="lg"><span class="sw" style="background:var(--part)"></span><b>내부 가벽</b> t100 · H2,100 (천장 미접)</div>
+      <div class="lg"><span class="sw" style="background:var(--door)"></span><b>문</b> 미닫이 · 아치 개구부, 숫자는 너비</div>
+      <div class="lg"><span class="sw" style="background:#8ED4EA"></span><b>설비</b> 싱크 · 소독기 · 샤워</div>
+      <div class="lg"><span class="sw" style="background:#C68C4E"></span><b>가구</b></div>
+      <div class="lg"><span class="sw" style="background:#8A5A2B"></span><b>수납</b> 락커 · 선반</div>
+      <div class="lg"><span class="sw" style="background:var(--dimc)"></span><b>구획</b> 카운터</div>
+      <div class="lg"><span class="sw" style="background:var(--pipe);border-radius:50%"></span><b>상하수 필요 지점</b> 4곳</div>
+      <div class="lg"><span class="sw" style="background:var(--fire)"></span><b>⊙ 감지기 · ⊗ 스프링클러 · ▣ 천장 환풍기</b></div>
+    </div>
+  </aside>
+</div>
+</div>
+
+<script id="geo" type="application/json">{"W":3500,"D":10360,"H":2400,"WT":150,"PT":100,"PH":2100,"UP":{"w":2980,"d":2220,"offL":140},"shell":[[140,0],[3120,0],[3120,2220],[3500,2220],[3500,10360],[0,10360],[0,2220],[140,2220]],"partitions":[{"id":"P1","x1":950,"z1":2900,"x2":3500,"z2":2900},{"id":"P2a","x1":950,"z1":2900,"x2":950,"z2":3050},{"id":"P2b","x1":950,"z1":3950,"x2":950,"z2":5950},{"id":"P3","x1":950,"z1":5950,"x2":3500,"z2":5950},{"id":"P4a","x1":1600,"z1":1060,"x2":1600,"z2":2000},{"id":"P4b","x1":1600,"z1":2850,"x2":1600,"z2":2900},{"id":"P5","x1":1090,"z1":2000,"x2":1600,"z2":2000},{"id":"P6","x1":140,"z1":2000,"x2":190,"z2":2000}],"sliders":[{"id":"SD1","x1":1600,"z1":2050,"x2":1600,"z2":2850,"w":800,"note":"복도 → 반영구방","lo":-1},{"id":"SD2","x1":950,"z1":3050,"x2":950,"z2":3950,"w":900,"note":"복도 → 왁싱방","lo":-1},{"id":"SD3","x1":0,"z1":5950,"x2":950,"z2":5950,"w":950,"type":"archwall","ow":900,"oh":1980,"note":"로비 ↔ 복도 · 아치형 가벽","lo":-1},{"id":"SD4","x1":1600,"z1":160,"x2":1600,"z2":1060,"w":900,"note":"세척·소독실 → 반영구방","lo":1},{"id":"SD5","x1":190,"z1":2000,"x2":1090,"z2":2000,"w":900,"note":"세척·소독실 → 복도","lo":1}],"rooms":[{"name":"세척·소독실","use":"싱크 → 세척·소독 → 보관","pts":[[140,0],[1600,0],[1600,1950],[140,1950]],"color":"#C08C7A","dim":[1460,2000],"area":2.85},{"name":"반영구방","use":"수면 · 락커","pts":[[1650,0],[3120,0],[3120,2220],[3500,2220],[3500,2850],[1650,2850]],"color":"#C8A882","dim":[3500,2850],"area":4.43},{"name":"왁싱방","use":"시술 · 샤워","pts":[[1000,2950],[3500,2950],[3500,5900],[1000,5900]],"color":"#C8A882","dim":[2500,2950],"area":7.38},{"name":"복도","use":"연결 동선","pts":[[140,2050],[1550,2050],[1550,2850],[900,2850],[900,5900],[0,5900],[0,2220],[140,2220]],"color":"#8E6238","dim":[900,3850],"area":3.96},{"name":"로비","use":"네일 · 카운터 · 대기","pts":[[0,6000],[3500,6000],[3500,10360],[0,10360]],"color":"#E2C79C","dim":[3500,4360],"area":15.26}],"items":[{"no":1,"name":"세탁기","spec":"800 × 800","type":"washer","cx":555,"cz":500,"w":800,"d":800,"h":850,"color":"#8ED4EA","kind":"eq","room":"세척·소독실"},{"no":2,"name":"싱크대","spec":"560 × 500","type":"basin","cx":1290,"cz":420,"w":560,"d":500,"h":850,"color":"#8ED4EA","kind":"eq","room":"세척·소독실"},{"no":3,"name":"소독기 · 세척기","spec":"500 × 700","type":"cabinet","cx":1290,"cz":1570,"w":500,"d":700,"h":900,"color":"#8ED4EA","kind":"eq","room":"세척·소독실"},{"no":4,"name":"베드","spec":"750 × 1850","type":"bed","cx":2740,"cz":1050,"w":750,"d":1850,"h":700,"color":"#C68C4E","kind":"fx","room":"반영구방"},{"no":5,"name":"락커","spec":"400 × 300","type":"cabinet","cx":3300,"cz":2410,"w":400,"d":300,"h":1800,"color":"#8A5A2B","kind":"sf","room":"반영구방"},{"no":6,"name":"샤워부스","spec":"900 × 1,000","type":"shower","cx":3050,"cz":3470,"w":900,"d":1000,"h":2000,"color":"#8ED4EA","kind":"eq","room":"왁싱방"},{"no":7,"name":"서랍장","spec":"800 × 800","type":"cabinet","cx":3080,"cz":4470,"w":800,"d":800,"h":800,"color":"#8A5A2B","kind":"sf","room":"왁싱방"},{"no":8,"name":"베드","spec":"750 × 1850","type":"bed","cx":1375,"cz":4975,"w":750,"d":1850,"h":700,"color":"#C68C4E","kind":"fx","room":"왁싱방"},{"no":9,"name":"원형의자","spec":"Ø400","type":"stool","cx":3100,"cz":5150,"w":400,"d":400,"h":460,"color":"#C68C4E","kind":"fx","room":"왁싱방"},{"no":10,"name":"원형탁자","spec":"Ø600","type":"rtable","cx":2600,"cz":5350,"w":600,"d":600,"h":740,"color":"#C68C4E","kind":"fx","room":"왁싱방"},{"no":11,"name":"원형의자","spec":"Ø400","type":"stool","cx":2100,"cz":5350,"w":400,"d":400,"h":460,"color":"#C68C4E","kind":"fx","room":"왁싱방"},{"no":12,"name":"원형의자","spec":"Ø400","type":"stool","cx":2010,"cz":8150,"w":400,"d":400,"h":460,"color":"#C68C4E","kind":"fx","room":"로비"},{"no":13,"name":"원형의자","spec":"Ø400","type":"stool","cx":2980,"cz":8150,"w":400,"d":400,"h":460,"color":"#C68C4E","kind":"fx","room":"로비"},{"no":14,"name":"세면대","spec":"500 × 400","type":"basin","cx":3300,"cz":7300,"w":400,"d":500,"h":850,"color":"#8ED4EA","kind":"eq","room":"로비"},{"no":15,"name":"벤치","spec":"400 × 1000","type":"bench","cx":300,"cz":7950,"w":400,"d":1000,"h":450,"color":"#C68C4E","kind":"fx","room":"로비"},{"no":16,"name":"네일테이블","spec":"500 × 800","type":"desk","cx":2510,"cz":8150,"w":500,"d":800,"h":750,"color":"#C68C4E","kind":"fx","room":"로비"},{"no":17,"name":"네일테이블","spec":"500 × 800","type":"desk","cx":2510,"cz":8950,"w":500,"d":800,"h":750,"color":"#C68C4E","kind":"fx","room":"로비"},{"no":18,"name":"원형의자","spec":"Ø400","type":"stool","cx":2010,"cz":8950,"w":400,"d":400,"h":460,"color":"#C68C4E","kind":"fx","room":"로비"},{"no":19,"name":"원형의자","spec":"Ø400","type":"stool","cx":2980,"cz":8950,"w":400,"d":400,"h":460,"color":"#C68C4E","kind":"fx","room":"로비"},{"no":20,"name":"네일선반","spec":"300 × 2,000","type":"cabinet","cx":3350,"cz":8550,"w":300,"d":2000,"h":1800,"color":"#8A5A2B","kind":"sf","room":"로비"},{"no":21,"name":"페디큐어 의자","spec":"600 × 600","type":"bench","cx":3200,"cz":9850,"w":600,"d":600,"h":900,"color":"#C68C4E","kind":"fx","room":"로비"}],"zones":[{"id":"C","name":"카운터","spec":"2,200 × 1,000","x1":1300,"z1":6050,"x2":3500,"z2":7050}],"detectors":[[740,1840],[2400,1840],[740,3820],[2380,3820]],"sprinklers":[[740,6130],[2380,6130],[740,8380],[2380,8380]],"vents":[[450,1550]],"doorW":1060}</script>
+<script id="co" type="application/json">[{"id":"C4","st":"r","s":"L","x":555,"z":500,"ly":560,"t":"세탁기·건조기장","l":"통째 숨김장(문+잠금) · 실측 필요","note":"세탁기1+건조기1(크기 비슷). 멸균품 외 노출 시 문제 소지 → 장 안에 통째로 숨긴다. 이 치수가 배관·전기·장 제작·가벽 위치를 동시에 잠근다."},{"id":"C1","st":"b","s":"L","x":900,"z":1000,"ly":1240,"t":"세척실 전체","l":"싱크 + 작업대 + 소독기 + 환기","note":""},{"id":"C3","st":"b","s":"L","x":450,"z":1550,"ly":1920,"t":"세척실 천장","l":"천장 덕트 구멍 → 환풍기 강제배기","note":""},{"id":"C2","st":"y","s":"L","x":640,"z":2000,"ly":2600,"t":"세척실 문","l":"문 2개 구조 — 법규 확인 후 확정","note":"검사 시 독립 공간으로 보이게 하는 논리. 법규 확인 후 문·벽 구조 최종 판단."},{"id":"H1","st":"y","s":"L","x":450,"z":4400,"ly":4300,"t":"복도","l":"통행폭 확보 — 방 폭 계산에 포함","note":""},{"id":"D1","st":"b","s":"L","x":530,"z":10360,"ly":10240,"t":"출입문","l":"기본 전자번호키 (10~15만원)","note":""},{"id":"W1","st":"r","s":"L","x":1375,"z":4975,"ly":5100,"t":"왁싱 베드","l":"베드+여유+통행폭 확정 필요","note":"베드 크기·주변 여유·동선을 계산해야 방 폭이 나온다. 내일 배관 후 바로 칸막이 착수."},{"id":"L2","st":"y","s":"L","x":100,"z":7600,"ly":7500,"t":"로비 벽면 · 니치","l":"벽 매립 니치 + 내부 간접LED","note":"스터드 사이 약 45cm, 벽 안쪽 약 10cm 를 파서 매립. 작고 좁게 만드는 게 예쁘다(향수·소품 정도). 튀어나오는 선반은 좁은 로비를 잡아먹는다."},{"id":"L3","st":"y","s":"L","x":100,"z":8700,"ly":8600,"t":"거울","l":"거울 뒤 간접광","note":"살짝 떠 보이게."},{"id":"P3","st":"y","s":"R","x":2200,"z":300,"ly":300,"t":"반영구방 환기","l":"전체환기 연결 · 검사 시 개별 환풍기","note":"전체 환기가 있고 가벽 위가 열려 있어 실사용은 문제 없을 가능성. 검사 기준에 따라 추가."},{"id":"P1","st":"y","s":"R","x":2500,"z":1500,"ly":1000,"t":"반영구방 전체","l":"시설기준 22항목 반영 후 고정구조물","note":"시설기준 자료 22항목 전달 완료. 고정 구조물 들어가기 전에 숙지 후 구조 확정."},{"id":"P2","st":"y","s":"R","x":3450,"z":2000,"ly":1700,"t":"반영구방 벽면","l":"비흡수성 마감","note":"규정 요구사항은 「물·습기를 흡수하지 않고 닦아낼 수 있는 재질」."},{"id":"W3","st":"y","s":"R","x":2200,"z":2900,"ly":2600,"t":"왁싱방 가벽","l":"파티션 1.5m↑(강제여부 확인) · 천장 띄움","note":"가벽은 천장까지 밀폐하지 않고 위를 띄운다 → 스프링클러 분사범위 확보, 증설 없이."},{"id":"W2","st":"y","s":"R","x":3450,"z":3300,"ly":3260,"t":"왁싱방 벽면","l":"비흡수성 마감 (수성페인트 불가 가능)","note":""},{"id":"S1","st":"r","s":"R","x":3050,"z":3470,"ly":3920,"t":"샤워부스","l":"완제품 확보가 가벽 설계 결정 · 2~3일 내","note":"직접 제작 시 방수석고 2겹(일반의 3배)·타일·방수층·양생으로 최소 3일, 약 100만원. 완제품이면 놓고 배관 연결 후 개조. 「샤워부스+30L 온수기 30만원」 매물이 좋은 후보. 실물이 있어야 부스 공간을 비우고 주변 가벽을 세울 수 있다."},{"id":"S2","st":"b","s":"R","x":3420,"z":4400,"ly":4580,"t":"온수기 2대","l":"소형→세면대 / 30L→샤워부스","note":""},{"id":"L1","st":"b","s":"R","x":2400,"z":6550,"ly":6400,"t":"로비 카운터","l":"2단 하이데스크 · 총높이 약 1m","note":"일반 책상 높이 + 위에 20~30cm 가림 상판. 외부에서 손·잡동사니가 안 보이고 앉으면 상체만 보인다. 안쪽 2인 착석. 1.2m 는 답답해진다. 제작은 맨 마지막."},{"id":"L4","st":"b","s":"R","x":3300,"z":7300,"ly":7300,"t":"세면대","l":"하수 라인 쪽 배치 · 컴팩트","note":"하수구 때문에 반대편으로 못 옮긴다. 기존 소형 온수기를 여기 연결."}]</script>
+<script>
+const D  = JSON.parse(document.getElementById('geo').textContent);
+const CO = JSON.parse(document.getElementById('co').textContent);
+const NS = 'http://www.w3.org/2000/svg';
+const svg = document.getElementById('plan');
+
+/* 도면 0..3500 × 0..10360 · 좌우에 주석용 여백을 크게 둔다 */
+const GUT = 3000, LX = -700, RX = 4200;
+const VB = {x:LX-GUT-260, y:-1000, w:(RX+GUT+300)-(LX-GUT-260), h:13000};
+svg.setAttribute('viewBox', `${VB.x} ${VB.y} ${VB.w} ${VB.h}`);
+
+const el=(t,a,p)=>{const n=document.createElementNS(NS,t);for(const k in a)n.setAttribute(k,a[k]);
+                   (p||svg).appendChild(n);return n;};
+const g = id => el('g',{id});
+const G = {floor:g('floor'), zone:g('zone'), wall:g('wall'), part:g('part'), door:g('door'),
+           furn:g('furn'), fire:g('fire'), pipe:g('pipe'), dim:g('dim'), lbl:g('lbl'), co:g('co')};
+const pts = a => a.map(p=>p.join(',')).join(' ');
+const fmt = n => n.toLocaleString('ko-KR');
+const STC = {b:'var(--ok)', y:'var(--rev)', r:'var(--urg)'};
+const STB = {b:'#e8f0f9',   y:'#faf2dc',    r:'#fbe8e5'};
+
+/* ── 바닥 · 실 ── */
+el('polygon',{points:pts(D.shell),fill:'#faf8f3'},G.floor);
+D.rooms.forEach(r=> el('polygon',{points:pts(r.pts),fill:r.color,'fill-opacity':.28,
+                       stroke:'#00000012','stroke-width':6},G.floor));
+
+/* ── 구획 ── */
+(D.zones||[]).forEach(z=>{
+  el('rect',{x:z.x1,y:z.z1,width:z.x2-z.x1,height:z.z2-z.z1,rx:20,fill:'#c0503c',
+             'fill-opacity':.10,stroke:'#c0503c','stroke-width':22,'stroke-dasharray':'110 80'},G.zone);
+  const t=el('text',{x:(z.x1+z.x2)/2,y:z.z1+300,'text-anchor':'middle'},G.zone);
+  el('tspan',{x:(z.x1+z.x2)/2,dy:0,'font-size':150,'font-weight':700,fill:'#a8402d'},t).textContent=z.name;
+  el('tspan',{x:(z.x1+z.x2)/2,dy:170,'font-size':108,fill:'#b06452'},t).textContent=z.spec;
+});
+
+/* ── 외벽 · 전면 창호 ── */
+el('polygon',{points:pts(D.shell),fill:'none',stroke:'var(--wall)','stroke-width':D.WT,
+              'stroke-linejoin':'miter'},G.wall);
+const y0=D.D;
+el('line',{x1:0,y1:y0,x2:D.doorW,y2:y0,stroke:'#a9754a','stroke-width':D.WT},G.wall);
+el('line',{x1:D.doorW,y1:y0,x2:D.W,y2:y0,stroke:'#8ED4EA','stroke-width':D.WT},G.wall);
+el('path',{d:`M ${D.doorW} ${y0} A ${D.doorW} ${D.doorW} 0 0 1 0 ${y0-D.doorW}`,fill:'none',
+           stroke:'#a9754a','stroke-width':18,'stroke-dasharray':'70 55'},G.wall);
+
+/* ── 가벽 ── */
+D.partitions.forEach(p=> el('line',{x1:p.x1,y1:p.z1,x2:p.x2,y2:p.z2,stroke:'var(--part)',
+                     'stroke-width':D.PT,'stroke-linecap':'square'},G.part));
+
+/* ── 문 ── */
+D.sliders.forEach(s=>{
+  const horiz=s.z1===s.z2, L=Math.abs(horiz?s.x2-s.x1:s.z2-s.z1);
+  const cx=(s.x1+s.x2)/2, cz=(s.z1+s.z2)/2;
+  const lw=s.ow||s.w, lo=s.lo||-1, ld=(s.type==='archwall'?660:330);
+  const lt=el('text',{'text-anchor':'middle','font-size':126,'font-weight':600,fill:'var(--door)'},G.door);
+  if(horiz){lt.setAttribute('x',cx);lt.setAttribute('y',cz+lo*ld+44);}
+  else{lt.setAttribute('x',0);lt.setAttribute('y',44);
+       lt.setAttribute('transform',`translate(${cx+lo*ld},${cz}) rotate(-90)`);}
+  lt.textContent=(s.type==='archwall'?'아치 ':'')+fmt(lw);
+
+  if(s.type==='archwall'){
+    el('line',{x1:s.x1,y1:s.z1,x2:s.x2,y2:s.z2,stroke:'var(--part)','stroke-width':D.PT,
+               'stroke-linecap':'square'},G.door);
+    const r=(s.ow||900)/2;
+    el('path',{d:`M ${cx-r} ${cz} A ${r} ${r} 0 0 1 ${cx+r} ${cz}`,fill:'none',
+               stroke:'var(--door)','stroke-width':26,'stroke-dasharray':'60 46'},G.door);
+    el('line',{x1:cx-r,y1:cz,x2:cx+r,y2:cz,stroke:'var(--door)','stroke-width':34},G.door);
+    return;
+  }
+  for(let i=0;i<2;i++){
+    const off=(i?1:-1)*D.PT*.62, sh=(i?.245:-.245)*L, len=L*.53;
+    const a=horiz?{x1:cx+sh-len/2,y1:cz+off,x2:cx+sh+len/2,y2:cz+off}
+                 :{x1:cx+off,y1:cz+sh-len/2,x2:cx+off,y2:cz+sh+len/2};
+    el('line',Object.assign(a,{stroke:'var(--door)','stroke-width':46,'stroke-linecap':'round'}),G.door);
+  }
+});
+
+/* ── 가구 ── */
+D.items.forEach(it=>{
+  const round=it.type==='stool'||it.type==='rtable';
+  if(round) el('circle',{cx:it.cx,cy:it.cz,r:it.w/2,fill:it.color,'fill-opacity':.85,
+                         stroke:'#00000030','stroke-width':10},G.furn);
+  else el('rect',{x:it.cx-it.w/2,y:it.cz-it.d/2,width:it.w,height:it.d,rx:16,fill:it.color,
+                  'fill-opacity':.85,stroke:'#00000030','stroke-width':10},G.furn);
+  if(Math.min(it.w,it.d)<420) return;
+  const t=el('text',{x:it.cx,y:it.cz,'text-anchor':'middle','font-size':108,fill:'#3b4249'},G.furn);
+  const two=it.d>=700;
+  el('tspan',{x:it.cx,dy:two?-6:38},t).textContent=it.name;
+  if(two) el('tspan',{x:it.cx,dy:130,'font-size':94,fill:'#6d7883'},t).textContent=it.spec;
+});
+
+/* ── 소방 · 천장 환풍기 ── */
+const fm=(p,k)=>{
+  el('circle',{cx:p[0],cy:p[1],r:95,fill:'#fff',stroke:'var(--fire)','stroke-width':22},G.fire);
+  if(k==='d') el('circle',{cx:p[0],cy:p[1],r:34,fill:'var(--fire)'},G.fire);
+  else [[-1,-1],[-1,1]].forEach(v=>el('line',{x1:p[0]+v[0]*62,y1:p[1]+v[1]*62,
+        x2:p[0]-v[0]*62,y2:p[1]-v[1]*62,stroke:'var(--fire)','stroke-width':22},G.fire));
+};
+D.detectors.forEach(p=>fm(p,'d')); D.sprinklers.forEach(p=>fm(p,'s'));
+(D.vents||[]).forEach(p=>{
+  el('rect',{x:p[0]-160,y:p[1]-160,width:320,height:320,rx:14,fill:'#fff',
+             stroke:'#2f7d95','stroke-width':22},G.fire);
+  el('circle',{cx:p[0],cy:p[1],r:108,fill:'none',stroke:'#2f7d95','stroke-width':20},G.fire);
+  el('circle',{cx:p[0],cy:p[1],r:34,fill:'#2f7d95'},G.fire);
+});
+
+/* ── 상하수 필요 지점 ── */
+const PIPE=[[3050,3470,'샤워부스'],[1290,420,'세척실 싱크'],[3300,7300,'세면대'],[555,500,'세탁기']];
+PIPE.forEach(p=>{
+  el('circle',{cx:p[0],cy:p[1],r:118,fill:'var(--pipe)','fill-opacity':.16,
+               stroke:'var(--pipe)','stroke-width':24},G.pipe);
+  el('path',{d:`M ${p[0]} ${p[1]-66} C ${p[0]+62} ${p[1]+2} ${p[0]+40} ${p[1]+62} ${p[0]} ${p[1]+62}
+               C ${p[0]-40} ${p[1]+62} ${p[0]-62} ${p[1]+2} ${p[0]} ${p[1]-66} Z`,
+             fill:'var(--pipe)'},G.pipe);
+});
+
+/* ── 실 이름 ── */
+D.rooms.forEach(r=>{
+  const xs=r.pts.map(p=>p[0]), zs=r.pts.map(p=>p[1]);
+  const cx=(Math.min(...xs)+Math.max(...xs))/2, cz=(Math.min(...zs)+Math.max(...zs))/2;
+  const t=el('text',{x:cx,y:cz,'text-anchor':'middle'},G.lbl);
+  el('tspan',{x:cx,dy:0,'font-size':190,'font-weight':800,fill:'#242b31'},t).textContent=r.name;
+  el('tspan',{x:cx,dy:200,'font-size':122,fill:'#5d6870'},t)
+    .textContent=`${fmt(r.dim[0])}×${fmt(r.dim[1])} · ${r.area}㎡`;
+});
+
+/* ── 치수선 ── */
+function dim(x1,y1,x2,y2,txt,side){
+  const h=y1===y2;
+  el('line',{x1,y1,x2,y2,stroke:'var(--dimc)','stroke-width':13},G.dim);
+  [[x1,y1],[x2,y2]].forEach(p=>el('line',{x1:p[0]-(h?0:70),y1:p[1]-(h?70:0),
+    x2:p[0]+(h?0:70),y2:p[1]+(h?70:0),stroke:'var(--dimc)','stroke-width':13},G.dim));
+  const mx=(x1+x2)/2,my=(y1+y2)/2;
+  const t=el('text',{'text-anchor':'middle','font-size':148,'font-weight':600,fill:'var(--dimc)'},G.dim);
+  if(h){t.setAttribute('x',mx);t.setAttribute('y',my+(side==='up'?-70:200));}
+  else{t.setAttribute('x',0);t.setAttribute('y',0);
+       t.setAttribute('transform',`translate(${mx+(side==='left'?-70:190)},${my}) rotate(-90)`);}
+  t.textContent=fmt(txt);
+}
+const UP=D.UP, UL=UP.offL, UR=UP.offL+UP.w;
+dim(UL,-560,UR,-560,UP.w,'up'); dim(0,-560,UL,-560,UL,'up'); dim(UR,-560,D.W,-560,D.W-UR,'up');
+dim(0,D.D+560,D.doorW,D.D+560,D.doorW,'dn'); dim(D.doorW,D.D+560,D.W,D.D+560,D.W-D.doorW,'dn');
+dim(0,D.D+1080,D.W,D.D+1080,D.W,'dn');
+dim(D.W+560,0,D.W+560,UP.d,UP.d,'right'); dim(D.W+560,UP.d,D.W+560,D.D,D.D-UP.d,'right');
+dim(D.W+1120,0,D.W+1120,D.D,D.D,'right');
+const zc=[0,...new Set(D.partitions.filter(p=>p.z1===p.z2).map(p=>p.z1))].concat(D.D).sort((a,b)=>a-b);
+zc.slice(0,-1).forEach((z,k)=>dim(-620,z,-620,zc[k+1],zc[k+1]-z,'left'));
+el('path',{d:'M 4300 -560 L 4180 -160 L 4300 -250 L 4420 -160 Z',fill:'var(--ink)'},G.dim);
+el('text',{x:4300,y:-680,'text-anchor':'middle','font-size':150,'font-weight':700,
+           fill:'var(--ink)'},G.dim).textContent='N';
+
+/* ── 콜아웃 : 지시선 + 라벨 ── */
+const BW=GUT-120, BH=430;
+CO.forEach(c=>{
+  const c1=STC[c.st], c2=STB[c.st];
+  const left = c.s==='L';
+  const bx = left ? LX-BW : RX;              // 라벨 상자 왼쪽 x
+  const ax = left ? LX    : RX;              // 도면 쪽 끝
+  const ly = c.ly;
+
+  /* 지시선 : 라벨 → 굴절 → 대상 */
+  el('polyline',{points:`${ax},${ly} ${ax+(left?260:-260)},${ly} ${c.x},${c.z}`,
+                 fill:'none',stroke:c1,'stroke-width':16,'stroke-opacity':.75,
+                 'stroke-linejoin':'round'},G.co);
+  el('circle',{cx:c.x,cy:c.z,r:78,fill:'#fff',stroke:c1,'stroke-width':30},G.co);
+  el('circle',{cx:c.x,cy:c.z,r:26,fill:c1},G.co);
+
+  /* 라벨 상자 */
+  el('rect',{x:bx,y:ly-BH/2,width:BW,height:BH,rx:52,fill:c2,stroke:c1,'stroke-width':16},G.co);
+  el('rect',{x:bx+40,y:ly-118,width:330,height:236,rx:40,fill:c1},G.co);
+  el('text',{x:bx+205,y:ly+62,'text-anchor':'middle','font-size':150,'font-weight':800,
+             fill:'#fff'},G.co).textContent=c.id;
+  const t=el('text',{x:bx+420,y:ly},G.co);
+  el('tspan',{x:bx+420,dy:-24,'font-size':142,'font-weight':800,fill:'#20262c'},t).textContent=c.t;
+  el('tspan',{x:bx+420,dy:180,'font-size':126,fill:'#4a555f'},t).textContent=c.l;
+});
+
+/* ── 콜아웃 범례 ── */
+const GRP=[['세척·소독실','C'],['반영구방','P'],['왁싱방 · 샤워','WS'],['복도 · 출입','HD'],['로비','L']];
+const KEY={C:'C',P:'P',W:'WS',S:'WS',H:'HD',D:'HD',L:'L'};
+const box=document.getElementById('colist');
+GRP.forEach(([name,key])=>{
+  const list=CO.filter(c=>KEY[c.id[0]]===key);
+  if(!list.length) return;
+  box.insertAdjacentHTML('beforeend',`<h3>${name}</h3>`);
+  list.forEach(c=>{
+    const cls={b:'n-ok',y:'n-rev',r:'n-urg'}[c.st];
+    const st={b:'확정',y:'검토중',r:'데이터 필요'}[c.st];
+    box.insertAdjacentHTML('beforeend',
+      `<div class="co"><span class="no ${cls}">${c.id}</span>` +
+      `<div class="h">${c.t}<em>${st}</em></div>` +
+      `<div class="d"><b>${c.l}</b>${c.note?' — '+c.note:''}</div></div>`);
+  });
+});
+
+/* ── 실 구성표 ── */
+const OLD={'로비':'3,500×4,610 · 16.14','왁싱방':'2,600×2,850 · 7.41','복도':'800×3,600 · 3.34',
+           '반영구방':'3,500×2,700 · 4.15','세척·소독실':'1,460×2,000 · 2.85'};
+const rt=document.getElementById('rt'); let tot=0;
+D.rooms.forEach(r=>{
+  tot+=r.area;
+  const now=`${fmt(r.dim[0])}×${fmt(r.dim[1])} · ${r.area.toFixed(2)}`;
+  const same=OLD[r.name]===now;
+  rt.insertAdjacentHTML('beforeend',
+    `<tr><td><span class="sw" style="background:${r.color}"></span>${r.name}</td>` +
+    `<td class="n">${now}㎡</td></tr>` +
+    (same?'':`<tr><td style="padding-top:0;font-size:11.5px;color:var(--faint)">└ 지시서(9/7)</td>` +
+             `<td class="n" style="padding-top:0;font-size:11.5px;color:var(--faint)">${OLD[r.name]}㎡</td></tr>`));
+});
+rt.insertAdjacentHTML('beforeend',
+  `<tfoot><tr><td>합계 (벽체 제외)</td><td class="n">${tot.toFixed(2)}㎡</td></tr></tfoot>`);
+
+/* ── 토글 · 인쇄 ── */
+const MAP={co:[G.co],pipe:[G.pipe],furn:[G.furn],dim:[G.dim],fire:[G.fire],lbl:[G.lbl]};
+document.querySelectorAll('button[data-t]').forEach(b=>b.addEventListener('click',()=>{
+  b.classList.toggle('on');
+  MAP[b.dataset.t].forEach(x=>x.style.display=b.classList.contains('on')?'':'none');
+}));
+document.getElementById('prt').addEventListener('click',()=>print());
+const d=new Date(), z=n=>String(n).padStart(2,'0');
+document.getElementById('stamp').textContent=`출력 ${d.getFullYear()}-${z(d.getMonth()+1)}-${z(d.getDate())}`;
+</script>
+</body></html>
