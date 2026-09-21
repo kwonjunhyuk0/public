@@ -29,6 +29,7 @@ h2 b{width:23px;height:23px;background:var(--ac);color:#fff;border-radius:7px;fo
 label.f{display:block;font-size:13px;font-weight:700;margin:26px 0 6px}
 .row2 label.f{margin-top:14px}   /* 2단 입력칸 안에서는 기존 간격 유지 */
 .sl{font-size:12px;font-weight:700;color:var(--sub);margin:10px 0 4px}
+.rq{color:var(--warn)}   /* 필수 표시 별표 */
 input[type=text],input[type=tel],input[type=number],textarea,select{
   width:100%;padding:12px 13px;border:1.5px solid var(--line);border-radius:10px;
   font-size:16px;font-family:inherit;background:#ffffff}
@@ -105,14 +106,14 @@ button.go:disabled{background:#c3ccd3}
   <h2><b>1</b>기본 정보</h2>
   <div class="hint">예약 확인과 시술 기록에 사용됩니다.</div>
   <div class="row2">
-    <div><label class="f">성함 *</label><input type="text" id="name" autocomplete="name"></div>
-    <div><label class="f">연락처 *</label><input type="tel" id="tel" placeholder="010-0000-0000"></div>
+    <div><label class="f">성함 <span class="rq">*</span></label><input type="text" id="name" autocomplete="name"></div>
+    <div><label class="f">연락처 <span class="rq">*</span></label><input type="tel" id="tel" placeholder="010-0000-0000"></div>
   </div>
   <div class="row2">
-    <div><label class="f">생년월일 *</label>
+    <div><label class="f">생년월일 <span class="rq">*</span></label>
       <input type="tel" id="birth" inputmode="numeric" maxlength="6" placeholder="예: 900503">
       <div class="hint" id="birthEcho" style="margin:6px 0 0"></div></div>
-    <div><label class="f">거주 / 소속 *</label>
+    <div><label class="f">거주 / 소속 <span class="rq">*</span></label>
       <select id="area">
         <option value="">선택</option>
         <option>해링턴플레이스 (아파트)</option>
@@ -125,7 +126,7 @@ button.go:disabled{background:#c3ccd3}
   <div class="note" id="minorNote" style="display:none">
     만 14세 미만은 법정대리인 동의가 필요합니다. 원장에게 알려주세요.
   </div>
-  <label class="f">방문 경로 *</label>
+  <label class="f">방문 경로 <span class="rq">*</span></label>
   <div class="hint" style="margin:-2px 0 6px">저희를 어떻게 알고 오셨는지 알려주세요.</div>
   <div class="chips" data-g="route">
     <div class="chip">네이버 지도</div><div class="chip">네이버 검색</div>
@@ -144,7 +145,7 @@ button.go:disabled{background:#c3ccd3}
     <div class="hint" style="margin:8px 0 0">소개 적립 확인에만 사용합니다.</div>
   </div>
 
-  <label class="f">시술 목적 *</label>
+  <label class="f">시술 목적 <span class="rq">*</span></label>
   <div class="chips" data-g="purpose">
     <div class="chip">위생</div><div class="chip">여행</div><div class="chip">수영</div>
     <div class="chip">운동</div><div class="chip">촬영</div><div class="chip">데이트 / 커플</div>
@@ -152,7 +153,7 @@ button.go:disabled{background:#c3ccd3}
     <div class="chip">주변 추천</div><div class="chip">기타</div>
   </div>
 
-  <label class="f">관심있는 시술 *</label>
+  <label class="f">관심있는 시술 <span class="rq">*</span></label>
   <div class="hint" style="margin:-2px 0 6px">오늘 받지는 않지만 관심있는 시술을 체크해주세요.
     없으시면 <b>아직없음</b>을 눌러주세요.</div>
   <div class="chips" data-g="interest">
@@ -164,7 +165,7 @@ button.go:disabled{background:#c3ccd3}
     <div class="chip" data-none="1">아직없음</div>
   </div>
 
-  <label class="f">오늘 함께 오셨나요? *</label>
+  <label class="f">오늘 함께 오셨나요? <span class="rq">*</span></label>
   <div class="chips" data-g="party">
     <div class="chip">혼자</div><div class="chip">부부</div><div class="chip">커플</div>
     <div class="chip">가족</div><div class="chip">친구</div>
@@ -172,7 +173,7 @@ button.go:disabled{background:#c3ccd3}
   <div class="hint" style="margin:8px 0 0">동반 적립 처리에만 사용하며,
     <b>혼인 여부 등은 따로 기록하거나 보관하지 않습니다.</b></div>
 
-  <label class="f">방문 편하신 시간대 *</label>
+  <label class="f">방문 편하신 시간대 <span class="rq">*</span></label>
   <div class="chips" data-g="visit">
     <div class="chip">평일</div><div class="chip">주말</div><div class="chip">오전</div>
     <div class="chip">오후</div><div class="chip">저녁</div><div class="chip">교대근무</div>
@@ -180,7 +181,7 @@ button.go:disabled{background:#c3ccd3}
   </div>
   <div class="hint" style="margin:8px 0 0">다음 예약을 잡을 때 참고합니다. 여러 개 선택하셔도 됩니다.</div>
 
-  <label class="f">받아보신 적 있는 시술 *</label>
+  <label class="f">받아보신 적 있는 시술 <span class="rq">*</span></label>
   <div class="hint" style="margin:-2px 0 6px">경험이 있는 항목을 눌러주세요.
     처음이시면 <b>없음</b>을 눌러주세요.</div>
   <div class="chips" data-g="exNone">
@@ -210,7 +211,7 @@ button.go:disabled{background:#c3ccd3}
   <h2><b>2</b>오늘 받으실 시술</h2>
   <div class="hint">해당하는 항목을 눌러주세요. 여러 개 선택할 수 있습니다.</div>
 
-  <label class="f">카테고리 *</label>
+  <label class="f">카테고리 <span class="rq">*</span></label>
   <div class="hint" style="margin:-2px 0 6px">받으실 시술을 고르시면 해당 항목만 나옵니다. 여러 개 고르셔도 됩니다.</div>
   <div class="chips" data-g="cat">
     <div class="chip">왁싱</div><div class="chip">속눈썹 연장</div>
@@ -419,7 +420,7 @@ button.go:disabled{background:#c3ccd3}
     <div class="ck" data-req="1"><i></i><span>건강정보 수집·이용에 동의합니다</span></div>
   </div>
 
-  <label class="f">서명 *</label>
+  <label class="f">서명 <span class="rq">*</span></label>
   <div id="sigwrap"><canvas id="sig"></canvas><div id="sigph">여기에 서명해주세요</div></div>
   <button class="mini" id="clr">서명 지우기</button>
 </section>
