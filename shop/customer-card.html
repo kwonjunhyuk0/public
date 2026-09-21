@@ -182,11 +182,8 @@ button.go:disabled{background:#c3ccd3}
   <div class="hint" style="margin:8px 0 0">다음 예약을 잡을 때 참고합니다. 여러 개 선택하셔도 됩니다.</div>
 
   <label class="f">받아보신 적 있는 시술 <span class="rq">*</span></label>
-  <div class="hint" style="margin:-2px 0 6px">경험이 있는 항목을 눌러주세요.
-    처음이시면 <b>없음</b>을 눌러주세요.</div>
-  <div class="chips" data-g="exNone">
-    <div class="chip" data-none="1">없음</div>
-  </div>
+  <div class="hint" style="margin:-2px 0 0">경험이 있는 항목을 눌러주세요.
+    처음이시면 기타의 <b>없음</b>을 눌러주세요.</div>
   <div class="sl">왁싱</div>
   <div class="chips" data-g="exWax">
     <div class="chip">브라질리언</div><div class="chip">페이스</div><div class="chip">바디</div>
@@ -204,6 +201,7 @@ button.go:disabled{background:#c3ccd3}
   <div class="chips" data-g="exEtc">
     <div class="chip">레이저 제모</div><div class="chip">성형수술</div>
     <div class="chip">보톡스</div><div class="chip">필러</div><div class="chip">그 외</div>
+    <div class="chip" data-none="1">없음</div>
   </div>
 </section>
 
@@ -451,7 +449,7 @@ const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 
 /* 칩 토글 */
 /* '없음' 칩은 같은 가족(연관 그룹) 전체를 비우고 자기만 켠다 */
-const EXF=['exNone','exWax','exLash','exSemi','exEtc'];
+const EXF=['exWax','exLash','exSemi','exEtc'];
 const FAM={}; EXF.forEach(k=>FAM[k]=EXF);
 const famChips = g => (FAM[g]||[g]).reduce((a,k)=>a.concat($$('.chips[data-g="'+k+'"] .chip')),[]);
 $$('.chips').forEach(g=>g.addEventListener('click',e=>{
@@ -543,6 +541,10 @@ function prog(){
   $('#submit').disabled=miss.length>0;
 }
 const pick=g=>$$('.chips[data-g="'+g+'"] .chip.on').map(x=>x.textContent).join(', ')||'—';
+/* '없음' 은 기타 줄 안에 있지만 기록은 따로 남긴다 */
+const pickX=g=>$$('.chips[data-g="'+g+'"] .chip.on:not([data-none])')
+                .map(x=>x.textContent).join(', ')||'—';
+const exNone=()=>$$('.chips[data-g="exEtc"] .chip.on[data-none]').length?'없음':'—';
 let sending=false, curCid='';
 /* 접수번호는 클라이언트에서 생성한다 — 응답이 유실돼도 시트에서 찾을 수 있어야 하므로 */
 function makeCid(){
@@ -563,8 +565,8 @@ function collect(){
     refTel:  isRefer() ? $('#refTel').value.trim() : '',
     interest:pick('interest'),
     party:pick('party'), visit:pick('visit'),
-    exWax:pick('exWax'), exLash:pick('exLash'), exSemi:pick('exSemi'), exEtc:pick('exEtc'),
-    exNone:pick('exNone'), cat:pick('cat'),
+    exWax:pick('exWax'), exLash:pick('exLash'), exSemi:pick('exSemi'), exEtc:pickX('exEtc'),
+    exNone:exNone(), cat:pick('cat'),
     brazilian:(d?d.dataset.v:''), brOpt:pick('br2'),
     face:pick('face'), body:pick('body'), care:pick('care'),
     lashCurl:(lc?lc.dataset.v:''), lashLen:pick('lashLen'),
