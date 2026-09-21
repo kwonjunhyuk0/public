@@ -213,7 +213,7 @@ button.go:disabled{background:#c3ccd3}
   <div class="hint" style="margin:-2px 0 6px">받으실 시술을 고르시면 해당 항목만 나옵니다. 여러 개 고르셔도 됩니다.</div>
   <div class="chips" data-g="cat">
     <div class="chip">왁싱</div><div class="chip">속눈썹 연장</div>
-    <div class="chip">속눈썹 펌</div><div class="chip">반영구</div>
+    <div class="chip">속눈썹 펌</div><div class="chip">반영구</div><div class="chip">기타</div>
   </div>
 
 <div data-cat="왁싱" hidden>
@@ -329,7 +329,12 @@ button.go:disabled{background:#c3ccd3}
   <div class="chips" data-g="etc">
     <div class="chip">눈썹문신</div><div class="chip">아이라인</div><div class="chip">헤어라인</div><div class="chip">상담희망</div>
   </div>
+</div>
 
+<div data-cat="기타" hidden>
+  <label class="f">기타 시술 <span class="rq">*</span></label>
+  <div class="hint" style="margin:-2px 0 6px">받으실 시술을 직접 적어주세요.</div>
+  <input type="text" id="catEtc" placeholder="예: 두피 관리">
 </div>
 </section>
 
@@ -495,7 +500,7 @@ $('#birth').addEventListener('input',e=>{
   $('#minorNote').style.display = (b && b.age<14) ? 'block' : 'none';
   prog();
 });
-['#name','#tel','#area'].forEach(s=>['input','change'].forEach(ev=>$(s).addEventListener(ev,prog)));
+['#name','#tel','#area','#catEtc'].forEach(s=>['input','change'].forEach(ev=>$(s).addEventListener(ev,prog)));
 
 /* 방문 경로 — '지인 소개' 를 고른 경우에만 소개자 입력칸 */
 const isRefer=()=>$$('.chips[data-g="route"] .chip.on')
@@ -516,26 +521,38 @@ $('#clr').onclick=()=>{cx.clearRect(0,0,cv.width,cv.height);drew=false;$('#sigph
 
 /* 진행률 */
 const G1 = g => $$('.chips[data-g="'+g+'"] .chip.on').length>0;
-const REQL=['기본정보','방문 경로','시술 목적','관심 시술','동반 방문','방문 시간대',
-            '시술 경험','오늘 받으실 시술','안전 확인','필수 동의','서명'];
-function reqOk(){
-  return [
-    $('#name').value.trim()!=='' && $('#tel').value.trim()!=='' &&
-      parseBirth($('#birth').value)!==null && $('#area').value!=='',
-    G1('route'), G1('purpose'), G1('interest'), G1('party'), G1('visit'),
-    EXF.some(G1),
-    G1('cat') && ($$('#svc .dz.on').length>0 ||
-                  $$('#svc .chips:not([data-g="cat"]) .chip.on').length>0),
-    G1('health'),
-    $$('.ck[data-req].on').length===3,
-    drew ];
+/* 고른 상위 카테고리는 그 안에서 최소 하나를 골라야 한다 */
+function catOk(n){
+  if(n==='기타') return $('#catEtc').value.trim()!=='';
+  const b=document.querySelector('#svc [data-cat="'+n+'"]');
+  return !!b && b.querySelectorAll('.chip.on,.dz.on').length>0;
+}
+const BASE=[
+  ['기본정보',   ()=> $('#name').value.trim()!=='' && $('#tel').value.trim()!=='' &&
+                     parseBirth($('#birth').value)!==null && $('#area').value!==''],
+  ['방문 경로',  ()=>G1('route')],
+  ['시술 목적',  ()=>G1('purpose')],
+  ['관심 시술',  ()=>G1('interest')],
+  ['동반 방문',  ()=>G1('party')],
+  ['방문 시간대',()=>G1('visit')],
+  ['시술 경험',  ()=>EXF.some(G1)],
+  ['시술 카테고리',()=>G1('cat')],
+];
+const TAIL=[
+  ['안전 확인',  ()=>G1('health')],
+  ['필수 동의',  ()=>$$('.ck[data-req].on').length===3],
+  ['서명',       ()=>drew],
+];
+function checklist(){
+  const cats=$$('.chips[data-g="cat"] .chip.on').map(x=>x.textContent.trim());
+  return BASE.concat(cats.map(n=>[n, ()=>catOk(n)])).concat(TAIL);
 }
 function prog(){
   catSync();
-  const o=reqOk(), n=o.filter(Boolean).length;
+  const L=checklist(), o=L.map(x=>!!x[1]()), n=o.filter(Boolean).length;
   $('#pg').style.width=(n/o.length*100)+'%';
   $('#pt').textContent=n+' / '+o.length;
-  const miss=o.map((v,i)=>v?null:REQL[i]).filter(Boolean);
+  const miss=L.map((x,i)=>o[i]?null:x[0]).filter(Boolean);
   $('#msg').textContent=miss.length?('남은 항목: '+miss.join(' · ')):'';
   purposeSync();
   $('#submit').disabled=miss.length>0;
@@ -566,7 +583,7 @@ function collect(){
     interest:pick('interest'),
     party:pick('party'), visit:pick('visit'),
     exWax:pick('exWax'), exLash:pick('exLash'), exSemi:pick('exSemi'), exEtc:pickX('exEtc'),
-    exNone:exNone(), cat:pick('cat'),
+    exNone:exNone(), cat:pick('cat'), catEtc:$('#catEtc').value.trim(),
     brazilian:(d?d.dataset.v:''), brOpt:pick('br2'),
     face:pick('face'), body:pick('body'), care:pick('care'),
     lashCurl:(lc?lc.dataset.v:''), lashLen:pick('lashLen'),
@@ -590,7 +607,7 @@ function showSummary(v){
     ['관심 시술',v.interest],
     ['동반 방문',v.party],['방문 시간대',v.visit],
     ['왁싱 경험',v.exWax],['속눈썹 경험',v.exLash],
-    ['반영구 경험',v.exSemi],['기타 경험',v.exEtc],['경험 없음',v.exNone],['시술 카테고리',v.cat],['브라질리언',(v.brazilian||'—')+' / '+v.brOpt],
+    ['반영구 경험',v.exSemi],['기타 경험',v.exEtc],['경험 없음',v.exNone],['시술 카테고리',v.cat],['기타 시술',v.catEtc||'—'],['브라질리언',(v.brazilian||'—')+' / '+v.brOpt],
     ['페이스',v.face],['바디',v.body],['집중케어',v.care],
     ['연장 컬',v.lashCurl||'—'],['연장 길이',v.lashLen],
     ['연장 숱',v.lashVol],['연장 모질',v.lashFib],
@@ -611,7 +628,10 @@ function catSync(){
   $$('#svc [data-cat]').forEach(b=>{
     const show=on.indexOf(b.dataset.cat)>=0;
     b.hidden=!show;
-    if(!show) [...b.querySelectorAll('.chip.on,.dz.on')].forEach(x=>x.classList.remove('on'));
+    if(!show){
+      [...b.querySelectorAll('.chip.on,.dz.on')].forEach(x=>x.classList.remove('on'));
+      [...b.querySelectorAll('input[type=text]')].forEach(x=>x.value='');
+    }
   });
 }
 
