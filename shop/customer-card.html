@@ -33,6 +33,7 @@ label.f{display:block;font-size:13px;font-weight:700;margin:26px 0 6px}
   padding:12px 13px;border:1.5px solid var(--line);border-radius:10px;font-size:16px;
   font-family:inherit;background:#ffffff;color:inherit;text-align:left;cursor:pointer}
 .dd.has{border-color:var(--ac);background:var(--acbg)}
+.dd.need{border-color:var(--warn);color:var(--warn);background:var(--warnbg)}
 .dd i{width:8px;height:8px;border:solid #8b939c;border-width:0 2px 2px 0;flex:none;
   transform:rotate(45deg) translateY(-3px);transition:transform .18s}
 .dd.open i{transform:rotate(-135deg) translateY(2px)}
@@ -120,7 +121,7 @@ button.go:disabled{background:#c3ccd3}
     <div><label class="f">생년월일 *</label>
       <input type="tel" id="birth" inputmode="numeric" maxlength="6" placeholder="예: 900503">
       <div class="hint" id="birthEcho" style="margin:6px 0 0"></div></div>
-    <div><label class="f">거주 / 소속</label>
+    <div><label class="f">거주 / 소속 *</label>
       <select id="area">
         <option value="">선택</option>
         <option>해링턴플레이스 (아파트)</option>
@@ -133,7 +134,7 @@ button.go:disabled{background:#c3ccd3}
   <div class="note" id="minorNote" style="display:none">
     만 14세 미만은 법정대리인 동의가 필요합니다. 원장에게 알려주세요.
   </div>
-  <label class="f">방문 경로</label>
+  <label class="f">방문 경로 *</label>
   <div class="hint" style="margin:-2px 0 6px">저희를 어떻게 알고 오셨는지 알려주세요.</div>
   <div class="chips" data-g="route">
     <div class="chip">네이버 지도</div><div class="chip">네이버 검색</div>
@@ -152,17 +153,17 @@ button.go:disabled{background:#c3ccd3}
     <div class="hint" style="margin:8px 0 0">소개 적립 확인에만 사용합니다.</div>
   </div>
 
-  <label class="f">시술 목적</label>
+  <label class="f">시술 목적 *</label>
   <div class="chips" data-g="purpose">
     <div class="chip">위생</div><div class="chip">여행</div><div class="chip">수영</div>
     <div class="chip">운동</div><div class="chip">촬영</div><div class="chip">데이트 / 커플</div>
     <div class="chip">임신 / 출산준비</div><div class="chip">미용</div>
-    <div class="chip">주변 추천</div>
+    <div class="chip">주변 추천</div><div class="chip">기타</div>
   </div>
 
-  <label class="f">관심있는 시술</label>
+  <label class="f">관심있는 시술 *</label>
   <div class="hint" style="margin:-2px 0 6px">오늘 받지는 않지만 관심있는 시술을 체크해주세요.
-    <b>선택 사항입니다.</b></div>
+    없으시면 <b>아직없음</b>을 눌러주세요.</div>
   <button type="button" class="dd" id="ddBtn" aria-expanded="false">
     <span id="ddLabel">선택 안 함</span><i></i>
   </button>
@@ -173,10 +174,11 @@ button.go:disabled{background:#c3ccd3}
       <div class="chip">속눈썹 연장</div><div class="chip">속눈썹 펌</div>
       <div class="chip">브로우리프트 펌</div><div class="chip">눈썹문신</div>
       <div class="chip">아이라인</div><div class="chip">헤어라인</div><div class="chip">상담희망</div>
+      <div class="chip" data-none="1">아직없음</div>
     </div>
   </div>
 
-  <label class="f">오늘 함께 오셨나요?</label>
+  <label class="f">오늘 함께 오셨나요? *</label>
   <div class="chips" data-g="party">
     <div class="chip">혼자</div><div class="chip">부부</div><div class="chip">커플</div>
     <div class="chip">가족</div><div class="chip">친구</div>
@@ -184,7 +186,7 @@ button.go:disabled{background:#c3ccd3}
   <div class="hint" style="margin:8px 0 0">동반 적립 처리에만 사용하며,
     <b>혼인 여부 등은 따로 기록하거나 보관하지 않습니다.</b></div>
 
-  <label class="f">방문 편하신 시간대</label>
+  <label class="f">방문 편하신 시간대 *</label>
   <div class="chips" data-g="visit">
     <div class="chip">평일</div><div class="chip">주말</div><div class="chip">오전</div>
     <div class="chip">오후</div><div class="chip">저녁</div><div class="chip">교대근무</div>
@@ -192,9 +194,12 @@ button.go:disabled{background:#c3ccd3}
   </div>
   <div class="hint" style="margin:8px 0 0">다음 예약을 잡을 때 참고합니다. 여러 개 선택하셔도 됩니다.</div>
 
-  <label class="f">받아보신 적 있는 시술</label>
-  <div class="hint" style="margin:-2px 0 0">경험이 있는 항목만 눌러주세요.
-    처음이시면 <b>비워두셔도 됩니다.</b></div>
+  <label class="f">받아보신 적 있는 시술 *</label>
+  <div class="hint" style="margin:-2px 0 6px">경험이 있는 항목을 눌러주세요.
+    처음이시면 <b>없음</b>을 눌러주세요.</div>
+  <div class="chips" data-g="exNone">
+    <div class="chip" data-none="1">없음</div>
+  </div>
   <div class="sl">왁싱</div>
   <div class="chips" data-g="exWax">
     <div class="chip">브라질리언</div><div class="chip">페이스</div><div class="chip">바디</div>
@@ -219,6 +224,14 @@ button.go:disabled{background:#c3ccd3}
   <h2><b>2</b>오늘 받으실 시술</h2>
   <div class="hint">해당하는 항목을 눌러주세요. 여러 개 선택할 수 있습니다.</div>
 
+  <label class="f">카테고리 *</label>
+  <div class="hint" style="margin:-2px 0 6px">받으실 시술을 고르시면 해당 항목만 나옵니다. 여러 개 고르셔도 됩니다.</div>
+  <div class="chips" data-g="cat">
+    <div class="chip">왁싱</div><div class="chip">속눈썹 연장</div>
+    <div class="chip">속눈썹 펌</div><div class="chip">반영구</div>
+  </div>
+
+<div data-cat="왁싱" hidden>
   <label class="f">브라질리언 — 디자인 선택</label>
   <div class="designs" id="dz">
     <div class="dz" data-v="비키니">
@@ -266,6 +279,9 @@ button.go:disabled{background:#c3ccd3}
     <div class="chip">보습</div><div class="chip">인그로운</div>
   </div>
 
+</div>
+
+<div data-cat="속눈썹 연장" hidden>
   <label class="f">속눈썹 연장</label>
   <div class="sl">컬</div>
   <div class="designs" id="lz">
@@ -307,6 +323,9 @@ button.go:disabled{background:#c3ccd3}
     <div class="chip">언더래쉬</div>
   </div>
 
+</div>
+
+<div data-cat="속눈썹 펌" hidden>
   <label class="f">속눈썹 펌</label>
   <div class="sl">펌 종류</div>
   <div class="chips" data-g="permType">
@@ -318,17 +337,26 @@ button.go:disabled{background:#c3ccd3}
     <div class="chip">클리닉 추가</div><div class="chip">노글루 추가</div>
   </div>
 
+</div>
+
+<div data-cat="반영구" hidden>
   <label class="f">반영구 시술</label>
   <div class="chips" data-g="etc">
     <div class="chip">눈썹문신</div><div class="chip">아이라인</div><div class="chip">헤어라인</div><div class="chip">상담희망</div>
   </div>
 
+</div>
+</section>
+
+<section>
+  <h2><b>3</b>신경 쓰이는 점</h2>
+  <div class="hint">선택 사항입니다. 없으시면 그냥 넘어가셔도 됩니다.</div>
   <label class="f">특히 신경 쓰이는 점이 있으신가요?</label>
   <textarea id="worry" placeholder="편하게 적어주세요. 없으시면 비워두셔도 됩니다."></textarea>
 </section>
 
 <section>
-  <h2><b>3</b>안전 확인</h2>
+  <h2><b>4</b>안전 확인</h2>
   <div class="hint">시술 가능 여부와 방식을 정하는 데 꼭 필요한 항목입니다.
     해당사항이 없으면 <b>해당 없음</b>을 눌러주세요.</div>
   <div class="chips" data-g="health" id="health">
@@ -344,14 +372,14 @@ button.go:disabled{background:#c3ccd3}
     <div class="chip warn">시술 부위 상처·염증</div>
     <div class="chip" data-none="1">해당 없음</div>
   </div>
-  <label class="f">체크하신 항목이 있다면 구체적으로</label>
+  <label class="f">체크하신 항목이 있다면 구체적으로 <em style="font-style:normal;font-weight:500;color:var(--sub)">(선택)</em></label>
   <textarea id="hdetail" placeholder="예: 알레르기 종류 / 복용 중인 약 종류"></textarea>
-  <label class="f">최근 면도 또는 제모를 하셨다면</label>
+  <label class="f">최근 면도 또는 제모를 하셨다면 <em style="font-style:normal;font-weight:500;color:var(--sub)">(선택)</em></label>
   <input type="text" id="shave" placeholder="예: 3일 전 면도">
 </section>
 
 <section id="pregSec" style="display:none">
-  <h2><b>4</b>임산부 문진</h2>
+  <h2><b>5</b>임산부 문진</h2>
   <div class="hint">더 편안한 자세와 속도로 진행하기 위한 항목입니다.
     <b>구름왁싱은 임산부라고 추가 요금을 받지 않습니다.</b></div>
   <label class="f">현재 임신 주차</label>
@@ -371,7 +399,7 @@ button.go:disabled{background:#c3ccd3}
 </section>
 
 <section>
-  <h2><b>5</b>동의</h2>
+  <h2><b>6</b>동의</h2>
   <div class="consent req">
     <h3>① 시술 동의 <em>필수</em></h3>
     <ul>
@@ -435,14 +463,18 @@ const TOKEN    = 'gureum-2026-x7k9qpjeifnqzmskvmbr';   // Code.gs 의 TOKEN 과 
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 
 /* 칩 토글 */
+/* '없음' 칩은 같은 가족(연관 그룹) 전체를 비우고 자기만 켠다 */
+const EXF=['exNone','exWax','exLash','exSemi','exEtc'];
+const FAM={}; EXF.forEach(k=>FAM[k]=EXF);
+const famChips = g => (FAM[g]||[g]).reduce((a,k)=>a.concat($$('.chips[data-g="'+k+'"] .chip')),[]);
 $$('.chips').forEach(g=>g.addEventListener('click',e=>{
   const c=e.target.closest('.chip'); if(!c)return;
-  if(g.id==='health'){
-    if(c.dataset.none){ $$('#health .chip').forEach(x=>x.classList.remove('on')); c.classList.add('on'); }
-    else { c.classList.toggle('on'); $$('#health .chip[data-none]').forEach(x=>x.classList.remove('on')); }
-    $('#pregSec').style.display =
-      $$('#health .chip[data-preg].on').length ? 'block' : 'none';
-  } else c.classList.toggle('on');
+  const fam=famChips(g.dataset.g);
+  if(c.dataset.none){ fam.forEach(x=>x.classList.remove('on')); c.classList.add('on'); }
+  else { c.classList.toggle('on');
+         fam.forEach(x=>{ if(x.dataset.none) x.classList.remove('on'); }); }
+  if(g.dataset.g==='health')
+    $('#pregSec').style.display = $$('#health .chip[data-preg].on').length ? 'block' : 'none';
   prog();
 }));
 /* 카드 단일선택 — 같은 카드를 다시 누르면 해제 */
@@ -478,7 +510,7 @@ $('#birth').addEventListener('input',e=>{
   $('#minorNote').style.display = (b && b.age<14) ? 'block' : 'none';
   prog();
 });
-['#name','#tel','#area'].forEach(s=>$(s).addEventListener('input',prog));
+['#name','#tel','#area'].forEach(s=>['input','change'].forEach(ev=>$(s).addEventListener(ev,prog)));
 
 /* 방문 경로 — '지인 소개' 를 고른 경우에만 소개자 입력칸 */
 const isRefer=()=>$$('.chips[data-g="route"] .chip.on')
@@ -494,9 +526,10 @@ $('#ddBtn').addEventListener('click',()=>{
 });
 function ddSync(){
   const on=$$('.chips[data-g="interest"] .chip.on').map(x=>x.textContent);
-  $('#ddLabel').textContent = !on.length ? '선택 안 함'
+  $('#ddLabel').textContent = !on.length ? '눌러서 선택해주세요 (필수)'
     : on.length===1 ? on[0] : on[0]+' 외 '+(on.length-1)+'개';
   $('#ddBtn').classList.toggle('has', on.length>0);
+  $('#ddBtn').classList.toggle('need', on.length===0);
 }
 
 /* 서명 */
@@ -512,22 +545,27 @@ addEventListener('pointerup',()=>down=false);
 $('#clr').onclick=()=>{cx.clearRect(0,0,cv.width,cv.height);drew=false;$('#sigph').style.display='flex';prog()};
 
 /* 진행률 */
+const G1 = g => $$('.chips[data-g="'+g+'"] .chip.on').length>0;
+const REQL=['기본정보','방문 경로','시술 목적','관심 시술','동반 방문','방문 시간대',
+            '시술 경험','오늘 받으실 시술','안전 확인','필수 동의','서명'];
 function reqOk(){
-  return [$('#name').value.trim()!=='', $('#tel').value.trim()!=='', parseBirth($('#birth').value)!==null,
-    ($$('#svc .dz.on').length>0 || $$('#svc .chips .chip.on').length>0),
-    $$('#health .chip.on').length>0,
-    $$('.ck[data-req].on').length===3, drew];
+  return [
+    $('#name').value.trim()!=='' && $('#tel').value.trim()!=='' &&
+      parseBirth($('#birth').value)!==null && $('#area').value!=='',
+    G1('route'), G1('purpose'), G1('interest'), G1('party'), G1('visit'),
+    EXF.some(G1),
+    G1('cat') && ($$('#svc .dz.on').length>0 ||
+                  $$('#svc .chips:not([data-g="cat"]) .chip.on').length>0),
+    G1('health'),
+    $$('.ck[data-req].on').length===3,
+    drew ];
 }
 function prog(){
+  catSync();
   const o=reqOk(), n=o.filter(Boolean).length;
   $('#pg').style.width=(n/o.length*100)+'%';
   $('#pt').textContent=n+' / '+o.length;
-  const miss=[];
-  if(!o[0]||!o[1]||!o[2])miss.push('기본정보');
-  if(!o[3])miss.push('시술 선택');
-  if(!o[4])miss.push('안전 확인');
-  if(!o[5])miss.push('필수 동의');
-  if(!o[6])miss.push('서명');
+  const miss=o.map((v,i)=>v?null:REQL[i]).filter(Boolean);
   $('#msg').textContent=miss.length?('남은 항목: '+miss.join(' · ')):'';
   ddSync(); purposeSync();
   $('#submit').disabled=miss.length>0;
@@ -554,6 +592,7 @@ function collect(){
     interest:pick('interest'),
     party:pick('party'), visit:pick('visit'),
     exWax:pick('exWax'), exLash:pick('exLash'), exSemi:pick('exSemi'), exEtc:pick('exEtc'),
+    exNone:pick('exNone'), cat:pick('cat'),
     brazilian:(d?d.dataset.v:''), brOpt:pick('br2'),
     face:pick('face'), body:pick('body'), care:pick('care'),
     lashCurl:(lc?lc.dataset.v:''), lashLen:pick('lashLen'),
@@ -577,7 +616,7 @@ function showSummary(v){
     ['관심 시술',v.interest],
     ['동반 방문',v.party],['방문 시간대',v.visit],
     ['왁싱 경험',v.exWax],['속눈썹 경험',v.exLash],
-    ['반영구 경험',v.exSemi],['기타 경험',v.exEtc],['브라질리언',(v.brazilian||'—')+' / '+v.brOpt],
+    ['반영구 경험',v.exSemi],['기타 경험',v.exEtc],['경험 없음',v.exNone],['시술 카테고리',v.cat],['브라질리언',(v.brazilian||'—')+' / '+v.brOpt],
     ['페이스',v.face],['바디',v.body],['집중케어',v.care],
     ['연장 컬',v.lashCurl||'—'],['연장 길이',v.lashLen],
     ['연장 숱',v.lashVol],['연장 모질',v.lashFib],
@@ -592,6 +631,16 @@ function showSummary(v){
   $('#form').style.display='none'; $('#done').style.display='block';
   $('.bar').style.display='none'; scrollTo(0,0);
 }
+/* 고른 카테고리의 블록만 보인다. 숨긴 블록의 선택은 비운다 */
+function catSync(){
+  const on=$$('.chips[data-g="cat"] .chip.on').map(x=>x.textContent.trim());
+  $$('#svc [data-cat]').forEach(b=>{
+    const show=on.indexOf(b.dataset.cat)>=0;
+    b.hidden=!show;
+    if(!show) [...b.querySelectorAll('.chip.on,.dz.on')].forEach(x=>x.classList.remove('on'));
+  });
+}
+
 /* 결과 확정 — postMessage 든 JSONP 확인이든 여기 한 곳으로 모은다 */
 function finish(r){
   if(!sending) return;
