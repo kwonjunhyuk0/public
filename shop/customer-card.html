@@ -29,15 +29,6 @@ h2 b{width:23px;height:23px;background:var(--ac);color:#fff;border-radius:7px;fo
 label.f{display:block;font-size:13px;font-weight:700;margin:26px 0 6px}
 .row2 label.f{margin-top:14px}   /* 2단 입력칸 안에서는 기존 간격 유지 */
 .sl{font-size:12px;font-weight:700;color:var(--sub);margin:10px 0 4px}
-.dd{width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;
-  padding:12px 13px;border:1.5px solid var(--line);border-radius:10px;font-size:16px;
-  font-family:inherit;background:#ffffff;color:inherit;text-align:left;cursor:pointer}
-.dd.has{border-color:var(--ac);background:var(--acbg)}
-.dd.need{border-color:var(--warn);color:var(--warn);background:var(--warnbg)}
-.dd i{width:8px;height:8px;border:solid #8b939c;border-width:0 2px 2px 0;flex:none;
-  transform:rotate(45deg) translateY(-3px);transition:transform .18s}
-.dd.open i{transform:rotate(-135deg) translateY(2px)}
-.ddp{margin-top:2px}
 input[type=text],input[type=tel],input[type=number],textarea,select{
   width:100%;padding:12px 13px;border:1.5px solid var(--line);border-radius:10px;
   font-size:16px;font-family:inherit;background:#ffffff}
@@ -164,18 +155,13 @@ button.go:disabled{background:#c3ccd3}
   <label class="f">관심있는 시술 *</label>
   <div class="hint" style="margin:-2px 0 6px">오늘 받지는 않지만 관심있는 시술을 체크해주세요.
     없으시면 <b>아직없음</b>을 눌러주세요.</div>
-  <button type="button" class="dd" id="ddBtn" aria-expanded="false">
-    <span id="ddLabel">선택 안 함</span><i></i>
-  </button>
-  <div class="ddp" id="ddPanel" hidden>
-    <div class="chips" data-g="interest">
-      <div class="chip">브라질리언 왁싱</div><div class="chip">페이스 왁싱</div>
-      <div class="chip">바디 왁싱</div><div class="chip">케어 프로그램</div>
-      <div class="chip">속눈썹 연장</div><div class="chip">속눈썹 펌</div>
-      <div class="chip">브로우리프트 펌</div><div class="chip">눈썹문신</div>
-      <div class="chip">아이라인</div><div class="chip">헤어라인</div><div class="chip">상담희망</div>
-      <div class="chip" data-none="1">아직없음</div>
-    </div>
+  <div class="chips" data-g="interest">
+    <div class="chip">브라질리언 왁싱</div><div class="chip">페이스 왁싱</div>
+    <div class="chip">바디 왁싱</div><div class="chip">케어 프로그램</div>
+    <div class="chip">속눈썹 연장</div><div class="chip">속눈썹 펌</div>
+    <div class="chip">브로우리프트 펌</div><div class="chip">눈썹문신</div>
+    <div class="chip">아이라인</div><div class="chip">헤어라인</div><div class="chip">상담희망</div>
+    <div class="chip" data-none="1">아직없음</div>
   </div>
 
   <label class="f">오늘 함께 오셨나요? *</label>
@@ -517,21 +503,6 @@ const isRefer=()=>$$('.chips[data-g="route"] .chip.on')
   .some(x=>x.textContent.trim()==='지인 소개');
 function purposeSync(){ $('#referSec').style.display = isRefer() ? 'block' : 'none'; }
 
-/* 관심있는 시술 — 접히는 드롭다운 안의 다중 선택 */
-$('#ddBtn').addEventListener('click',()=>{
-  const open=$('#ddPanel').hasAttribute('hidden');
-  if(open) $('#ddPanel').removeAttribute('hidden'); else $('#ddPanel').setAttribute('hidden','');
-  $('#ddBtn').classList.toggle('open',open);
-  $('#ddBtn').setAttribute('aria-expanded',String(open));
-});
-function ddSync(){
-  const on=$$('.chips[data-g="interest"] .chip.on').map(x=>x.textContent);
-  $('#ddLabel').textContent = !on.length ? '눌러서 선택해주세요 (필수)'
-    : on.length===1 ? on[0] : on[0]+' 외 '+(on.length-1)+'개';
-  $('#ddBtn').classList.toggle('has', on.length>0);
-  $('#ddBtn').classList.toggle('need', on.length===0);
-}
-
 /* 서명 */
 const cv=$('#sig'), cx=cv.getContext('2d'); let drew=false,down=false;
 function fit(){const r=cv.getBoundingClientRect();cv.width=r.width*2;cv.height=r.height*2;
@@ -567,7 +538,7 @@ function prog(){
   $('#pt').textContent=n+' / '+o.length;
   const miss=o.map((v,i)=>v?null:REQL[i]).filter(Boolean);
   $('#msg').textContent=miss.length?('남은 항목: '+miss.join(' · ')):'';
-  ddSync(); purposeSync();
+  purposeSync();
   $('#submit').disabled=miss.length>0;
 }
 const pick=g=>$$('.chips[data-g="'+g+'"] .chip.on').map(x=>x.textContent).join(', ')||'—';
