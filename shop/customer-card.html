@@ -84,6 +84,8 @@ button.go:disabled{background:#c3ccd3}
   font-size:12.5px;color:#7d3d31;margin-top:12px}
 #done{display:none}
 #done section{border-color:var(--ac)}
+.back{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:13px;color:var(--sub);margin-bottom:13px}
+.back .mini{margin:0}
 #stat{font-size:13.5px;font-weight:700;padding:10px 13px;border-radius:9px;margin-bottom:13px;
   background:#eef2f5;color:#4a5560;border:1px solid #dfe5ea}
 #stat.ok{background:#eef6ef;color:#2f6b3d;border-color:#cfe3d3}
@@ -435,6 +437,8 @@ button.go:disabled{background:#c3ccd3}
     <h2><b>✓</b>작성이 완료되었습니다</h2>
     <div class="hint">원장에게 태블릿을 전달해주세요.</div>
     <div id="stat"></div>
+    <div class="back"><span id="backMsg"></span>
+      <button type="button" class="mini" id="backNow">처음 화면으로</button></div>
     <div class="sum" id="sum"></div>
   </section>
 </div>
@@ -622,6 +626,7 @@ function showSummary(v){
     +'<div style="margin-top:10px;font-size:12px;color:#6f7a85">접수번호 '+v.cid+' &middot; 작성일 '+new Date().toLocaleString('ko-KR')+'</div>';
   $('#form').style.display='none'; $('#done').style.display='block';
   $('.bar').style.display='none'; scrollTo(0,0);
+  startBack();
 }
 /* 고른 카테고리의 블록만 보인다. 숨긴 블록의 선택은 비운다 */
 function catSync(){
@@ -635,6 +640,41 @@ function catSync(){
     }
   });
 }
+
+/* 완료 화면 → 30초 뒤 처음 화면. 공용 태블릿이라 다음 손님이 앞 사람 정보를 보면 안 된다.
+   전송 중이면 끝날 때까지 기다리고, 실패하면 접수번호를 봐야 하므로 멈춘다 */
+const BACK_SEC=30; let backT=null, backN=0;
+function stopBack(){ clearInterval(backT); backT=null; }
+function startBack(){ stopBack(); backN=BACK_SEC; tickBack(); backT=setInterval(tickBack,1000); }
+function tickBack(){
+  if($('#stat').className==='err'){
+    stopBack();
+    $('#backMsg').textContent='전송에 문제가 있어 자동으로 넘어가지 않습니다. 원장 확인 후 눌러주세요.';
+    return;
+  }
+  if(backN<=0){
+    if(sending){ $('#backMsg').textContent='전송 확인 중입니다. 끝나면 처음 화면으로 돌아갑니다.'; return; }
+    resetForm(); return;
+  }
+  $('#backMsg').textContent=backN+'초 후 처음 화면으로 돌아갑니다.';
+  backN--;
+}
+function resetForm(){
+  stopBack(); clearTimeout(window.__to);
+  sending=false; curCid='';
+  $$('#form input[type=text],#form input[type=tel],#form input[type=number],#form textarea')
+    .forEach(x=>x.value='');
+  $$('#form select').forEach(x=>x.selectedIndex=0);
+  $$('#form .chip.on,#form .dz.on,#form .ck.on').forEach(x=>x.classList.remove('on'));
+  cx.clearRect(0,0,cv.width,cv.height); drew=false; $('#sigph').style.display='flex';
+  $('#birthEcho').textContent=''; $('#minorNote').style.display='none';
+  $('#pregSec').style.display='none';
+  $('#sum').innerHTML='';                      // 서명 이미지·개인정보를 화면에서 지운다
+  $('#stat').textContent=''; $('#stat').className=''; $('#backMsg').textContent='';
+  $('#done').style.display='none'; $('#form').style.display=''; $('.bar').style.display='';
+  scrollTo(0,0); prog();
+}
+$('#backNow').addEventListener('click',resetForm);
 
 /* 결과 확정 — postMessage 든 JSONP 확인이든 여기 한 곳으로 모은다 */
 function finish(r){
