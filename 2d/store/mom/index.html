@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="googlebot" content="noindex, nofollow, noarchive">
+<meta name="referrer" content="no-referrer">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>샵인샵 평면도 · Rev.1</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" as="style" crossorigin
+  href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --paper:#f2f0eb; --sheet:#fffefb; --ink:#20262c; --sub:#6d7883; --faint:#9aa5af;
+  --line:#d8d3c8; --wall:#20262c; --part:#2f7d95; --door:#1f7a4d;
+  --dimc:#c0503c; --glass:#8ED4EA; --entry:#a9754a;
+}
+body{
+  font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic Neo',sans-serif;
+  background:var(--paper); color:var(--ink); line-height:1.55; font-size:15px;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1240px;margin:0 auto;padding:22px 18px 60px}
+header{border-bottom:1.5px solid var(--ink);padding-bottom:12px;margin-bottom:18px}
+h1{font-size:21px;font-weight:800;letter-spacing:-.3px}
+.sub{font-size:12.5px;color:var(--sub);margin-top:4px}
+
+.cols{display:flex;gap:22px;align-items:flex-start;flex-wrap:wrap}
+.sheet{
+  flex:1 1 420px; min-width:320px; background:var(--sheet);
+  border:1px solid var(--line); border-radius:10px; padding:10px;
+}
+.sheet svg{display:block;width:100%;height:auto}
+aside{flex:0 1 320px;min-width:260px;display:flex;flex-direction:column;gap:16px}
+
+.card{background:var(--sheet);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+h2{font-size:12px;font-weight:800;letter-spacing:.08em;color:var(--sub);
+   text-transform:uppercase;margin-bottom:9px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+td{padding:4px 0;vertical-align:top}
+td.n{text-align:right;color:var(--sub);font-variant-numeric:tabular-nums;white-space:nowrap}
+tr+tr td{border-top:1px solid #efece5}
+tfoot td{border-top:1.5px solid var(--line);font-weight:700;padding-top:6px}
+.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:7px;vertical-align:-1px}
+.lg{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--sub);padding:2.5px 0}
+.lg b{color:var(--ink);font-weight:600}
+.note{font-size:12px;color:var(--sub)}
+.note li{margin-left:15px;margin-top:3px}
+
+.tools{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+button{background:var(--sheet);color:var(--ink);border:1px solid var(--line);border-radius:7px;
+  padding:6px 11px;font-size:12.5px;cursor:pointer;font-family:inherit}
+button:hover{background:#f6f3ec}
+button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+button:focus-visible,.btn:focus-visible{outline:2px solid var(--part);outline-offset:2px}
+.btn{background:var(--sheet);color:var(--ink);border:1px solid var(--line);border-radius:7px;
+  padding:6px 11px;font-size:12.5px;text-decoration:none;display:inline-flex;align-items:center}
+.btn:hover{background:#f6f3ec}
+
+@media print{
+  body{background:#fff}
+  .wrap{max-width:none;padding:0}
+  .tools{display:none}
+  .cols{display:block}
+  .sheet{border:0;padding:0;page-break-after:always}
+  aside{margin-top:14px}
+  @page{size:A4 portrait;margin:12mm}
+}
+</style></head><body>
+<div class="wrap">
+
+<header>
+  <h1>샵인샵 &nbsp;평면도</h1>
+  <div class="sub">Rev.1 · 단위 mm · 실내 3,900 × 2,900 · 전용 11.31㎡ (약 3.4평) · 층고 2,400
+    &nbsp;·&nbsp; <span id="stamp"></span></div>
+</header>
+
+<div class="tools">
+  <button data-t="furn" class="on">가구</button>
+  <button data-t="dim"  class="on">치수</button>
+  <button data-t="lbl"  class="on">실 이름</button>
+  <button id="prt">인쇄</button>
+  <a class="btn" href="../../../3d/store/mom/">3D 뷰어</a>
+</div>
+
+<div class="cols">
+  <div class="sheet"><svg id="plan" xmlns="http://www.w3.org/2000/svg" role="img"
+       aria-label="샵인샵 평면도 — 시술실, 세척·소독실"></svg></div>
+
+  <aside>
+    <div class="card">
+      <h2>실 구성</h2>
+      <table id="rt"></table>
+    </div>
+    <div class="card">
+      <h2>범례</h2>
+      <div class="lg"><span class="sw" style="background:var(--wall)"></span><b>외벽</b> t200</div>
+      <div class="lg"><span class="sw" style="background:var(--glass)"></span><b>통창</b> 북측 전면 · 바닥~2,100</div>
+      <div class="lg"><span class="sw" style="background:var(--entry)"></span><b>출입문</b> 여닫이 · 밖으로 열림</div>
+      <div class="lg"><span class="sw" style="background:var(--part)"></span><b>파티션</b> t50 · H2,100 · 불투명</div>
+      <div class="lg"><span class="sw" style="background:var(--door)"></span><b>미닫이문</b> 화살표 방향으로 열림</div>
+      <div class="lg"><span class="sw" style="background:#8ED4EA"></span><b>설비</b> 소독기·세척기·싱크대</div>
+      <div class="lg"><span class="sw" style="background:#C68C4E"></span><b>가구</b> 베드</div>
+      <div class="lg"><span class="sw" style="background:#8A5A2B"></span><b>수납</b> 수납장·전용보관함</div>
+    </div>
+    <div class="card">
+      <h2>확인 필요</h2>
+      <ul class="note">
+        <li>가구·설비 높이는 도면에 없어 가정한 값 (베드 700, 수납 900, 보관함 1,800, 소독기·세척기 900, 싱크대 850)</li>
+        <li>세척기 깊이 600 → 580 : 도면에서 싱크대와 20 겹쳐 줄임</li>
+        <li>출입문·미닫이문 높이 2,050 가정</li>
+        <li>통창 분할(멀리언) 미정 → 한 장으로 표기</li>
+      </ul>
+    </div>
+  </aside>
+</div>
+</div>
+
+<script id="geo" type="application/json">{"W":3900,"D":2900,"H":2400,"WT":200,"PT":50,"PH":2100,"shell":[[0,0],[3900,0],[3900,2900],[0,2900]],"door":{"x1":1900,"x2":2700,"h":2050,"hinge":"e","note":"출입문 · 밖으로 여는 여닫이"},"glass":{"x1":0,"x2":3900,"h":2100,"note":"북측 통창 · 바닥~2,100"},"partitions":[{"x1":2875,"z1":0,"x2":2875,"z2":1300},{"x1":2875,"z1":2100,"x2":2875,"z2":2900}],"sliders":[{"id":"SD1","x1":2875,"z1":1300,"x2":2875,"z2":2100,"w":800,"h":2050,"face":-1,"dir":1,"lo":-1,"note":"시술실 → 세척·소독실, 시술실 쪽 면에서 남쪽으로 밀림"}],"rooms":[{"name":"시술실","pts":[[0,0],[2850,0],[2850,2900],[0,2900]],"dim":[2850,2900],"area":8.27,"color":"#C8A882"},{"name":"세척·소독실","pts":[[2900,0],[3900,0],[3900,2900],[2900,2900]],"dim":[1000,2900],"area":2.9,"color":"#C08C7A","lp":[3080,1750],"rot":true}],"items":[{"no":1,"name":"베드","spec":"700 × 1,850","type":"bed","cx":350,"cz":925,"w":700,"d":1850,"h":700,"color":"#C68C4E","kind":"fx","room":"시술실"},{"no":2,"name":"수납","spec":"700 × 490","type":"cabinet","cx":350,"cz":2655,"w":700,"d":490,"h":900,"color":"#8A5A2B","kind":"sf","room":"시술실","face":"e"},{"no":3,"name":"전용보관함","spec":"1,000 × 600","type":"cabinet","cx":3400,"cz":300,"w":1000,"d":600,"h":1800,"color":"#8A5A2B","kind":"sf","room":"세척·소독실","face":"s"},{"no":4,"name":"소독기","spec":"500 × 400","type":"cabinet","cx":3650,"cz":1520,"w":500,"d":400,"h":900,"color":"#8ED4EA","kind":"eq","room":"세척·소독실","face":"w"},{"no":5,"name":"세척기","spec":"500 × 580","type":"cabinet","cx":3650,"cz":2010,"w":500,"d":580,"h":900,"color":"#8ED4EA","kind":"eq","room":"세척·소독실","face":"w"},{"no":6,"name":"싱크대","spec":"500 × 600","type":"basin","cx":3650,"cz":2600,"w":500,"d":600,"h":850,"color":"#8ED4EA","kind":"eq","room":"세척·소독실","face":"w"}]}</script>
+<script>
+const D = JSON.parse(document.getElementById('geo').textContent);
+const NS = 'http://www.w3.org/2000/svg';
+const svg = document.getElementById('plan');
+
+/* ── 도면 영역 : 실내 0..3900 × 0..2900, 출입문 회전 반경과 사방 치수선 여백 ── */
+const VB = {x:-1000, y:-1400, w:6800, h:6500};
+svg.setAttribute('viewBox', `${VB.x} ${VB.y} ${VB.w} ${VB.h}`);
+
+const el = (t, a, parent) => {
+  const n = document.createElementNS(NS, t);
+  for (const k in a) n.setAttribute(k, a[k]);
+  (parent || svg).appendChild(n); return n;
+};
+const g = id => el('g', {id});
+const G = {floor:g('floor'), wall:g('wall'), part:g('part'), door:g('door'),
+           furn:g('furn'), dim:g('dim'), lbl:g('lbl')};
+const pts = a => a.map(p => p.join(',')).join(' ');
+const fmt = n => n.toLocaleString('ko-KR');
+const hw = D.WT/2;
+
+/* ── 바닥 · 실 ── */
+el('polygon', {points:pts(D.shell), fill:'#faf8f3'}, G.floor);
+D.rooms.forEach(r => {
+  el('polygon', {points:pts(r.pts), fill:r.color, 'fill-opacity':.30,
+                 stroke:'#00000012', 'stroke-width':6}, G.floor);
+});
+
+/* ── 외벽 : 서 · 동 · 남(출입문 양옆) — 중심선, 끝은 두께 절반만큼 연장 ── */
+const dr = D.door;
+[[-hw, -hw, -hw, D.D+hw], [D.W+hw, -hw, D.W+hw, D.D+hw],
+ [-hw, D.D+hw, dr.x1-hw, D.D+hw], [dr.x2+hw, D.D+hw, D.W+hw, D.D+hw]
+].forEach(w => el('line', {x1:w[0], y1:w[1], x2:w[2], y2:w[3], stroke:'var(--wall)',
+                           'stroke-width':D.WT, 'stroke-linecap':'square'}, G.wall));
+
+/* ── 북측 통창 ── */
+const gl = D.glass;
+el('line', {x1:gl.x1, y1:-hw, x2:gl.x2, y2:-hw, stroke:'var(--glass)', 'stroke-width':D.WT}, G.wall);
+el('line', {x1:gl.x1, y1:-hw, x2:gl.x2, y2:-hw, stroke:'#4f8fa6', 'stroke-width':14}, G.wall);
+el('text', {x:(gl.x1+gl.x2)/2, y:-hw-40, 'text-anchor':'middle', 'font-size':100,
+            'font-weight':600, fill:'#2f6f86', 'paint-order':'stroke', stroke:'var(--glass)',
+            'stroke-width':40}, G.wall).textContent = `통창 · 바닥~${fmt(gl.h)}`;
+
+/* ── 출입문 : 밖(남)으로 여는 여닫이, 경첩은 동쪽 ── */
+const oz = D.D + D.WT;                               // 외벽 바깥 면
+const dw = dr.x2 - dr.x1;
+el('line', {x1:dr.x2, y1:oz, x2:dr.x2, y2:oz+dw, stroke:'var(--entry)',
+            'stroke-width':40, 'stroke-linecap':'round'}, G.door);
+el('path', {d:`M ${dr.x1} ${oz} A ${dw} ${dw} 0 0 0 ${dr.x2} ${oz+dw}`,
+            fill:'none', stroke:'var(--entry)', 'stroke-width':18,
+            'stroke-dasharray':'70 55'}, G.door);
+el('text', {x:(dr.x1+dr.x2)/2, y:D.D+hw+35, 'text-anchor':'middle', 'font-size':100,
+            'font-weight':600, fill:'var(--entry)'}, G.door).textContent = '출입';
+
+/* ── 파티션 ── */
+D.partitions.forEach(p => el('line',
+  {x1:p.x1, y1:p.z1, x2:p.x2, y2:p.z2, stroke:'var(--part)',
+   'stroke-width':D.PT, 'stroke-linecap':'butt'}, G.part));
+
+/* ── 미닫이문 : 한 짝, s.face 쪽 면(-1 서/북, +1 동/남)에 붙어 s.dir 쪽으로 밀린다 ── */
+D.sliders.forEach(s => {
+  const horiz = s.z1 === s.z2;
+  const cx = (s.x1+s.x2)/2, cz = (s.z1+s.z2)/2;
+  const off = s.face * (D.PT/2 + 25), L = s.w + 60;           // 양옆 30씩 겹쳐 닫힘
+  el('line', Object.assign(horiz
+    ? {x1:cx-L/2, y1:cz+off, x2:cx+L/2, y2:cz+off}
+    : {x1:cx+off, y1:cz-L/2, x2:cx+off, y2:cz+L/2},
+    {stroke:'var(--door)', 'stroke-width':46, 'stroke-linecap':'round'}), G.door);
+  /* 여는 방향 화살표 — 문짝에서 175 떨어진 자리 */
+  const ao = s.face * 175, a1 = -s.w*.32*s.dir, a2 = s.w*.32*s.dir;
+  const A = horiz ? [[cx+a1, cz+ao], [cx+a2, cz+ao]] : [[cx+ao, cz+a1], [cx+ao, cz+a2]];
+  el('line', {x1:A[0][0], y1:A[0][1], x2:A[1][0], y2:A[1][1], stroke:'var(--door)',
+              'stroke-width':20}, G.door);
+  const [hx, hz] = A[1], u = 90*s.dir;
+  el('polygon', {points: horiz ? pts([[hx+u, hz], [hx-u*.2, hz-55], [hx-u*.2, hz+55]])
+                               : pts([[hx, hz+u], [hx-55, hz-u*.2], [hx+55, hz-u*.2]]),
+                 fill:'var(--door)'}, G.door);
+  /* 문 너비 — s.lo 쪽에 표기 */
+  const lt = el('text', {'text-anchor':'middle', 'font-size':126, 'font-weight':600,
+                         fill:'var(--door)'}, G.door);
+  const lo = s.lo || -1, ld = 330;
+  if (horiz) { lt.setAttribute('x', cx); lt.setAttribute('y', cz + lo*ld + 44); }
+  else { lt.setAttribute('x', 0); lt.setAttribute('y', 44);
+         lt.setAttribute('transform', `translate(${cx + lo*ld},${cz}) rotate(-90)`); }
+  lt.textContent = '미닫이 ' + fmt(s.w);
+});
+
+/* ── 가구 · 설비 ── */
+D.items.forEach(it => {
+  el('rect', {x:it.cx-it.w/2, y:it.cz-it.d/2, width:it.w, height:it.d, rx:16,
+              fill:it.color, 'fill-opacity':.85, stroke:'#00000030', 'stroke-width':10}, G.furn);
+  /* 이름 + 가로×세로 — 모든 가구에 표기 */
+  const t = el('text', {x:it.cx, y:it.cz, 'text-anchor':'middle',
+                        'font-size':118, 'font-weight':700, fill:'#2c3238'}, G.furn);
+  el('tspan', {x:it.cx, dy:-14}, t).textContent = it.name;
+  el('tspan', {x:it.cx, dy:128, 'font-size':104, 'font-weight':500, fill:'#3f4850'}, t)
+    .textContent = `${fmt(it.w)}×${fmt(it.d)}`;
+});
+
+/* ── 실 이름 — 좁은 실은 r.lp 자리에 세로로 ── */
+D.rooms.forEach(r => {
+  const xs = r.pts.map(p => p[0]), zs = r.pts.map(p => p[1]);
+  const [cx, cz] = r.lp || [(Math.min(...xs)+Math.max(...xs))/2, (Math.min(...zs)+Math.max(...zs))/2];
+  const t = el('text', {x:0, y:0, 'text-anchor':'middle',
+                        transform:`translate(${cx},${cz})${r.rot ? ' rotate(-90)' : ''}`}, G.lbl);
+  el('tspan', {x:0, dy:0, 'font-size':r.rot ? 160 : 190, 'font-weight':800,
+               fill:'#242b31'}, t).textContent = r.name;
+  el('tspan', {x:0, dy:r.rot ? 170 : 200, 'font-size':r.rot ? 108 : 122, fill:'#5d6870'}, t)
+    .textContent = `${fmt(r.dim[0])}×${fmt(r.dim[1])} · ${r.area.toFixed(2)}㎡`;
+});
+
+/* ── 치수선 ── */
+function dim(x1, y1, x2, y2, txt, side) {
+  const horiz = y1 === y2;
+  el('line', {x1, y1, x2, y2, stroke:'var(--dimc)', 'stroke-width':13}, G.dim);
+  [[x1,y1],[x2,y2]].forEach(p => el('line',
+    {x1:p[0]-(horiz?0:70), y1:p[1]-(horiz?70:0),
+     x2:p[0]+(horiz?0:70), y2:p[1]+(horiz?70:0),
+     stroke:'var(--dimc)', 'stroke-width':13}, G.dim));
+  const mx = (x1+x2)/2, my = (y1+y2)/2;
+  const t = el('text', {'text-anchor':'middle', 'font-size':148, 'font-weight':600,
+                        fill:'var(--dimc)'}, G.dim);
+  if (horiz) { t.setAttribute('x', mx); t.setAttribute('y', my + (side === 'up' ? -70 : 200)); }
+  else { t.setAttribute('x', 0); t.setAttribute('y', 0);
+         t.setAttribute('transform', `translate(${mx + (side === 'left' ? -70 : 190)},${my}) rotate(-90)`); }
+  t.textContent = fmt(txt);
+}
+const chain = (cuts, f) => cuts.slice(0,-1).forEach((v,k) => f(v, cuts[k+1]));
+/* 벽에 붙은 가구의 앞뒤 끝을 모아 체인 칸을 만든다 — 빈 칸(통로)도 함께 잰다 */
+const edges = list => [...new Set([0, D.D, ...list.flatMap(it => [it.cz-it.d/2, it.cz+it.d/2])])]
+                        .sort((a,b) => a-b);
+/* 줄 이름 — 치수선이 무엇을 재는지 */
+const cap = (x, y, txt) => el('text', {x, y, 'text-anchor':'middle', 'font-size':100,
+                                       'font-weight':600, fill:'var(--sub)'}, G.dim).textContent = txt;
+const OW = [-D.WT, 0];                                   // 외벽 두께 칸
+
+/* 상부 : 실 폭 체인(파티션 위치) + 외벽 포함 전체 */
+const px = D.partitions[0].x1, pa = px - D.PT/2, pb = px + D.PT/2;
+chain([0, pa, pb, D.W], (a,b) => dim(a, -560, b, -560, b-a, 'up'));
+chain([...OW, D.W, D.W+D.WT], (a,b) => dim(a, -1080, b, -1080, b-a, 'up'));
+/* 하부 : 출입문 위치 + 외벽 포함 전체 — 문이 밖으로 열리는 반경 아래 */
+const by = oz + dw + 250;
+chain([0, dr.x1, dr.x2, D.W], (a,b) => dim(a, by, b, by, b-a, 'dn'));
+chain([...OW, D.W, D.W+D.WT], (a,b) => dim(a, by+520, b, by+520, b-a, 'dn'));
+/* 좌측 : 서쪽 벽 가구 (베드 · 빈 칸 · 수납) */
+const LX = -620;
+chain(edges(D.items.filter(it => it.room === D.rooms[0].name)), (a,b) => dim(LX, a, LX, b, b-a, 'left'));
+cap(LX, D.D+D.WT+330, '시술실 가구');
+/* 우측 : 동쪽 벽 설비 → 파티션 미닫이 → 외벽 포함 전체 깊이 */
+const R1 = D.W+500, R2 = D.W+1000, R3 = D.W+1500, s0 = D.sliders[0];
+chain(edges(D.items.filter(it => it.room === D.rooms[1].name)), (a,b) => dim(R1, a, R1, b, b-a, 'right'));
+chain([0, s0.z1, s0.z2, D.D], (a,b) => dim(R2, a, R2, b, b-a, 'right'));
+chain([...OW, D.D, D.D+D.WT], (a,b) => dim(R3, a, R3, b, b-a, 'right'));
+cap(R1, D.D+D.WT+330, '설비');
+cap(R2, D.D+D.WT+330, '미닫이');
+cap(R3, D.D+D.WT+330, '전체');
+
+/* 실내 유효 폭 — 가구 앞에서 파티션까지 */
+function dimIn(x1, x2, y, txt) {
+  el('line', {x1, y1:y, x2, y2:y, stroke:'var(--dimc)', 'stroke-width':10,
+              'stroke-dasharray':'40 26'}, G.dim);
+  [x1, x2].forEach(x => el('line', {x1:x, y1:y-55, x2:x, y2:y+55,
+                                    stroke:'var(--dimc)', 'stroke-width':12}, G.dim));
+  el('text', {x:(x1+x2)/2, y:y-45, 'text-anchor':'middle', 'font-size':122, 'font-weight':600,
+              fill:'var(--dimc)', 'paint-order':'stroke', stroke:'#faf8f3', 'stroke-width':30},
+     G.dim).textContent = txt;
+}
+const sn = D.items.find(it => it.name === '수납'), bed = D.items.find(it => it.type === 'bed');
+dimIn(sn.cx+sn.w/2, pa, sn.cz+30, `통로 ${fmt(pa-(sn.cx+sn.w/2))}`);
+dimIn(bed.cx+bed.w/2, pa, 600, `베드 옆 ${fmt(pa-(bed.cx+bed.w/2))}`);
+const eq = D.items.filter(it => it.room === D.rooms[1].name && it.kind === 'eq');
+const eqFront = Math.min(...eq.map(it => it.cx-it.w/2));
+dimIn(pb, eqFront, 1000, fmt(eqFront-pb));
+
+/* 방위 */
+el('path', {d:'M -560 -1000 L -680 -600 L -560 -690 L -440 -600 Z',
+            fill:'var(--ink)'}, G.dim);
+el('text', {x:-560, y:-1110, 'text-anchor':'middle', 'font-size':150,
+            'font-weight':700, fill:'var(--ink)'}, G.dim).textContent = 'N';
+
+/* ── 실 구성표 ── */
+const rt = document.getElementById('rt');
+let tot = 0;
+D.rooms.forEach(r => {
+  tot += r.area;
+  rt.insertAdjacentHTML('beforeend',
+    `<tr><td><span class="sw" style="background:${r.color}"></span>${r.name}</td>` +
+    `<td class="n">${fmt(r.dim[0])}×${fmt(r.dim[1])}</td>` +
+    `<td class="n"><b>${r.area.toFixed(2)}</b>㎡</td></tr>`);
+});
+rt.insertAdjacentHTML('beforeend',
+  `<tfoot><tr><td>합계 (파티션 제외)</td><td class="n"></td>` +
+  `<td class="n">${tot.toFixed(2)}㎡</td></tr></tfoot>`);
+
+/* ── 표시 토글 · 인쇄 ── */
+const MAP = {furn:[G.furn], dim:[G.dim], lbl:[G.lbl]};
+document.querySelectorAll('button[data-t]').forEach(b =>
+  b.addEventListener('click', () => {
+    b.classList.toggle('on');
+    MAP[b.dataset.t].forEach(x => x.style.display = b.classList.contains('on') ? '' : 'none');
+  }));
+document.getElementById('prt').addEventListener('click', () => print());
+
+const d = new Date(), z = n => String(n).padStart(2, '0');
+document.getElementById('stamp').textContent =
+  `출력 ${d.getFullYear()}-${z(d.getMonth()+1)}-${z(d.getDate())}`;
+</script>
+</body></html>
