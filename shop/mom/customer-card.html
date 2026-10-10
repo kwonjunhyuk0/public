@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>씨엘로뷰티 고객카드</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/svg+xml" href="mark.svg">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="theme-color" content="#fdf5f1">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" as="style" crossorigin
+  href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--ink:#4f4846;--sub:#766d69;--line:#f1d3df;--bg:#fdf5f1;--card:#fffbf9;
+      --ac:#b84a76;--acbg:#fdeff4;--warn:#b8503f;--warnbg:#fdf1ef;
+      /* 시그니처 — 로고 꽃잎 세 색 */
+      --cy:#f1dc5e;--co:#f2ac55;--cp:#e8739f;--brand:linear-gradient(90deg,var(--cy),var(--co),var(--cp))}
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic Neo',
+     'Noto Sans KR',sans-serif;
+     background:var(--bg);color:var(--ink);line-height:1.6;font-size:16px}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px 120px}
+header{padding:26px 0 16px;text-align:center}
+.logo{display:block;width:min(230px,62vw);height:auto;margin:0 auto 6px}
+h1{font-size:22px;font-weight:800;letter-spacing:-.4px}
+.sub{font-size:13px;color:var(--sub);margin-top:6px}
+.prog{height:4px;background:var(--line);border-radius:3px;margin:16px 0 4px;overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:var(--brand);transition:width .3s}
+.ptxt{font-size:11.5px;color:var(--sub);text-align:right}
+
+section{background:var(--card);border:1px solid var(--line);border-radius:14px;
+        padding:20px;margin-bottom:14px}
+h2{font-size:16px;font-weight:800;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+h2 b{width:23px;height:23px;background:var(--ac);color:#fff;border-radius:7px;font-size:12px;
+     display:flex;align-items:center;justify-content:center;flex:none}
+.hint{font-size:12.5px;color:var(--sub);margin-bottom:14px}
+label.f{display:block;font-size:13px;font-weight:700;margin:26px 0 6px}
+.row2 label.f{margin-top:14px}   /* 2단 입력칸 안에서는 기존 간격 유지 */
+.sl{font-size:12px;font-weight:700;color:var(--sub);margin:10px 0 4px}
+.rq{color:var(--warn)}   /* 필수 표시 별표 */
+input[type=text],input[type=tel],input[type=number],textarea,select{
+  width:100%;padding:12px 13px;border:1.5px solid var(--line);border-radius:10px;
+  font-size:16px;font-family:inherit;background:#ffffff}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--ac)}
+textarea{min-height:72px;resize:vertical}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.chip{border:1.5px solid var(--line);background:#ffffff;border-radius:10px;
+      padding:9px 14px;font-size:14px;cursor:pointer;user-select:none}
+.chip.on{background:var(--ac);border-color:var(--ac);color:#fff;font-weight:700}
+.chip.warn.on{background:var(--warn);border-color:var(--warn)}
+
+.designs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px}
+.dz{border:2px solid var(--line);border-radius:12px;padding:12px 8px;text-align:center;cursor:pointer;background:#ffffff}
+.dz.on{border-color:var(--ac);background:var(--acbg)}
+.dz svg{width:100%;height:78px;display:block}
+.dz .nm{font-size:13.5px;font-weight:700;margin-top:6px}
+.dz .ds{font-size:11px;color:var(--sub);line-height:1.4;word-break:keep-all}
+
+.consent{border:1.5px solid var(--line);border-radius:12px;padding:14px;margin-bottom:11px;background:#ffffff}
+.consent.req{border-color:var(--ac);background:var(--acbg)}
+.consent h3{font-size:13.5px;font-weight:800;margin-bottom:7px}
+.consent h3 em{font-style:normal;font-size:11px;padding:2px 7px;border-radius:5px;margin-left:6px;
+  background:var(--warn);color:#fff;vertical-align:1px}
+.consent p,.consent li{font-size:12.5px;color:#414a52;line-height:1.65}
+.consent ul{margin:5px 0 0 17px}
+.ck{display:flex;gap:10px;align-items:flex-start;margin-top:10px;cursor:pointer;
+    padding:9px 11px;border-radius:9px;background:#fff;border:1.5px solid var(--line)}
+.ck.on{border-color:var(--ac);background:var(--acbg)}
+.ck i{width:20px;height:20px;border:2px solid #c9bcc0;border-radius:6px;flex:none;position:relative;background:#fff;margin-top:1px}
+.ck.on i{background:var(--ac);border-color:var(--ac)}
+.ck.on i:after{content:'';position:absolute;left:6px;top:2px;width:5px;height:10px;
+  border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
+.ck span{font-size:13.5px;font-weight:600}
+
+#sigwrap{border:1.5px dashed #dccfd3;border-radius:12px;background:#fff;position:relative}
+#sig{width:100%;height:150px;display:block;touch-action:none;border-radius:12px}
+#sigph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  color:#c9bcc0;font-size:14px;pointer-events:none}
+.mini{background:none;border:none;color:var(--ac);font-size:12.5px;font-weight:700;
+  cursor:pointer;padding:6px 0}
+
+.bar{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.97);
+  border-top:1px solid var(--line);padding:12px 16px;backdrop-filter:blur(8px);z-index:20}
+.bar .in{max-width:760px;margin:0 auto;display:flex;gap:10px;align-items:center}
+.bar .msg{flex:1;font-size:12.5px;color:var(--warn);font-weight:600}
+button.go{background:var(--ac);color:#fff;border:none;border-radius:11px;
+  padding:14px 26px;font-size:15.5px;font-weight:800;font-family:inherit;cursor:pointer}
+button.go:disabled{background:#dccfd3}
+.note{background:var(--warnbg);border:1px solid #f0d5cf;border-radius:11px;padding:12px 14px;
+  font-size:12.5px;color:#7d3d31;margin-top:12px}
+#done{display:none}
+#done section{border-color:var(--ac)}
+#stat{font-size:13.5px;font-weight:700;padding:10px 13px;border-radius:9px;margin-bottom:13px;
+  background:#eef2f5;color:#4a5560;border:1px solid #dfe5ea}
+#stat.ok{background:#eef6ef;color:#2f6b3d;border-color:#cfe3d3}
+#stat.err{background:#fdf1ef;color:#8f3a2c;border-color:#f0d5cf}
+.sum{font-size:14px;line-height:1.9}
+.sum b{display:inline-block;min-width:96px;color:var(--sub);font-weight:700;font-size:12.5px}
+@media print{.bar,#form,.mini{display:none}#done{display:block!important}body{background:#fff}}
+</style></head><body>
+<div class="wrap">
+<header>
+  <img class="logo" src="logo.svg" alt="Cielo nail &amp; beauty · 씨엘로뷰티">
+  <h1>고객카드</h1>
+  <div class="sub">안전한 시술을 위한 필수 항목입니다 · 약 2분</div>
+  <div class="prog"><i id="pg"></i></div>
+  <div class="ptxt" id="pt">0 / 5</div>
+</header>
+
+<div id="form">
+<section>
+  <h2><b>1</b>기본 정보</h2>
+  <div class="hint">예약 확인과 시술 기록에 사용됩니다.</div>
+  <div class="row2">
+    <div><label class="f">성함 <span class="rq">*</span></label><input type="text" id="name" autocomplete="name"></div>
+    <div><label class="f">연락처 <span class="rq">*</span></label><input type="tel" id="tel" placeholder="010-0000-0000"></div>
+  </div>
+  <div class="row2">
+    <div><label class="f">생년월일 <span class="rq">*</span></label>
+      <input type="tel" id="birth" inputmode="numeric" maxlength="6" placeholder="예: 900503">
+      <div class="hint" id="birthEcho" style="margin:6px 0 0"></div></div>
+  </div>
+  <div class="note" id="minorNote" style="display:none">
+    만 14세 미만은 법정대리인 동의가 필요합니다. 원장에게 알려주세요.
+  </div>
+  <label class="f">방문 경로 <span class="rq">*</span></label>
+  <div class="hint" style="margin:-2px 0 6px">저희를 어떻게 알고 오셨는지 알려주세요.</div>
+  <div class="chips" data-g="route">
+    <div class="chip">네이버 지도</div><div class="chip">네이버 검색</div>
+    <div class="chip">인스타</div><div class="chip">카톡</div>
+    <div class="chip">구글 검색</div><div class="chip">지인 소개</div>
+    <div class="chip">워크인</div><div class="chip">당근</div>
+    <div class="chip">숨고</div><div class="chip">기타</div>
+  </div>
+  <div id="referSec" style="display:none">
+    <div class="row2" style="margin-top:10px">
+      <div><label class="f" style="margin-top:0">소개해주신 분 성함</label>
+        <input type="text" id="refName"></div>
+      <div><label class="f" style="margin-top:0">연락처</label>
+        <input type="tel" id="refTel" placeholder="010-0000-0000"></div>
+    </div>
+    <div class="hint" style="margin:8px 0 0">소개 적립 확인에만 사용합니다.</div>
+  </div>
+
+  <label class="f">시술 목적 <span class="rq">*</span></label>
+  <div class="chips" data-g="purpose">
+    <div class="chip">위생</div><div class="chip">여행</div><div class="chip">수영</div>
+    <div class="chip">운동</div><div class="chip">촬영</div><div class="chip">데이트 / 커플</div>
+    <div class="chip">임신 / 출산준비</div><div class="chip">미용</div>
+    <div class="chip">주변 추천</div><div class="chip">기타</div>
+  </div>
+
+  <label class="f">관심있는 시술 <span class="rq">*</span></label>
+  <div class="hint" style="margin:-2px 0 6px">오늘 받지는 않지만 관심있는 시술을 체크해주세요.
+    없으시면 <b>아직없음</b>을 눌러주세요.</div>
+  <div class="chips" data-g="interest">
+    <div class="chip">페이스 왁싱</div>
+    <div class="chip">바디 왁싱</div><div class="chip">케어 프로그램</div>
+    <div class="chip">속눈썹 연장</div><div class="chip">속눈썹 펌</div>
+    <div class="chip">브로우리프트 펌</div><div class="chip">눈썹문신</div>
+    <div class="chip">아이라인</div><div class="chip">헤어라인</div><div class="chip">상담희망</div>
+    <div class="chip" data-none="1">아직없음</div>
+  </div>
+
+  <label class="f">오늘 함께 오셨나요? <span class="rq">*</span></label>
+  <div class="chips" data-g="party">
+    <div class="chip">혼자</div><div class="chip">부부</div><div class="chip">커플</div>
+    <div class="chip">가족</div><div class="chip">친구</div>
+  </div>
+  <div class="hint" style="margin:8px 0 0">동반 적립 처리에만 사용하며,
+    <b>혼인 여부 등은 따로 기록하거나 보관하지 않습니다.</b></div>
+
+  <label class="f">방문 편하신 시간대 <span class="rq">*</span></label>
+  <div class="chips" data-g="visit">
+    <div class="chip">평일</div><div class="chip">주말</div><div class="chip">오전</div>
+    <div class="chip">오후</div><div class="chip">저녁</div><div class="chip">교대근무</div>
+    <div class="chip">일정하지 않음</div><div class="chip">기타</div>
+  </div>
+  <div class="hint" style="margin:8px 0 0">다음 예약을 잡을 때 참고합니다. 여러 개 선택하셔도 됩니다.</div>
+
+  <label class="f">받아보신 적 있는 시술 <span class="rq">*</span></label>
+  <div class="hint" style="margin:-2px 0 0">경험이 있는 항목을 눌러주세요.
+    처음이시면 기타의 <b>없음</b>을 눌러주세요.</div>
+  <div class="sl">왁싱</div>
+  <div class="chips" data-g="exWax">
+    <div class="chip">페이스</div><div class="chip">바디</div>
+  </div>
+  <div class="sl">속눈썹</div>
+  <div class="chips" data-g="exLash">
+    <div class="chip">속눈썹연장</div><div class="chip">속눈썹펌</div>
+  </div>
+  <div class="sl">반영구시술</div>
+  <div class="chips" data-g="exSemi">
+    <div class="chip">눈썹문신</div><div class="chip">아이라인</div><div class="chip">헤어라인</div>
+    <div class="chip">입술</div>
+  </div>
+  <div class="sl">기타</div>
+  <div class="chips" data-g="exEtc">
+    <div class="chip">레이저 제모</div><div class="chip">성형수술</div>
+    <div class="chip">보톡스</div><div class="chip">필러</div><div class="chip">그 외</div>
+    <div class="chip" data-none="1">없음</div>
+  </div>
+</section>
+
+<section id="svc">
+  <h2><b>2</b>오늘 받으실 시술</h2>
+  <div class="hint">해당하는 항목을 눌러주세요. 여러 개 선택할 수 있습니다.</div>
+
+  <label class="f">카테고리 <span class="rq">*</span></label>
+  <div class="hint" style="margin:-2px 0 6px">받으실 시술을 고르시면 해당 항목만 나옵니다. 여러 개 고르셔도 됩니다.</div>
+  <div class="chips" data-g="cat">
+    <div class="chip">왁싱</div><div class="chip">속눈썹 연장</div>
+    <div class="chip">속눈썹 펌</div><div class="chip">반영구</div><div class="chip">기타</div>
+  </div>
+
+<div data-cat="왁싱" hidden>
+  <label class="f">페이스</label>
+  <div class="chips" data-g="face">
+    <div class="chip">헤어라인</div><div class="chip">이마</div><div class="chip">눈썹</div>
+    <div class="chip">인중</div><div class="chip">턱</div><div class="chip">구레나룻</div>
+    <div class="chip">콧털</div><div class="chip">풀페이스</div>
+  </div>
+
+  <label class="f">바디</label>
+  <div class="chips" data-g="body">
+    <div class="chip">겨드랑이</div><div class="chip">팔 전체</div><div class="chip">팔 반</div>
+    <div class="chip">다리 전체</div><div class="chip">다리 반</div><div class="chip">배</div>
+    <div class="chip">등</div><div class="chip">가슴</div><div class="chip">엉덩이</div>
+    <div class="chip">뒷목</div><div class="chip">손·발</div>
+  </div>
+
+  <label class="f">집중케어를 원하시는 부분이 있나요?</label>
+  <div class="chips" data-g="care">
+    <div class="chip">붉은기</div><div class="chip">통증</div><div class="chip">열감</div>
+    <div class="chip">빠른진정</div><div class="chip">미백</div><div class="chip">탄력</div>
+    <div class="chip">보습</div><div class="chip">인그로운</div>
+  </div>
+
+</div>
+
+<div data-cat="속눈썹 연장" hidden>
+  <label class="f">속눈썹 연장</label>
+  <div class="sl">컬</div>
+  <div class="designs" id="lz">
+    <div class="dz" data-v="JC컬">
+      <svg viewBox="0 0 90 78">
+        <path d="M7 64 Q25 72 45 69" fill="none" stroke="#dccfd3" stroke-width="3.4" stroke-linecap="round"/>
+        <path d="M19 64 L74 36" fill="none" stroke="#f1c4d6" stroke-width="2" stroke-dasharray="3 3"/>
+        <path d="M19 64 C41 60 60 52 65 30" fill="none" stroke="var(--ac)" stroke-width="3.2" stroke-linecap="round"/></svg>
+      <div class="nm">JC컬</div><div class="ds">가장 인기있는 자연스러운 컬</div>
+    </div>
+    <div class="dz" data-v="C컬">
+      <svg viewBox="0 0 90 78">
+        <path d="M7 64 Q25 72 45 69" fill="none" stroke="#dccfd3" stroke-width="3.4" stroke-linecap="round"/>
+        <path d="M19 64 L74 36" fill="none" stroke="#f1c4d6" stroke-width="2" stroke-dasharray="3 3"/>
+        <path d="M19 64 C42 62 62 54 61 28" fill="none" stroke="var(--ac)" stroke-width="3.2" stroke-linecap="round"/></svg>
+      <div class="nm">C컬</div><div class="ds">JC컬보다 더 올려 또렷한 컬</div>
+    </div>
+    <div class="dz" data-v="특수컬">
+      <svg viewBox="0 0 90 78">
+        <path d="M7 64 Q25 72 45 69" fill="none" stroke="#dccfd3" stroke-width="3.4" stroke-linecap="round"/>
+        <path d="M19 64 L74 36" fill="none" stroke="#f1c4d6" stroke-width="2" stroke-dasharray="3 3"/>
+        <path d="M19 64 C43 63 63 56 57 26" fill="none" stroke="var(--ac)" stroke-width="3.2" stroke-linecap="round"/></svg>
+      <div class="nm">특수컬 <span style="font-weight:600">CC·LC 등</span></div><div class="ds">가장 또렷하고 화려한 컬</div>
+    </div>
+  </div>
+  <div class="sl">길이</div>
+  <div class="chips" data-g="lashLen">
+    <div class="chip">8mm</div><div class="chip">9mm</div><div class="chip">10mm</div>
+    <div class="chip">11mm</div><div class="chip">12mm</div><div class="chip">13mm</div>
+  </div>
+  <div class="sl">숱</div>
+  <div class="chips" data-g="lashVol">
+    <div class="chip">자연스럽게</div><div class="chip">풍성하게</div>
+  </div>
+  <div class="sl">종류</div>
+  <div class="chips" data-g="lashFib">
+    <div class="chip">베이직 클래식</div><div class="chip">프리미엄 플랫</div>
+    <div class="chip">프리미엄 슬림 플랫</div><div class="chip">내추럴 브라운</div>
+    <div class="chip">언더래쉬</div>
+  </div>
+
+</div>
+
+<div data-cat="속눈썹 펌" hidden>
+  <label class="f">속눈썹 펌</label>
+  <div class="sl">펌 종류</div>
+  <div class="chips" data-g="permType">
+    <div class="chip">베이직펌</div><div class="chip">블랙/초코틴팅펌</div>
+    <div class="chip">언더래쉬펌</div><div class="chip">브로우리프트펌</div>
+  </div>
+  <div class="sl">추가시술</div>
+  <div class="chips" data-g="permAdd">
+    <div class="chip">클리닉 추가</div><div class="chip">노글루 추가</div>
+  </div>
+
+</div>
+
+<div data-cat="반영구" hidden>
+  <label class="f">반영구 시술</label>
+  <div class="chips" data-g="etc">
+    <div class="chip">눈썹문신</div><div class="chip">아이라인</div><div class="chip">헤어라인</div><div class="chip">상담희망</div>
+  </div>
+</div>
+
+<div data-cat="기타" hidden>
+  <label class="f">기타 시술 <span class="rq">*</span></label>
+  <div class="hint" style="margin:-2px 0 6px">받으실 시술을 직접 적어주세요.</div>
+  <input type="text" id="catEtc" placeholder="예: 두피 관리">
+</div>
+</section>
+
+<section>
+  <h2><b>3</b>신경 쓰이는 점</h2>
+  <div class="hint">선택 사항입니다. 없으시면 그냥 넘어가셔도 됩니다.</div>
+  <label class="f">특히 신경 쓰이는 점이 있으신가요?</label>
+  <textarea id="worry" placeholder="편하게 적어주세요. 없으시면 비워두셔도 됩니다."></textarea>
+</section>
+
+<section>
+  <h2><b>4</b>안전 확인</h2>
+  <div class="hint">시술 가능 여부와 방식을 정하는 데 꼭 필요한 항목입니다.
+    해당사항이 없으면 <b>해당 없음</b>을 눌러주세요.</div>
+  <label class="f" style="margin-top:2px">해당하는 항목 <span class="rq">*</span></label>
+  <div class="chips" data-g="health" id="health">
+    <div class="chip warn">피부암</div>
+    <div class="chip warn">아문 상처</div>
+    <div class="chip warn" data-preg="1">임신 중</div>
+    <div class="chip warn">수유 중</div>
+    <div class="chip warn">알레르기 있음</div>
+    <div class="chip warn">복용 중인 약</div>
+    <div class="chip warn">피부질환 치료 중</div>
+    <div class="chip warn">최근 레이저·필링·시술</div>
+    <div class="chip warn">피부 연고 사용 중</div>
+    <div class="chip warn">켈로이드성 피부</div>
+    <div class="chip warn">과거 시술 후 이상반응</div>
+    <div class="chip warn">시술 부위 상처·염증</div>
+    <div class="chip" data-none="1">해당 없음</div>
+  </div>
+  <label class="f">체크하신 항목이 있다면 구체적으로 <em style="font-style:normal;font-weight:500;color:var(--sub)">(선택)</em></label>
+  <textarea id="hdetail" placeholder="예: 알레르기 종류 / 복용 중인 약 종류"></textarea>
+  <label class="f">최근 면도 또는 제모를 하셨다면 <em style="font-style:normal;font-weight:500;color:var(--sub)">(선택)</em></label>
+  <input type="text" id="shave" placeholder="예: 3일 전 면도">
+</section>
+
+<section id="pregSec" style="display:none">
+  <h2><b>5</b>임산부 문진</h2>
+  <div class="hint">더 편안한 자세와 속도로 진행하기 위한 항목입니다.
+    <b>씨엘로뷰티는 임산부라고 추가 요금을 받지 않습니다.</b></div>
+  <label class="f">현재 임신 주차</label>
+  <input type="number" id="week" placeholder="예: 28" min="1" max="42" style="max-width:160px">
+  <label class="f">해당하는 항목</label>
+  <div class="chips" data-g="preg">
+    <div class="chip">현재 특별한 이상 없음</div><div class="chip">오래 같은 자세가 불편</div>
+    <div class="chip">바로 눕는 자세가 불편</div><div class="chip">중간 휴식이 필요</div>
+    <div class="chip">피부가 전보다 민감해짐</div>
+  </div>
+  <label class="f">담당 의사에게 특별히 주의받은 사항이 있다면</label>
+  <textarea id="docnote" placeholder="없으시면 비워두셔도 됩니다."></textarea>
+  <div class="note" style="background:var(--acbg);border-color:var(--line);color:#7a3657">
+    <b>중단 약속</b> — 시술 중 어지러움·통증·불편함이 있으면 <b>손을 들어주세요.</b>
+    이유를 묻지 않고 즉시 멈춥니다. 자세를 바꾸거나 쉬었다 진행할 수 있습니다.
+  </div>
+</section>
+
+<section>
+  <h2><b>6</b>동의</h2>
+  <div class="consent req">
+    <h3>① 시술 동의 <em>필수</em></h3>
+    <ul>
+      <li>현재 피부상태·복용약·알레르기·질환 등을 사실대로 알렸습니다.</li>
+      <li>개인의 피부상태와 체질에 따라 일시적인 붉음·열감·가려움·따가움·부종·트러블이
+          생길 수 있다는 설명을 들었습니다.</li>
+      <li>시술자가 안전상 부적절하다고 판단하면 시술의 일부 또는 전체를 제한하거나
+          중단할 수 있습니다.</li>
+      <li>시술 중 이상이나 불편함이 있으면 즉시 알리겠습니다.</li>
+      <li>시술 전후 주의사항과 홈케어 방법을 안내받았습니다.</li>
+    </ul>
+    <div class="ck" data-req="1"><i></i><span>위 내용을 확인하고 시술에 동의합니다</span></div>
+  </div>
+
+  <div class="consent req">
+    <h3>② 개인정보 수집·이용 <em>필수</em></h3>
+    <p><b>항목</b> 성명, 연락처, 생년월일, 동반 방문 유형, 시술이력 및 디자인 기록,
+       소개자 성함·연락처(지인 소개를 선택하신 경우)<br>
+       <b>목적</b> 예약 확인, 시술 기록, 재방문 시 동일 디자인 재현, 시술 관련 안내<br>
+       <b>보유기간</b> 최종 방문일로부터 <b>3년</b> · 이후 지체 없이 파기</p>
+    <div class="ck" data-req="1"><i></i><span>개인정보 수집·이용에 동의합니다</span></div>
+  </div>
+
+  <div class="consent req">
+    <h3>③ 건강정보 수집·이용 <em>필수</em></h3>
+    <p>임신 여부, 복용 약, 알레르기, 피부질환 등 <b>건강에 관한 정보</b>는
+       다른 개인정보와 분리하여 별도로 동의를 받습니다.<br>
+       <b>목적</b> 시술 가능 여부 판단 및 안전한 시술 방식 결정 (오직 이 목적으로만 사용)<br>
+       <b>보유기간</b> 최종 방문일로부터 <b>3년</b><br>
+       동의하지 않으실 수 있으나, 그 경우 <b>안전 확인이 어려워 시술이 제한될 수 있습니다.</b></p>
+    <div class="ck" data-req="1"><i></i><span>건강정보 수집·이용에 동의합니다</span></div>
+  </div>
+
+  <label class="f">서명 <span class="rq">*</span></label>
+  <div id="sigwrap"><canvas id="sig"></canvas><div id="sigph">여기에 서명해주세요</div></div>
+  <button class="mini" id="clr">서명 지우기</button>
+</section>
+</div>
+
+<div id="done">
+  <section>
+    <h2><b>✓</b>작성이 완료되었습니다</h2>
+    <div class="hint">원장에게 태블릿을 전달해주세요.</div>
+    <div id="stat"></div>
+    <div class="sum" id="sum"></div>
+  </section>
+</div>
+</div>
+
+<div class="bar"><div class="in">
+  <div class="msg" id="msg"></div>
+  <button class="go" id="submit">작성 완료</button>
+</div></div>
+
+<iframe name="sink" id="sink" style="display:none"></iframe>
+<script>
+/* ══════ 설정 — 이 두 줄만 바꾸세요 ══════ */
+const ENDPOINT = 'https://script.google.com/macros/s/AKfycbzYr-WH1ZFPsZKChKgryTqlm6eCBmx7OLnWQGl0L6HpscMW_0o82B2wjA-yOegqtHYq/exec';   // Apps Script 배포 후 /exec 주소로 교체
+const TOKEN    = 'cielo-2026-67c18181b97534eb72a6';   // Code.gs 의 TOKEN 과 동일하게
+/* ═══════════════════════════════════════ */
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+
+/* 칩 토글 */
+/* '없음' 칩은 같은 가족(연관 그룹) 전체를 비우고 자기만 켠다 */
+const EXF=['exWax','exLash','exSemi','exEtc'];
+const FAM={}; EXF.forEach(k=>FAM[k]=EXF);
+const famChips = g => (FAM[g]||[g]).reduce((a,k)=>a.concat($$('.chips[data-g="'+k+'"] .chip')),[]);
+$$('.chips').forEach(g=>g.addEventListener('click',e=>{
+  const c=e.target.closest('.chip'); if(!c)return;
+  const fam=famChips(g.dataset.g);
+  if(c.dataset.none){ fam.forEach(x=>x.classList.remove('on')); c.classList.add('on'); }
+  else { c.classList.toggle('on');
+         fam.forEach(x=>{ if(x.dataset.none) x.classList.remove('on'); }); }
+  if(g.dataset.g==='health')
+    $('#pregSec').style.display = $$('#health .chip[data-preg].on').length ? 'block' : 'none';
+  prog();
+}));
+/* 카드 단일선택 — 같은 카드를 다시 누르면 해제 */
+$$('.designs').forEach(g=>g.addEventListener('click',e=>{
+  const d=e.target.closest('.dz'); if(!d || !g.contains(d)) return;
+  const was=d.classList.contains('on');
+  [...g.querySelectorAll('.dz')].forEach(x=>x.classList.remove('on'));
+  if(!was) d.classList.add('on');
+  prog();
+}));
+/* 동의 체크 */
+$$('.ck').forEach(k=>k.addEventListener('click',()=>{k.classList.toggle('on');prog()}));
+/* 생년월일 — 숫자 6자리(YYMMDD). 100 이하 두 자리라 세기를 추정한다 */
+function parseBirth(v){
+  if(!/^\d{6}$/.test(v)) return null;
+  const yy=+v.slice(0,2), mm=+v.slice(2,4), dd=+v.slice(4,6);
+  if(mm<1||mm>12||dd<1||dd>31) return null;
+  const t=new Date(), ok=(y)=>{ const d=new Date(y,mm-1,dd);
+    return (d.getMonth()===mm-1 && d.getDate()===dd) ? d : null; };
+  let y=2000+yy, d=ok(y);
+  if(!d) return null;
+  if(d>t){ y=1900+yy; d=ok(y); if(!d) return null; }   // 아직 오지 않은 날짜면 19xx
+  let a=t.getFullYear()-y;
+  if(t.getMonth()<mm-1 || (t.getMonth()===mm-1 && t.getDate()<dd)) a--;
+  const z=n=>String(n).padStart(2,'0');
+  return { iso:y+'-'+z(mm)+'-'+z(dd), age:a, label:y+'년 '+mm+'월 '+dd+'일 · 만 '+a+'세' };
+}
+$('#birth').addEventListener('input',e=>{
+  e.target.value=e.target.value.replace(/\D/g,'').slice(0,6);
+  const b=parseBirth(e.target.value), full=e.target.value.length===6;
+  $('#birthEcho').textContent = b ? b.label : (full ? '날짜를 다시 확인해주세요' : '');
+  $('#birthEcho').style.color = (!b && full) ? '#c0392b' : '';
+  $('#minorNote').style.display = (b && b.age<14) ? 'block' : 'none';
+  prog();
+});
+['#name','#tel','#catEtc'].forEach(s=>['input','change'].forEach(ev=>$(s).addEventListener(ev,prog)));
+
+/* 방문 경로 — '지인 소개' 를 고른 경우에만 소개자 입력칸 */
+const isRefer=()=>$$('.chips[data-g="route"] .chip.on')
+  .some(x=>x.textContent.trim()==='지인 소개');
+function purposeSync(){ $('#referSec').style.display = isRefer() ? 'block' : 'none'; }
+
+/* 서명 */
+const cv=$('#sig'), cx=cv.getContext('2d'); let drew=false,down=false;
+function fit(){const r=cv.getBoundingClientRect();cv.width=r.width*2;cv.height=r.height*2;
+  cx.scale(2,2);cx.lineWidth=2.2;cx.lineCap='round';cx.strokeStyle='#1e2328';}
+addEventListener('resize',()=>{fit();drew=false;$('#sigph').style.display='flex'});fit();
+const pos=e=>{const r=cv.getBoundingClientRect();return[e.clientX-r.left,e.clientY-r.top]};
+cv.addEventListener('pointerdown',e=>{down=true;drew=true;$('#sigph').style.display='none';
+  cx.beginPath();cx.moveTo(...pos(e));cv.setPointerCapture(e.pointerId);prog()});
+cv.addEventListener('pointermove',e=>{if(!down)return;e.preventDefault();cx.lineTo(...pos(e));cx.stroke()});
+addEventListener('pointerup',()=>down=false);
+$('#clr').onclick=()=>{cx.clearRect(0,0,cv.width,cv.height);drew=false;$('#sigph').style.display='flex';prog()};
+
+/* 진행률 */
+const G1 = g => $$('.chips[data-g="'+g+'"] .chip.on').length>0;
+/* 고른 상위 카테고리는 그 안에서 최소 하나를 골라야 한다 */
+function catOk(n){
+  if(n==='기타') return $('#catEtc').value.trim()!=='';
+  const b=document.querySelector('#svc [data-cat="'+n+'"]');
+  return !!b && b.querySelectorAll('.chip.on,.dz.on').length>0;
+}
+const BASE=[
+  ['기본정보',   ()=> $('#name').value.trim()!=='' && $('#tel').value.trim()!=='' &&
+                     parseBirth($('#birth').value)!==null],
+  ['방문 경로',  ()=>G1('route')],
+  ['시술 목적',  ()=>G1('purpose')],
+  ['관심 시술',  ()=>G1('interest')],
+  ['동반 방문',  ()=>G1('party')],
+  ['방문 시간대',()=>G1('visit')],
+  ['시술 경험',  ()=>EXF.some(G1)],
+  ['시술 카테고리',()=>G1('cat')],
+];
+const TAIL=[
+  ['안전 확인',  ()=>G1('health')],
+  ['필수 동의',  ()=>$$('.ck[data-req].on').length===3],
+  ['서명',       ()=>drew],
+];
+function checklist(){
+  const cats=$$('.chips[data-g="cat"] .chip.on').map(x=>x.textContent.trim());
+  return BASE.concat(cats.map(n=>[n, ()=>catOk(n)])).concat(TAIL);
+}
+function prog(){
+  catSync();
+  const L=checklist(), o=L.map(x=>!!x[1]()), n=o.filter(Boolean).length;
+  $('#pg').style.width=(n/o.length*100)+'%';
+  $('#pt').textContent=n+' / '+o.length;
+  const miss=L.map((x,i)=>o[i]?null:x[0]).filter(Boolean);
+  $('#msg').textContent=miss.length?('남은 항목: '+miss.join(' · ')):'';
+  purposeSync();
+  $('#submit').disabled=miss.length>0;
+}
+const pick=g=>$$('.chips[data-g="'+g+'"] .chip.on').map(x=>x.textContent).join(', ')||'—';
+/* '없음' 은 기타 줄 안에 있지만 기록은 따로 남긴다 */
+const pickX=g=>$$('.chips[data-g="'+g+'"] .chip.on:not([data-none])')
+                .map(x=>x.textContent).join(', ')||'—';
+const exNone=()=>$$('.chips[data-g="exEtc"] .chip.on[data-none]').length?'없음':'—';
+let sending=false, curCid='';
+/* 접수번호는 클라이언트에서 생성한다 — 응답이 유실돼도 시트에서 찾을 수 있어야 하므로 */
+function makeCid(){
+  const d=new Date(), p=n=>String(n).padStart(2,'0');
+  return p(d.getFullYear()%100)+p(d.getMonth()+1)+p(d.getDate())+'-'
+        +p(d.getHours())+p(d.getMinutes())+p(d.getSeconds())+'-'
+        +p(Math.floor(Math.random()*100));
+}
+function collect(){
+  const lc=$('#lz .dz.on');
+  const preg = $('#pregSec').style.display==='block';
+  return {
+    token:TOKEN, cid:curCid,
+    name:$('#name').value.trim(), tel:$('#tel').value.trim(),
+    birth:(parseBirth($('#birth').value)||{}).iso||'',
+    route:pick('route'), purpose:pick('purpose'),
+    refName: isRefer() ? $('#refName').value.trim() : '',
+    refTel:  isRefer() ? $('#refTel').value.trim() : '',
+    interest:pick('interest'),
+    party:pick('party'), visit:pick('visit'),
+    exWax:pick('exWax'), exLash:pick('exLash'), exSemi:pick('exSemi'), exEtc:pickX('exEtc'),
+    exNone:exNone(), cat:pick('cat'), catEtc:$('#catEtc').value.trim(),
+    face:pick('face'), body:pick('body'), care:pick('care'),
+    lashCurl:(lc?lc.dataset.v:''), lashLen:pick('lashLen'),
+    lashVol:pick('lashVol'), lashFib:pick('lashFib'),
+    permType:pick('permType'), permAdd:pick('permAdd'),
+    etc:pick('etc'),
+    worry:$('#worry').value.trim(),
+    health:pick('health'), hdetail:$('#hdetail').value.trim(),
+    shave:$('#shave').value.trim(),
+    week: preg ? ($('#week').value||'') : '',
+    preg: preg ? pick('preg') : '',
+    docnote: preg ? $('#docnote').value.trim() : '',
+    agreeTx:'동의', agreePI:'동의', agreeHealth:'동의',
+    signature: cv.toDataURL('image/png')
+  };
+}
+function showSummary(v){
+  const rows=[['성함',v.name],['연락처',v.tel],['생년월일',v.birth],
+    ['방문 경로',v.route],['시술 목적',v.purpose],
+    ['소개자',(v.refName||v.refTel) ? (v.refName+' '+v.refTel).trim() : '—'],
+    ['관심 시술',v.interest],
+    ['동반 방문',v.party],['방문 시간대',v.visit],
+    ['왁싱 경험',v.exWax],['속눈썹 경험',v.exLash],
+    ['반영구 경험',v.exSemi],['기타 경험',v.exEtc],['경험 없음',v.exNone],['시술 카테고리',v.cat],['기타 시술',v.catEtc||'—'],['페이스',v.face],['바디',v.body],['집중케어',v.care],
+    ['연장 컬',v.lashCurl||'—'],['연장 길이',v.lashLen],
+    ['연장 숱',v.lashVol],['연장 모질',v.lashFib],
+    ['펌 종류',v.permType],['펌 추가시술',v.permAdd],
+    ['반영구·기타',v.etc],
+    ['신경 쓰이는 점',v.worry||'—'],['안전 확인',v.health],['상세',v.hdetail||'—'],
+    ['최근 제모',v.shave||'—']];
+  if(v.week||v.preg) rows.push(['임신 주차',(v.week||'—')+'주'],['임산부 특이',v.preg],['의사 주의사항',v.docnote||'—']);
+  $('#sum').innerHTML=rows.map(r=>'<div><b>'+r[0]+'</b> '+String(r[1]).replace(/</g,'&lt;')+'</div>').join('')
+    +'<div style="margin-top:14px"><b>서명</b><br><img src="'+v.signature+'" style="height:70px;margin-top:5px"></div>'
+    +'<div style="margin-top:10px;font-size:12px;color:#6f7a85">접수번호 '+v.cid+' &middot; 작성일 '+new Date().toLocaleString('ko-KR')+'</div>';
+  $('#form').style.display='none'; $('#done').style.display='block';
+  $('.bar').style.display='none'; scrollTo(0,0);
+}
+/* 고른 카테고리의 블록만 보인다. 숨긴 블록의 선택은 비운다 */
+function catSync(){
+  const on=$$('.chips[data-g="cat"] .chip.on').map(x=>x.textContent.trim());
+  $$('#svc [data-cat]').forEach(b=>{
+    const show=on.indexOf(b.dataset.cat)>=0;
+    b.hidden=!show;
+    if(!show){
+      [...b.querySelectorAll('.chip.on,.dz.on')].forEach(x=>x.classList.remove('on'));
+      [...b.querySelectorAll('input[type=text]')].forEach(x=>x.value='');
+    }
+  });
+}
+
+/* 결과 확정 — postMessage 든 JSONP 확인이든 여기 한 곳으로 모은다 */
+function finish(r){
+  if(!sending) return;
+  sending=false; clearTimeout(window.__to);
+  if(r && r.ok){
+    $('#stat').innerHTML='접수 완료 &middot; 번호 <b>'+(r.id||curCid)+'</b>';
+    $('#stat').className='ok';
+  }else{
+    $('#stat').textContent='전송 실패: '+((r&&r.msg)||'알 수 없음')
+      +' — 접수번호 '+curCid+' 를 원장에게 알려주세요';
+    $('#stat').className='err';
+  }
+}
+/* 응답이 안 올 때 GET(JSONP)으로 실제 저장 여부를 되묻는다.
+   CORS 를 타지 않으려고 script 태그를 쓴다 — fetch 는 여전히 불가 */
+function confirmSaved(cid, cb){
+  const name='__cb'+Math.random().toString(36).slice(2);
+  const s=document.createElement('script');
+  const t=setTimeout(()=>{ done(null) },10000);
+  let fired=false;
+  function done(r){ if(fired) return; fired=true;
+    clearTimeout(t); try{ delete window[name] }catch(x){ window[name]=undefined }
+    s.remove(); cb(r); }
+  window[name]=r=>done(r);
+  s.onerror=()=>done(null);
+  s.src=ENDPOINT+'?token='+encodeURIComponent(TOKEN)
+       +'&check='+encodeURIComponent(cid)+'&callback='+name;
+  document.body.appendChild(s);
+}
+/* Apps Script 응답은 googleusercontent.com 샌드박스에서 온다 */
+const OK_ORIGIN=/(^|\.)googleusercontent\.com$|(^|\.)google\.com$/;
+addEventListener('message',e=>{
+  let r; try{ r=JSON.parse(typeof e.data==='string'?e.data:'{}'); }catch(x){ return; }
+  if(typeof r.ok==='undefined') return;
+  if(!curCid || r.cid!==curCid){
+    // 접수번호가 안 맞으면, 출처가 확실한 경우에만 받아들인다 (구버전 Code.gs 대비)
+    let host=''; try{ host=new URL(e.origin).hostname }catch(x){}
+    if(!OK_ORIGIN.test(host) || r.cid) return;
+  }
+  finish(r);
+});
+$('#submit').onclick=()=>{
+  if(sending) return;
+  curCid=makeCid();
+  const v=collect();
+  if(ENDPOINT.indexOf('여기에')>=0){
+    showSummary(v);
+    $('#stat').textContent='전송 설정 전입니다 (ENDPOINT 미설정). 화면을 원장에게 보여주세요.';
+    $('#stat').className='err'; return;
+  }
+  sending=true; $('#submit').disabled=true;
+  const f=document.createElement('form');
+  f.method='POST'; f.action=ENDPOINT; f.target='sink'; f.style.display='none';
+  Object.keys(v).forEach(k=>{ const i=document.createElement('input');
+    i.type='hidden'; i.name=k; i.value=v[k]; f.appendChild(i); });
+  document.body.appendChild(f);
+  showSummary(v);
+  $('#stat').textContent='전송 중…'; $('#stat').className='';
+  f.submit(); setTimeout(()=>f.remove(),1500);
+  /* 응답이 늦으면 실패로 단정하지 않고, 저장됐는지 먼저 되묻는다 */
+  window.__to=setTimeout(()=>{
+    if(!sending) return;
+    $('#stat').textContent='저장 여부를 확인하는 중…'; $('#stat').className='';
+    confirmSaved(curCid,r=>{
+      if(!sending) return;
+      if(r && r.ok && r.found){ finish({ok:true,id:curCid}); return; }
+      sending=false;
+      $('#stat').textContent='응답이 없습니다. 접수번호 '+curCid
+        +' 를 원장에게 알려주세요. (네트워크 확인 필요)';
+      $('#stat').className='err';
+    });
+  },15000);
+};
+prog();
+</script></body></html>
