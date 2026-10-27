@@ -8,7 +8,8 @@
 
 // ▼▼▼ 아래 3개만 바꾸면 됩니다 ▼▼▼
 const SHEET_ID  = '1pm7ScUM6UER5W6d5tKflGa-cu-u_CmbrEzI9s9Qs-5M';   // 시트 URL 의 /d/ 와 /edit 사이 문자열
-const FOLDER_ID = '';   // Drive 폴더 URL 의 /folders/ 뒤 문자열 — 비워 두면 '씨엘로뷰티 고객카드 서명' 폴더를 자동으로 만든다
+const FOLDER_ID = '';   // 서명 폴더 — 비워 두면 '씨엘로뷰티 고객카드 서명' 폴더를 자동으로 만든다.
+                        // 폴더 ID · 폴더 주소(…/folders/…) · 폴더 이름 어느 것을 넣어도 된다
 const TOKEN     = 'cielo-2026-67c18181b97534eb72a6';           // HTML 의 TOKEN 과 똑같이
 // ▲▲▲ ─────────────────────────────── ▲▲▲
 
@@ -17,7 +18,7 @@ const SHEET_NAME = '고객카드';
 /* 배포된 코드가 무엇인지 확인하는 도장.
    저장(⌘S)만 하면 /exec 는 여전히 옛 버전을 돌린다 — 반드시 새 버전으로 배포해야 한다.
    ENDPOINT 주소를 브라우저로 열면 여기 적힌 값이 보인다. */
-const VERSION = '2026-10-10 · 41열 · 씨엘로';
+const VERSION = '2026-10-27 · 41열 · 씨엘로 · 서명폴더';
 
 /* 열 이름이 바뀐 이력. ensureHeaders_ 가 먼저 적용해 중복 열이 생기지 않게 한다 */
 const RENAME = [['출생연도', '생년월일'], ['얼굴', '페이스'], ['속눈썹·반영구', '반영구·기타']];
@@ -329,13 +330,22 @@ function 설치테스트() {
   Logger.log('폴더 연결 OK: ' + f.getName());
 }
 
-/** 서명 폴더 — FOLDER_ID 가 비어 있으면 처음 한 번 만들고 그 ID 를 기억한다 */
+/** 서명 폴더 — FOLDER_ID 에 ID·주소·이름 중 무엇이 들어와도 찾아 낸다.
+    이름(또는 빈 값)이면 같은 이름의 폴더를 찾고, 없으면 만든 뒤 그 ID 를 기억한다.
+    (이름을 ID 자리에 넣으면 getFolderById 가 '잘못된 파일 또는 폴더 ID' 로 실패했다) */
 function sigFolder_() {
-  if (FOLDER_ID) return DriveApp.getFolderById(FOLDER_ID);
+  const v = String(FOLDER_ID || '').trim();
+  const m = v.match(/\/folders\/([A-Za-z0-9_-]+)/);
+  const id = m ? m[1] : (/^[A-Za-z0-9_-]{20,}$/.test(v) ? v : '');
+  if (id) return DriveApp.getFolderById(id);
+
+  const name  = v || '씨엘로뷰티 고객카드 서명';
   const props = PropertiesService.getScriptProperties();
-  const saved = props.getProperty('SIG_FOLDER_ID');
+  const key   = 'SIG_FOLDER_ID:' + name;
+  const saved = props.getProperty(key);
   if (saved) { try { return DriveApp.getFolderById(saved); } catch (e) {} }
-  const f = DriveApp.createFolder('씨엘로뷰티 고객카드 서명');
-  props.setProperty('SIG_FOLDER_ID', f.getId());
+  const it = DriveApp.getFoldersByName(name);
+  const f  = it.hasNext() ? it.next() : DriveApp.createFolder(name);
+  props.setProperty(key, f.getId());
   return f;
 }
