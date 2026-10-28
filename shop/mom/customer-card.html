@@ -97,6 +97,30 @@ button.go:disabled{background:#dccfd3}
 #stat.err{background:#fdf1ef;color:#8f3a2c;border-color:#f0d5cf}
 .sum{font-size:14px;line-height:1.9}
 .sum b{display:inline-block;min-width:96px;color:var(--sub);font-weight:700;font-size:12.5px}
+/* 건강 체크 묶음 */
+.hg{border-top:1px dashed var(--line);padding-top:16px;margin-top:18px}
+.hg h3{font-size:14.5px;font-weight:800;margin-bottom:8px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.hg .hn{color:var(--ac);font-size:15px}
+.hg .tag{font-style:normal;font-size:11px;font-weight:600;color:var(--sub);background:var(--acbg);
+  border:1px solid var(--line);border-radius:6px;padding:1px 7px}
+.ex{font-size:12.5px;color:var(--sub);margin-top:9px;line-height:1.6}
+.ex.calm{background:var(--acbg);border-radius:9px;padding:8px 11px;color:#7a3657}
+.follow{display:none;margin-top:4px}
+.follow label.f{margin-top:14px}
+em.opt{font-style:normal;font-weight:500;color:var(--sub)}
+details.why{margin-top:9px;font-size:12.5px;color:var(--sub)}
+details.why summary{cursor:pointer;color:var(--ac);font-weight:700;list-style:none;display:inline-block}
+details.why summary::-webkit-details-marker{display:none}
+details.why summary:before{content:'? ';font-weight:800}
+details.why[open]{background:#fff;border:1px solid var(--line);border-radius:9px;padding:8px 11px}
+#flags{margin-bottom:14px}
+#flags details{border:1px solid var(--line);border-radius:10px;background:#fff;padding:10px 12px}
+#flags summary{cursor:pointer;font-weight:800;font-size:14px}
+#flags li{list-style:none;font-size:13px;line-height:1.6;padding:5px 0;border-top:1px solid #f3e8ec}
+#flags li:first-child{border-top:0}
+#flags .lv{display:inline-block;min-width:38px;text-align:center;font-size:11px;font-weight:800;
+  border-radius:5px;padding:1px 6px;margin-right:7px;color:#fff;vertical-align:1px}
+#flags .lv.미룸{background:#b8503f}#flags .lv.확인{background:#c98a1a}#flags .lv.참고{background:#8b939c}
 @media print{.bar,#form,.mini{display:none}#done{display:block!important}body{background:#fff}}
 </style></head><body>
 <div class="wrap">
@@ -318,29 +342,146 @@ button.go:disabled{background:#dccfd3}
   <textarea id="worry" placeholder="편하게 적어주세요. 없으시면 비워두셔도 됩니다."></textarea>
 </section>
 
-<section>
-  <h2><b>4</b>안전 확인</h2>
-  <div class="hint">시술 가능 여부와 방식을 정하는 데 꼭 필요한 항목입니다.
-    해당사항이 없으면 <b>해당 없음</b>을 눌러주세요.</div>
-  <label class="f" style="margin-top:2px">해당하는 항목 <span class="rq">*</span></label>
-  <div class="chips" data-g="health" id="health">
-    <div class="chip warn">피부암</div>
-    <div class="chip warn">아문 상처</div>
-    <div class="chip warn" data-preg="1">임신 중</div>
-    <div class="chip warn">수유 중</div>
-    <div class="chip warn">알레르기 있음</div>
-    <div class="chip warn">복용 중인 약</div>
-    <div class="chip warn">피부질환 치료 중</div>
-    <div class="chip warn">최근 레이저·필링·시술</div>
-    <div class="chip warn">피부 연고 사용 중</div>
-    <div class="chip warn">켈로이드성 피부</div>
-    <div class="chip warn">과거 시술 후 이상반응</div>
-    <div class="chip warn">시술 부위 상처·염증</div>
-    <div class="chip" data-none="1">해당 없음</div>
+<section id="hsec">
+  <h2><b>4</b>건강 체크</h2>
+  <div class="hint">묶음마다 해당하는 것을 눌러 주세요. 없으면 <b>없음</b> 한 번이면 됩니다.<br>
+    체크하셨다고 거절하지 않아요. <b>방법이나 날짜를 원장과 함께 정해요.</b></div>
+
+  <div class="hg">
+    <h3><span class="hn">①</span>오늘 몸 상태</h3>
+    <div class="chips" data-g="hToday">
+      <div class="chip warn" data-k="preg" data-preg="1">임신 중이거나 가능성 있음</div>
+      <div class="chip warn" data-k="nurse">수유 중</div>
+      <div class="chip warn" data-k="fever">열·오한·감기 기운</div>
+      <div class="chip warn" data-k="alcohol">24시간 안에 술을 마심</div>
+      <div class="chip warn" data-k="fasting">오늘 식사를 거의 못 함</div>
+      <div class="chip warn" data-k="period">생리 중</div>
+      <div class="chip" data-none="1">없음</div>
+    </div>
+    <details class="why"><summary>왜 묻나요?</summary>
+      열이 있거나 술을 마신 날은 피가 더 나고 회복이 늦어요. 굶고 오시면 시술 중 어지러울 수 있어
+      사탕이나 음료를 먼저 드려요.</details>
   </div>
-  <label class="f">체크하신 항목이 있다면 구체적으로 <em style="font-style:normal;font-weight:500;color:var(--sub)">(선택)</em></label>
-  <textarea id="hdetail" placeholder="예: 알레르기 종류 / 복용 중인 약 종류"></textarea>
-  <label class="f">최근 면도 또는 제모를 하셨다면 <em style="font-style:normal;font-weight:500;color:var(--sub)">(선택)</em></label>
+
+  <div class="hg">
+    <h3><span class="hn">②</span>진단받았거나 치료 중인 병</h3>
+    <div class="chips" data-g="hDx">
+      <div class="chip warn" data-k="htn">고혈압</div>
+      <div class="chip warn" data-k="dm">당뇨</div>
+      <div class="chip warn" data-k="heart">심장 질환</div>
+      <div class="chip warn" data-k="stroke">뇌졸중</div>
+      <div class="chip warn" data-k="seizure">뇌전증 · 쓰러진 적 있음</div>
+      <div class="chip warn" data-k="liver">간 질환</div>
+      <div class="chip warn" data-k="bleed">피가 잘 안 멈추는 병</div>
+      <div class="chip warn" data-k="cancer">암 치료 중</div>
+      <div class="chip warn" data-k="skinca">피부암 · 모양이 변하는 점</div>
+      <div class="chip warn" data-k="bbp">B형·C형 간염 · HIV</div>
+      <div class="chip" data-none="1">없음</div>
+    </div>
+    <div class="ex">심장 질환은 특히 <b>인공판막·심내막염을 앓은 적·선천성 심장병</b>이면 꼭 눌러 주세요.
+      피가 잘 안 멈추는 병은 혈우병·혈소판 감소 등, 암 치료는 항암·방사선 치료를 말해요.</div>
+    <div class="ex calm">B형·C형 간염·HIV를 체크하셔도 <b>그 이유로 거절하지 않아요.</b>
+      모든 고객께 같은 위생 기준으로 시술합니다.</div>
+    <details class="why"><summary>왜 묻나요?</summary>
+      피가 멎는 힘, 상처가 아무는 속도, 시술 중 쓰러질 위험이 병마다 달라요. 그에 맞춰 강도와 순서를 바꿔요.</details>
+  </div>
+
+  <div class="hg">
+    <h3><span class="hn">③</span>드시거나 바르는 약</h3>
+    <div class="chips" data-g="hMed">
+      <div class="chip warn" data-k="thinner">피를 묽게 하는 약</div>
+      <div class="chip warn" data-k="painkiller">어제·오늘 먹은 진통제</div>
+      <div class="chip warn" data-k="bpmed">혈압약</div>
+      <div class="chip warn" data-k="dmmed">당뇨약 · 인슐린</div>
+      <div class="chip warn" data-k="steroid">스테로이드 · 면역억제제</div>
+      <div class="chip warn" data-k="isotret">먹는 여드름약</div>
+      <div class="chip warn" data-k="retinoid">바르는 레티놀·트레티노인</div>
+      <div class="chip warn" data-k="psych">우울·불안·수면 약</div>
+      <div class="chip warn" data-k="supp">오메가3·은행잎 영양제</div>
+      <div class="chip" data-none="1">없음</div>
+    </div>
+    <div class="ex">피를 묽게 하는 약: 아스피린, 와파린, 엘리퀴스·자렐토·릭시아나, 클로피도그렐(플라빅스) 등.
+      먹는 여드름약은 <b>지금 드시거나 끊은 지 6개월이 안 됐으면</b> 눌러 주세요(로아큐탄 등).</div>
+    <div class="ex calm"><b>시술 때문에 약을 끊지 마세요.</b> 필요하면 처방한 의사와 상의하도록 안내해 드려요.</div>
+    <div class="follow" data-for="hMed">
+      <label class="f">약 이름을 아시면 <em class="opt">(선택)</em></label>
+      <input type="text" id="medName" placeholder="예: 아스피린 100mg, 로아큐탄">
+    </div>
+    <details class="why"><summary>왜 묻나요?</summary>
+      피를 묽게 하는 약과 일부 우울증 약은 멍과 피가 더 생기게 해요. 여드름약·레티놀은 피부를 얇게 만들어
+      왁싱 때 피부가 벗겨질 수 있어요.</details>
+  </div>
+
+  <div class="hg">
+    <h3><span class="hn">④</span>알레르기 · 예전에 겪은 반응</h3>
+    <div class="chips" data-g="hAllergy">
+      <div class="chip warn" data-k="anesth">마취제 (치과 마취 때 이상했던 적 포함)</div>
+      <div class="chip warn" data-k="latex">라텍스(고무장갑)</div>
+      <div class="chip warn" data-k="metal">금속</div>
+      <div class="chip warn" data-k="disinf">소독용 알코올</div>
+      <div class="chip warn" data-k="cosme">화장품 · 염색약</div>
+      <div class="chip warn" data-k="drug">약 (항생제 등)</div>
+      <div class="chip warn" data-k="pigment">예전 문신·반영구 색소 반응</div>
+      <div class="chip warn" data-k="prior">과거 시술 후 이상반응</div>
+      <div class="chip" data-none="1">없음</div>
+    </div>
+    <details class="why"><summary>왜 묻나요?</summary>
+      반응했던 성분은 쓰지 않고 다른 장갑·소독제·제품으로 바꿔요.</details>
+  </div>
+
+  <div class="hg">
+    <h3><span class="hn">⑤</span>피부</h3>
+    <div class="chips" data-g="hSkin">
+      <div class="chip warn" data-k="wound">시술 부위 상처·염증·뾰루지</div>
+      <div class="chip warn" data-k="scar">시술 부위에 아문 상처·흉터</div>
+      <div class="chip warn" data-k="keloid">흉터가 부풀어 오름(켈로이드)</div>
+      <div class="chip warn" data-k="herpes">입술 물집(헤르페스)이 되풀이됨</div>
+      <div class="chip warn" data-k="atopy">아토피·건선·습진 (최근 3개월 치료)</div>
+      <div class="chip warn" data-k="ointment">피부 연고 사용 중</div>
+      <div class="chip" data-none="1">없음</div>
+    </div>
+    <details class="why"><summary>왜 묻나요?</summary>
+      상처·염증 위에는 바늘이나 왁스를 쓰지 않고 다 나은 뒤에 해요. 흉터 위는 색이 고르지 않게 남을 수 있어 미리 말씀드려요.</details>
+  </div>
+
+  <div class="hg">
+    <h3><span class="hn">⑥</span>최근에 받은 시술</h3>
+    <div class="chips" data-g="hRecent">
+      <div class="chip warn" data-k="laser">레이저 · 필링</div>
+      <div class="chip warn" data-k="botox">보톡스 · 필러</div>
+      <div class="chip warn" data-k="thread">실 리프팅</div>
+      <div class="chip warn" data-k="eyesurg">눈 성형 · 라식 · 라섹</div>
+      <div class="chip warn" data-k="tan">태닝 · 햇볕에 많이 탐</div>
+      <div class="chip" data-none="1">없음</div>
+    </div>
+    <div class="follow" data-for="hRecent">
+      <label class="f">가장 최근이 언제였나요?</label>
+      <div class="chips" data-g="hWhen">
+        <div class="chip">1주 안</div><div class="chip">1달 안</div>
+        <div class="chip">3개월 안</div><div class="chip">3개월보다 전</div>
+      </div>
+    </div>
+    <details class="why"><summary>왜 묻나요?</summary>
+      레이저 뒤 피부, 보톡스 뒤 눈썹 위치가 자리 잡을 때까지 기다려야 결과가 고르게 나와요.</details>
+  </div>
+
+  <div class="hg" id="eyeGrp" hidden>
+    <h3><span class="hn">⑦</span>눈 <em class="tag">아이라인·속눈썹을 고르셔서 나와요</em></h3>
+    <div class="chips" data-g="hEye">
+      <div class="chip warn" data-k="dryeye">안구건조증 · 인공눈물을 자주 넣음</div>
+      <div class="chip warn" data-k="eyeinfl">지금 다래끼·결막염·눈꺼풀 염증</div>
+      <div class="chip warn" data-k="lens">렌즈를 끼고 왔어요</div>
+      <div class="chip warn" data-k="lashext">속눈썹 연장을 하고 있어요</div>
+      <div class="chip warn" data-k="latisse">속눈썹 영양제(라티스 등)</div>
+      <div class="chip" data-none="1">없음</div>
+    </div>
+    <details class="why"><summary>왜 묻나요?</summary>
+      렌즈는 시술 전에 빼야 해요. 눈에 염증이 있으면 다 나은 뒤에 하고, 건조증이 심하면 방법을 바꿔요.</details>
+  </div>
+
+  <label class="f">더 알려 주실 내용 <em class="opt">(선택)</em></label>
+  <textarea id="hdetail" placeholder="예: 알레르기 종류 / 수술한 날짜 / 의사에게 들은 주의사항"></textarea>
+  <label class="f">최근 면도 또는 제모를 하셨다면 <em class="opt">(선택)</em></label>
   <input type="text" id="shave" placeholder="예: 3일 전 면도">
 </section>
 
@@ -391,7 +532,7 @@ button.go:disabled{background:#dccfd3}
 
   <div class="consent req">
     <h3>③ 건강정보 수집·이용 <em>필수</em></h3>
-    <p>임신 여부, 복용 약, 알레르기, 피부질환 등 <b>건강에 관한 정보</b>는
+    <p>임신·수유 여부, 진단받은 질병, 복용 약, 알레르기, 피부 상태, 최근 받은 시술 등 <b>건강에 관한 정보</b>는
        다른 개인정보와 분리하여 별도로 동의를 받습니다.<br>
        <b>목적</b> 시술 가능 여부 판단 및 안전한 시술 방식 결정 (오직 이 목적으로만 사용)<br>
        <b>보유기간</b> 최종 방문일로부터 <b>3년</b><br>
@@ -410,6 +551,7 @@ button.go:disabled{background:#dccfd3}
     <h2><b>✓</b>작성이 완료되었습니다</h2>
     <div class="hint">원장에게 태블릿을 전달해주세요.</div>
     <div id="stat"></div>
+    <div id="flags"></div>
     <div class="sum" id="sum"></div>
   </section>
 </div>
@@ -439,8 +581,6 @@ $$('.chips').forEach(g=>g.addEventListener('click',e=>{
   if(c.dataset.none){ fam.forEach(x=>x.classList.remove('on')); c.classList.add('on'); }
   else { c.classList.toggle('on');
          fam.forEach(x=>{ if(x.dataset.none) x.classList.remove('on'); }); }
-  if(g.dataset.g==='health')
-    $('#pregSec').style.display = $$('#health .chip[data-preg].on').length ? 'block' : 'none';
   prog();
 }));
 /* 카드 단일선택 — 같은 카드를 다시 누르면 해제 */
@@ -495,6 +635,122 @@ cv.addEventListener('pointermove',e=>{if(!down)return;e.preventDefault();cx.line
 addEventListener('pointerup',()=>down=false);
 $('#clr').onclick=()=>{cx.clearRect(0,0,cv.width,cv.height);drew=false;$('#sigph').style.display='flex';prog()};
 
+/* ── 건강 체크 ──
+   묶음 하나에 하나 이상(또는 '없음')을 눌러야 넘어간다.
+   눈 묶음은 아이라인 · 속눈썹 연장 · 속눈썹 펌을 고른 경우에만 보인다. */
+const HG=[['hToday','오늘 몸 상태'],['hDx','진단받은 병'],['hMed','약'],
+          ['hAllergy','알레르기'],['hSkin','피부'],['hRecent','최근 시술']];
+const HG_EYE=['hEye','눈'];
+const eyeWork=()=>{
+  const cats=$$('.chips[data-g="cat"] .chip.on').map(x=>x.textContent.trim());
+  const liner=$$('.chips[data-g="etc"] .chip.on').some(x=>x.textContent.trim()==='아이라인');
+  return liner || cats.indexOf('속눈썹 연장')>=0 || cats.indexOf('속눈썹 펌')>=0;
+};
+function healthSync(){
+  const eye=eyeWork(), g=$('#eyeGrp');
+  g.hidden=!eye;
+  if(!eye) $$('#eyeGrp .chip.on').forEach(x=>x.classList.remove('on'));
+  /* 묶음 안에서 '없음' 말고 하나라도 고르면 꼬리 질문을 연다 */
+  $$('#hsec .follow').forEach(f=>{
+    const any=$$('.chips[data-g="'+f.dataset.for+'"] .chip.on:not([data-none])').length>0;
+    f.style.display=any?'block':'none';
+    if(!any){ f.querySelectorAll('.chip.on').forEach(x=>x.classList.remove('on'));
+              f.querySelectorAll('input').forEach(x=>x.value=''); }
+  });
+  $('#pregSec').style.display = $$('#hsec .chip[data-preg].on').length ? 'block' : 'none';
+}
+const healthGroups=()=>HG.concat(eyeWork()?[HG_EYE]:[]);
+const hKeys=()=>new Set($$('#hsec .chip.on[data-k]').map(x=>x.dataset.k));
+
+/* 원장 확인 메모 — 고른 항목과 시술 종류를 맞춰 본다.
+   근거: 문신사 수업 1·2회차 검증기록(누적/검증기록.md R2b·R2c·R2d), 보건복지부 「문신시술 표준지침」.
+   단계: 미룸(오늘은 하지 않는 쪽) · 확인(시작 전 원장이 확인) · 참고 */
+function healthFlags(){
+  const k=hKeys(), has=x=>k.has(x);
+  const cats=$$('.chips[data-g="cat"] .chip.on').map(x=>x.textContent.trim());
+  const pmu=cats.indexOf('반영구')>=0, wax=cats.indexOf('왁싱')>=0;
+  const brow=pmu && $$('.chips[data-g="etc"] .chip.on').some(x=>x.textContent.trim()==='눈썹문신');
+  const liner=pmu && $$('.chips[data-g="etc"] .chip.on').some(x=>x.textContent.trim()==='아이라인');
+  const eye=eyeWork();
+  const F=[], add=(lv,t)=>F.push([lv,t]);
+
+  if(has('preg')) pmu ? add('미룸','임신 중 반영구는 출산 뒤로 미루는 것이 주류 권고예요(감염 위험·색소 정보 부족). 임산부 문진도 확인')
+                      : add('확인','임산부 문진(주차·자세·휴식) 확인');
+  if(has('nurse') && pmu) add('확인','수유 중 반영구: 수유가 끝난 뒤로 미루는 것이 보수적 기준이에요. 매장 기준으로 정하기');
+  if(has('fever')) add('확인','시작 전 체온 확인. 열·오한이 있으면 미루기');
+  if(has('alcohol') && (pmu||wax)) add('확인','24시간 안 음주(표준지침 확인 항목). 피가 더 나고 회복이 늦어요');
+  if(has('fasting')) (has('dmmed')||has('dm'))
+      ? add('확인','당뇨약·인슐린 + 공복: 저혈당 대비. 떨림·식은땀·어지럼이면 사탕·주스 15–20g, 의식이 흐리면 입에 넣지 말고 119')
+      : add('참고','공복: 시술 중 어지럼·실신 주의, 먼저 당 보충');
+  if(has('period') && wax) add('참고','생리 중 왁싱: 진행 여부를 고객과 정하기');
+
+  if(has('htn')) add('참고','조절되는 고혈압은 금기가 아니에요. 160/100을 넘거나 가슴 통증·숨참·한쪽 마비·말 어눌함이 있으면 미루고, 증상이 있으면 119');
+  if(has('dm')) add('참고','당뇨: 상처가 늦게 아물고 감염에 약해요. 위생·사후관리 안내를 더 꼼꼼히');
+  if(has('heart')) add('확인','인공판막·심내막염 병력·일부 선천성 심장병이면 주치의 확인 먼저(유럽심장학회가 문신을 말림)');
+  if(has('stroke')||has('seizure')) add('확인','뇌졸중·뇌전증은 표준지침상 의료기관 소견서 확인 대상. 시술 중 이상하면 바로 멈추고 바늘 제거·의식 확인·119');
+  if(has('liver')) add(pmu?'확인':'참고','간경변이면 피가 잘 안 멈춰요. 담당 의사 확인 뒤에만');
+  if(has('bleed')) pmu ? add('미룸','혈우병 등 출혈 질환: 담당 의사 확인과 응고인자 계획이 없으면 반영구를 하지 않아요')
+                       : add('확인','출혈 질환: 멍·출혈 주의, 시술 범위 상의');
+  if(has('cancer')) add('확인','항암·방사선 치료 중: 감염 위험이 높아요. 담당 의료진에게 시기를 확인받기');
+  if(has('skinca')) add('확인','피부암·변하는 점이 있는 자리에는 시술하지 않아요. 피부과 진료 권유');
+  if(has('bbp')) add('확인','B형·C형 간염·HIV: 표준지침상 소견서 확인 대상. 이 사실만으로 거절하면 차별 소지(국가인권위). 모든 고객에게 같은 표준주의');
+
+  if(has('thinner')) pmu ? add('확인','항응고제·항혈소판제: 표준지침상 소견서 확인 대상. 끊으라고 하지 않기(처방 의사와 상의). 지혈은 더 오래 누르기')
+                         : add('참고','피를 묽게 하는 약: 멍·출혈이 더 생길 수 있어요');
+  if(has('painkiller')) add('참고','아스피린·이부프로펜 같은 진통제: 멍·출혈이 늘 수 있어요');
+  if(has('bpmed')) add('참고','혈압약: 일어설 때 어지럼(기립성). 앉았다가 천천히 일으키기');
+  if(has('steroid')) add('확인','스테로이드·면역억제제: 피부가 얇고 상처·감염에 약해요. 약을 끊으라고 하지 않기');
+  if(has('isotret')) wax ? add('미룸','먹는 여드름약(이소트레티노인): 복용 중과 끊은 뒤 6개월은 왁스 제모를 피해요(약 설명서)')
+                         : add('확인','먹는 여드름약: 피부가 얇고 건조해요. 복용 중·끊은 지 6개월 안이면 원장과 상의');
+  if(has('retinoid')) wax ? add('미룸','바르는 레티노이드: 바른 자리는 왁싱하지 않아요(피부가 벗겨질 수 있음)')
+                          : add('참고','바르는 레티노이드: 시술 부위에 바르고 있으면 처방 의사와 상의해 쉬게 하기');
+  if(has('psych')) add('참고','우울·불안 약(SSRI·SNRI)은 멍·출혈을 늘릴 수 있고, 수면제는 다음 날 어지럼·낙상 위험. 끊으라고 하지 않기');
+  if(has('supp')) add('참고','오메가3·은행잎 등 영양제: 멍·출혈에 영향을 줄 수 있어요');
+
+  if(has('anesth')) add('확인','마취제 반응: 원인을 모르면 마취 크림을 쓰지 않기. 치과에서의 "쇼크"는 긴장성 실신인 경우가 많아요');
+  if(has('latex')) add('확인','라텍스 없는 장갑으로. 반영구는 라텍스가 아닌 멸균장갑');
+  if(has('metal')||has('disinf')||has('cosme')||has('drug')) add('참고','알레르기 성분을 확인하고 해당 제품·소독제를 바꾸기');
+  if(has('pigment')) add('확인','예전 색소 반응: 같은 색소를 쓰지 않기. 반응은 빨간 색소에서 가장 흔하고 몇 년 뒤에도 생길 수 있어요');
+  if(has('prior')) add('참고','예전 시술 뒤 어떤 반응이었는지 확인');
+
+  if(has('wound')) add('미룸','시술 부위 상처·염증·뾰루지: 그 자리는 다 나은 뒤에 해요(표준지침)');
+  if(has('scar')) add('참고','흉터 위는 색이 고르지 않게 남을 수 있음을 미리 알리기. 아직 붉고 단단한 흉터는 하지 않기');
+  if(has('keloid')) add('확인','켈로이드 체질: 시술로 켈로이드가 생길 수 있어요(미국 FDA). 진행 여부 상의');
+  if(has('herpes')) add('확인','헤르페스: 물집·딱지가 있으면 미루기. 재발 이력이 있으면 시술 전 예방약은 의사 진료로');
+  if(has('atopy')) add('확인','시술 부위에 아토피·습진이 있으면 미루기(포진상 습진 위험)');
+  if(has('ointment')) add('참고','바르는 연고 이름과 마지막으로 바른 날 확인');
+
+  if(has('laser')) add('확인','레이저·필링 뒤: 붉음·딱지가 없어질 때까지 기다리기(얕은 시술 1–7일, 중간 깊이 7–14일)');
+  if(has('botox') && (brow||liner)) add('확인','보톡스는 효과가 자리 잡는 1–2주 뒤(한 달이면 여유), 필러는 붓기가 빠지는 1–2주 뒤에 디자인');
+  if(has('thread')) add('참고','실 리프팅 자리는 고르지 않을 수 있어요. 붓기·멍이 빠진 뒤에');
+  if(has('eyesurg') && eye) add('미룸','눈 수술·라식·라섹 뒤: 최소 3개월, 수술한 병원의 허락 뒤에');
+  if(has('tan')) add('참고','태닝한 피부는 바탕색이 달라 색 선택이 달라져요. 자외선 차단 안내');
+
+  if(has('dryeye')) add(liner?'확인':'참고', liner?'안구건조증이 심하면 아이라인을 권하지 않아요(마이봄샘이 상해 더 나빠질 수 있음)':'안구건조증: 눈 자극 주의');
+  if(has('eyeinfl') && eye) add('미룸','다래끼·결막염·눈꺼풀 염증: 다 나은 뒤에 해요');
+  if(has('lens') && eye) add('참고','렌즈는 시술 전에 빼고, 자극이 가라앉을 때까지 다시 끼지 않기');
+  if(has('lashext') && liner) add('확인','아이라인 전에 속눈썹 연장을 떼야 해요');
+  if(has('latisse')) add('참고','속눈썹 영양제는 눈가 피부를 어둡게 할 수 있어요. 시술 탓으로 오해받지 않게 기록');
+
+  const order={'미룸':0,'확인':1,'참고':2};
+  return F.sort((a,b)=>order[a[0]]-order[b[0]]);
+}
+/* 시트의 '안전확인' 칸 한 곳에 묶음 이름을 붙여 담는다 — 열을 늘리지 않아 Apps Script 를 고칠 필요가 없다 */
+function healthText(){
+  return healthGroups().map(([g,n])=>{
+    const on=$$('.chips[data-g="'+g+'"] .chip.on').map(x=>x.textContent.trim());
+    return n+': '+(on.join(', ')||'—');
+  }).join(' / ');
+}
+function healthDetail(){
+  const p=[];
+  const med=$('#medName').value.trim(); if(med) p.push('약 이름: '+med);
+  const when=pick('hWhen'); if(when!=='—') p.push('최근 시술 시기: '+when);
+  const free=$('#hdetail').value.trim(); if(free) p.push(free);
+  const fl=healthFlags(); if(fl.length) p.push('원장 확인: '+fl.map(f=>'['+f[0]+'] '+f[1]).join(' | '));
+  return p.join(' / ');
+}
+
 /* 진행률 */
 const G1 = g => $$('.chips[data-g="'+g+'"] .chip.on').length>0;
 /* 고른 상위 카테고리는 그 안에서 최소 하나를 골라야 한다 */
@@ -515,16 +771,16 @@ const BASE=[
   ['시술 카테고리',()=>G1('cat')],
 ];
 const TAIL=[
-  ['안전 확인',  ()=>G1('health')],
   ['필수 동의',  ()=>$$('.ck[data-req].on').length===3],
   ['서명',       ()=>drew],
 ];
 function checklist(){
   const cats=$$('.chips[data-g="cat"] .chip.on').map(x=>x.textContent.trim());
-  return BASE.concat(cats.map(n=>[n, ()=>catOk(n)])).concat(TAIL);
+  return BASE.concat(cats.map(n=>[n, ()=>catOk(n)]))
+    .concat(healthGroups().map(([g,n])=>[n, ()=>G1(g)])).concat(TAIL);
 }
 function prog(){
-  catSync();
+  catSync(); healthSync();
   const L=checklist(), o=L.map(x=>!!x[1]()), n=o.filter(Boolean).length;
   $('#pg').style.width=(n/o.length*100)+'%';
   $('#pt').textContent=n+' / '+o.length;
@@ -566,7 +822,7 @@ function collect(){
     permType:pick('permType'), permAdd:pick('permAdd'),
     etc:pick('etc'),
     worry:$('#worry').value.trim(),
-    health:pick('health'), hdetail:$('#hdetail').value.trim(),
+    health:healthText(), hdetail:healthDetail(),
     shave:$('#shave').value.trim(),
     week: preg ? ($('#week').value||'') : '',
     preg: preg ? pick('preg') : '',
@@ -587,9 +843,14 @@ function showSummary(v){
     ['연장 숱',v.lashVol],['연장 모질',v.lashFib],
     ['펌 종류',v.permType],['펌 추가시술',v.permAdd],
     ['반영구·기타',v.etc],
-    ['신경 쓰이는 점',v.worry||'—'],['안전 확인',v.health],['상세',v.hdetail||'—'],
+    ['신경 쓰이는 점',v.worry||'—'],['건강 체크',v.health],['건강 상세',v.hdetail||'—'],
     ['최근 제모',v.shave||'—']];
   if(v.week||v.preg) rows.push(['임신 주차',(v.week||'—')+'주'],['임산부 특이',v.preg],['의사 주의사항',v.docnote||'—']);
+  const fl=healthFlags();
+  $('#flags').innerHTML = fl.length
+    ? '<details><summary>원장 확인 메모 '+fl.length+'건 · 미룸 '+fl.filter(f=>f[0]==='미룸').length+'</summary><ul>'
+      + fl.map(f=>'<li><span class="lv '+f[0]+'">'+f[0]+'</span>'+f[1]+'</li>').join('')+'</ul></details>'
+    : '';
   $('#sum').innerHTML=rows.map(r=>'<div><b>'+r[0]+'</b> '+String(r[1]).replace(/</g,'&lt;')+'</div>').join('')
     +'<div style="margin-top:14px"><b>서명</b><br><img src="'+v.signature+'" style="height:70px;margin-top:5px"></div>'
     +'<div style="margin-top:10px;font-size:12px;color:#6f7a85">접수번호 '+v.cid+' &middot; 작성일 '+new Date().toLocaleString('ko-KR')+'</div>';
