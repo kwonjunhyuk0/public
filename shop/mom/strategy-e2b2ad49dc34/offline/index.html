@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="googlebot" content="noindex, nofollow">
+<meta name="Yeti" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>씨엘로 오프라인 전략</title>
+<style>
+:root{
+  --bg:#faf8f5; --panel:#ffffff; --ink:#1f1d1a; --mute:#5c564e; --line:#ddd5c9; --accent:#8a5a2b; --accent-soft:#f3e7d8; --cloud:#245a91; --cloud-soft:#e2ecf8; --ok:#1f6b3a; --ok-soft:#e1f1e6; --warn:#875300; --warn-soft:#fbefd6; --bad:#a1261b; --bad-soft:#f8e0dc; --link:#1b5fa8;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#131211; --panel:#1d1c1a; --ink:#f2eee7; --mute:#bdb5aa; --line:#3c3934; --accent:#e5b583; --accent-soft:#3a2e21; --cloud:#a3cdf7; --cloud-soft:#1d3247; --ok:#86e0a6; --ok-soft:#173120; --warn:#f6cb72; --warn-soft:#382d17; --bad:#ffa092; --bad-soft:#3d211e; --link:#93c9ff;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#131211; --panel:#1d1c1a; --ink:#f2eee7; --mute:#bdb5aa; --line:#3c3934; --accent:#e5b583; --accent-soft:#3a2e21; --cloud:#a3cdf7; --cloud-soft:#1d3247; --ok:#86e0a6; --ok-soft:#173120; --warn:#f6cb72; --warn-soft:#382d17; --bad:#ffa092; --bad-soft:#3d211e; --link:#93c9ff;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.7 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Noto Sans KR",sans-serif;word-break:keep-all}
+header{padding:28px 16px 8px;max-width:1080px;margin:0 auto}
+header h1{margin:0 0 4px;font-size:24px;letter-spacing:-.02em}
+header p{margin:0;color:var(--mute);font-size:13.5px}
+nav{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+nav .in{max-width:1080px;margin:0 auto;padding:0 16px;display:flex;gap:4px;overflow-x:auto}
+nav button{flex:none;border:0;background:none;color:var(--mute);font:inherit;font-weight:600;padding:14px 14px 12px;border-bottom:3px solid transparent;cursor:pointer}
+nav button[aria-selected="true"]{color:var(--ink);border-color:var(--accent)}
+nav button.cl[aria-selected="true"]{border-color:var(--cloud)}
+main{max-width:1080px;margin:0 auto;padding:8px 16px 80px}
+.tab{display:none}.tab.on{display:block}
+h2{font-size:20px;margin:40px 0 12px;letter-spacing:-.02em;padding-top:4px}
+h3{font-size:16.5px;margin:28px 0 8px}
+h4{font-size:15px;margin:18px 0 6px}
+p{margin:8px 0}
+.lead{font-size:16px;color:var(--ink)}
+.mute{color:var(--mute);font-size:13.5px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.grid:has(.kpi){grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.kpi b{display:block;font-size:24px;letter-spacing:-.02em}
+.kpi span{color:var(--mute);font-size:13px}
+.callout{border-radius:12px;padding:14px 16px;margin:14px 0;border:1px solid}
+.callout.bad{background:var(--bad-soft);border-color:var(--bad);}
+.callout.warn{background:var(--warn-soft);border-color:var(--warn)}
+.callout.ok{background:var(--ok-soft);border-color:var(--ok)}
+.callout.info{background:var(--accent-soft);border-color:var(--accent)}
+.callout.cl{background:var(--cloud-soft);border-color:var(--cloud)}
+.callout strong:first-child{display:block;margin-bottom:4px}
+.tw{overflow-x:auto;margin:10px 0;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:560px}
+th,td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:var(--accent-soft);font-weight:700;white-space:nowrap}
+.cl-t th{background:var(--cloud-soft)}
+tr:last-child td{border-bottom:0}
+td.n{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.tag{display:inline-block;font-size:12px;font-weight:700;padding:1px 8px;border-radius:99px;margin:0 2px 2px 0;white-space:nowrap}
+.t-ok{background:var(--ok-soft);color:var(--ok)}.t-warn{background:var(--warn-soft);color:var(--warn)}.t-bad{background:var(--bad-soft);color:var(--bad)}
+.t-a{background:var(--accent-soft);color:var(--accent)}.t-c{background:var(--cloud-soft);color:var(--cloud)}
+ul,ol{padding-left:22px;margin:8px 0}li{margin:4px 0}
+.check li{list-style:none;margin-left:-20px}
+.check li::before{content:"☐ ";color:var(--accent);font-weight:700}
+code,.mono{font-family:ui-monospace,Menlo,monospace;font-size:13px;background:var(--accent-soft);padding:1px 5px;border-radius:5px}
+.tpl{white-space:pre-wrap;font-family:ui-monospace,Menlo,monospace;font-size:13px;background:var(--panel);border:1px dashed var(--line);border-radius:10px;padding:14px;line-height:1.65}
+.week{border-left:4px solid var(--accent);padding-left:12px;margin:14px 0}
+.cl-w{border-color:var(--cloud)}
+.toc{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
+.toc a{font-size:13px;text-decoration:none;color:var(--ink);border:1px solid var(--line);background:var(--panel);border-radius:99px;padding:4px 11px}
+.req td:first-child{white-space:nowrap;font-weight:700}
+details{background:var(--panel);border:1px solid var(--line);border-radius:12px;margin:10px 0}
+details>summary{cursor:pointer;padding:14px 18px;font-weight:700;font-size:16px;list-style:none;display:flex;justify-content:space-between;gap:12px}
+details>summary::-webkit-details-marker{display:none}
+details>summary::after{content:"펼치기 ▾";font-size:12.5px;font-weight:600;color:var(--mute);white-space:nowrap}
+details[open]>summary::after{content:"접기 ▴"}
+details[open]>summary{border-bottom:1px solid var(--line)}
+.dbody{padding:4px 18px 16px}
+.dbody h3:first-child{margin-top:14px}
+footer{max-width:1080px;margin:0 auto;padding:0 16px 40px;color:var(--mute);font-size:12.5px}
+@media print{nav{display:none}.tab{display:block!important;page-break-before:always}}
+
+nav button[aria-selected="true"]{border-color:var(--accent)}
+a{color:var(--link);text-decoration:underline;text-underline-offset:2px;font-weight:600}
+a:visited{color:var(--link)}
+.tag{border:1px solid currentColor}
+details>summary{color:var(--ink)}
+</style>
+</head>
+<body>
+<div style="max-width:1080px;margin:0 auto;padding:10px 16px 0;font-size:13.5px"><a href="../">목차</a> · <a href="../online/">① 온라인</a> · <a href="../offline/" aria-current="page" style="font-weight:800;text-decoration:none">② 오프라인</a> · <a href="../branding/">③ 브랜딩</a></div>
+
+<header>
+  <h1>씨엘로뷰티 오프라인 전략 <span style="font-size:15px;font-weight:600;color:var(--mute)">· 3축 중 ② 오프라인</span></h1>
+  <p>매장 안 광고 · 네일 손님을 뷰티로 · 네일과 속눈썹 주기 맞추기 · 고가 시술로 이어지는 배너</p>
+</header>
+<nav><div class="in" role="tablist">
+  <button role="tab" data-t="t1" aria-selected="true">전략 설명</button>
+  <button role="tab" data-t="t2" aria-selected="false">액션 플랜</button>
+</div></nav>
+<main>
+<section class="tab on" id="t1">
+<div class="callout info"><strong>한 줄 진단</strong>씨엘로뷰티의 가장 가까운 손님은 <b>지금 매장에 앉아 있는 네일 손님</b>입니다. 이미 이 샵을 믿고 오는 사람들이고, 네일을 받는 1시간 남짓 같은 벽을 바라봅니다. 그런데 그 벽에는 가격만 적힌 입술 메뉴판이 붙어 있고, 유리문에는 이 손님층과 맞지 않는 두피 SMP 배너가 붙어 있습니다. <b>자리는 있는데 메시지가 없습니다.</b></div>
+<div class="callout ok"><strong>최종 목표</strong>네일 손님이 "여기 <b>속눈썹도 잘하네?</b>"라고 느끼게 합니다. 그래서 <b>네일 주기에 속눈썹 주기를 맞춰</b> 함께 방문하게 하고, 믿음이 쌓인 손님이 <b>눈썹문신 같은 고가 시술</b>까지 고르게 하는 매장 안 배너 구성을 만듭니다.</div>
+
+<h2 id="op">문제점 · 원인 · 개선 방향</h2>
+<p class="mute">'원인' 칸의 굵은 글씨는 오프라인 광고가 작동하는 원리입니다(아래 '매장 광고가 작동하는 원리' 참고).</p>
+<div class="tw"><table>
+<tr><th>#</th><th>문제점</th><th>원인</th><th>개선 방향</th><th>우선</th></tr>
+<tr><td>1</td><td><b>유리문의 SMP 두피문신 배너가 손님층과 맞지 않는다</b></td><td>유리문 앞을 지나고 들어오는 사람은 대부분 네일 손님입니다. 두피 SMP는 가르마·정수리 숱이나 탈모를 고민하는, 결이 다른 손님이 <b>스스로 찾아서</b> 오는 시술입니다. <b>첫인상 신호</b>: 유리문은 "여기는 어떤 샵인가"를 정하는 자리인데, 두피 배너는 네일 손님에게 낯설고 뷰티 손님에게도 주력이 무엇인지 흐립니다.</td><td>유리문에는 <b>가장 넓은 수요(속눈썹펌 · 눈썹문신)</b> 한 장과 새 상호만 둡니다. SMP는 <b>찾아오는 손님이 보는 곳</b>, 즉 테이블 위 상담 앨범과 온라인(플레이스 메뉴·블로그)으로 옮깁니다.</td><td><span class="tag t-bad">이번 주</span></td></tr>
+<tr><td>2</td><td><b>매장 안 뷰티 상품 광고가 약하다</b> (눈썹문신 · 속눈썹 · 입술)</td><td>네일이 중심인 매장이라 뷰티가 눈에 띄는 자리가 정해져 있지 않습니다. <b>체류 시간</b>: 손님이 가장 오래, 가장 편하게 보는 곳에 뷰티가 없습니다.</td><td><b>네일 손님이 앉아서 시선을 고정하는 벽면을 주 광고판</b>으로 정합니다. 손님이 떠나는 순간에는 카운터, 상담할 때는 테이블 앨범으로 동선마다 역할을 나눕니다(아래 동선표).</td><td><span class="tag t-bad">이번 주</span></td></tr>
+<tr><td>3</td><td><b>주 광고판 자리의 입술문신 광고가 메뉴판에 그친다</b></td><td>가격과 메뉴만 있고 "왜 여기서, 왜 지금"이 없습니다. <b>설득 순서</b>: 사람은 가격보다 먼저 걱정이 풀려야 움직입니다. 처음 보는 손님에게 35만 원짜리 입술은 첫 상품으로 문턱이 높습니다.</td><td>벽면을 <b>걱정 해소 → 결정 기준 → 증거(전후) → 가격 → 행동(QR)</b> 순서의 배너로 바꿉니다. 첫 상품은 문턱이 낮은 <b>속눈썹펌</b>으로 하고, 입술은 상담 앨범으로 옮깁니다.</td><td><span class="tag t-warn">2주</span></td></tr>
+<tr><td>4</td><td><b>무엇을, 어떻게 팔지 정해져 있지 않다</b></td><td>상품별 주력과 메시지가 없어 광고도 메뉴 나열이 됩니다. 원장님 숙제 4번(팔고 싶은 상품)과 5번(실제로 팔릴 상품)이 아직 비어 있습니다.</td><td>숙제를 받아 <b>입구 상품 · 핵심 상품 · 확장 상품</b> 세 단계로 정합니다(아래 '상품 사다리'). 기본안: 입구=속눈썹펌, 핵심=눈썹문신, 확장=입술·아이라인·헤어라인·SMP.</td><td><span class="tag t-bad">이번 주</span></td></tr>
+<tr><td>5</td><td><b>손님의 걱정과 결정 기준이 광고에 없다</b></td><td>숙제 1번(결정할 때 가장 중요한 것)과 2번(망설이는 이유)이 광고 문구로 옮겨져 있지 않습니다. <b>망설임 해소</b>: "짱구 눈썹 될까 봐", "속눈썹 상할까 봐" 같은 걱정을 풀어 주지 않으면 관심이 있어도 결정하지 않습니다.</td><td>상품마다 <b>걱정 한 문장 + 답 한 문장 + 증거 한 장</b>을 배너 첫 줄에 둡니다. 예: "속눈썹 상할까 봐 걱정이세요? → 영양 펌으로 결을 지키며 올립니다." (문구는 숙제 답으로 확정)</td><td><span class="tag t-warn">2주</span></td></tr>
+<tr><td>6</td><td><b>네일과 속눈썹 방문 주기가 따로 논다</b></td><td>네일 젤은 보통 3~4주, 속눈썹펌은 6~8주마다 다시 받습니다(일반적인 주기). 이 둘을 묶는 장치(동시 예약, 안내, 혜택)가 없습니다. <b>습관 연결</b>: 이미 오는 날에 하나를 더하는 것이 새로 오게 하는 것보다 훨씬 쉽습니다.</td><td>"<b>네일 2번에 속눈썹펌 1번</b>" 주기표를 벽면과 카운터 카드에 넣고, 같은 날 받으면 혜택을 줍니다. 네일 원장님과 다음 예약을 잡을 때 속눈썹 칸도 함께 묻습니다.</td><td><span class="tag t-warn">2주</span></td></tr>
+<tr><td>7</td><td><b>고가 시술로 이어지는 길이 없다</b></td><td>눈썹문신(18만~30만 원)·입술(35만 원)·헤어라인(30만~40만 원)은 한 번 보고 결정하지 않습니다. <b>신뢰 단계</b>: 작은 시술로 실력을 겪어 본 손님이 큰 시술을 고릅니다.</td><td>속눈썹펌 손님에게 <b>무료 눈썹 디자인 상담</b>(펜슬로 그려 보기)을 권하는 단계를 둡니다. 테이블에 <b>고가 시술 전후 앨범</b>을 둡니다. 뷰티 전용 회원권(30·50·70만 원권)을 상담 끝에 안내합니다.</td><td><span class="tag t-a">4주~</span></td></tr>
+<tr><td>8</td><td><b>원장님의 감각이 매장에서 보이지 않는다</b></td><td>미대 출신이라는 강점이 말로만 남아 있습니다.</td><td>얼굴 소묘 작품 전시를 검토합니다. 자세한 내용은 <b>브랜딩 전략</b> 파일에 있습니다. 벽면 광고판과 자리가 겹치지 않게 둡니다.</td><td><span class="tag t-a">4주~</span></td></tr>
+</table></div>
+
+<h2>손님 동선 — 자리마다 역할이 다르다</h2>
+<div class="tw"><table>
+<tr><th>자리</th><th>누가 보나</th><th>보는 시간</th><th>역할</th><th>여기에 둘 것</th></tr>
+<tr><td>① 유리문(바깥)</td><td>지나가는 사람, 처음 오는 사람</td><td>2~3초</td><td>이 샵이 무엇을 하는지 한눈에</td><td>새 상호 '씨엘로네일&amp;눈썹문신' · 눈썹 또는 속눈썹 전후 1장 · 짧은 한 줄 · QR(네이버 예약)</td></tr>
+<tr><td>② 네일 테이블 앞 벽면 <span class="tag t-ok">주 광고판</span></td><td>네일 받는 손님</td><td>60~90분 (앉아서, 시선 고정)</td><td>관심 → 걱정 해소 → 결정</td><td>속눈썹펌 배너(걱정·기준·전후·주기표·오늘 혜택·QR) + 눈썹문신 배너(디자인 과정·전후·상담 무료)</td></tr>
+<tr><td>③ 테이블 위</td><td>관심이 생긴 손님</td><td>손으로 넘겨 봄</td><td>고가 시술 깊게 보기</td><td>A5 상담 앨범: 눈썹·입술·아이라인·헤어라인·SMP 전후, 가격, 자주 묻는 질문</td></tr>
+<tr><td>④ 카운터(결제)</td><td>나가는 손님</td><td>결제하는 30초</td><td>다음 방문 약속</td><td>"다음 네일 날 속눈썹펌 함께" 예약 카드 · 소개 혜택 카드 · 리뷰 QR</td></tr>
+<tr><td>⑤ 대기 · 입구 안쪽 벽</td><td>기다리는 손님</td><td>몇 분</td><td>원장님 감각 보여 주기</td><td>얼굴 소묘 작품(브랜딩 전략) — 광고판과 섞지 않음</td></tr>
+</table></div>
+
+<h2>상품 사다리 — 무엇을, 어떤 순서로 팔까 (숙제 4·5번으로 확정)</h2>
+<div class="tw"><table>
+<tr><th>단계</th><th>상품 (기본안)</th><th>왜 이 자리인가</th><th>네일 손님에게 거는 말</th></tr>
+<tr><td><b>입구</b></td><td>속눈썹펌 (영양 44,000 · 마스카라 50,000)</td><td>가격 문턱이 낮고, 30~40분이면 끝나며, 주기적으로 다시 옵니다. 네일과 같은 날 받기 쉽습니다. 리뷰 키워드 '유지력이 좋아요'(263)라는 증거도 이미 있습니다.</td><td>"네일 받는 날, 속눈썹도 같이 올리고 가세요."</td></tr>
+<tr><td><b>핵심</b></td><td>눈썹문신 (자연결 18만 · 그라데이션·콤보 20만 · 헤어스트록 30만)</td><td>객단가가 높고, 원장님의 디자인 감각이 가장 잘 드러나는 시술입니다. 온라인 전략의 주력 키워드('의왕 눈썹문신')와도 같습니다.</td><td>"눈썹, 그리기 전에 얼굴 비율부터 봐 드릴게요. 상담은 무료예요."</td></tr>
+<tr><td><b>확장</b></td><td>입술(35만) · 아이라인(18만~20만) · 헤어라인(30만~40만) · 두피 SMP(상담)</td><td>눈썹으로 믿음이 생긴 손님에게 권합니다. 처음부터 벽면에 걸면 문턱이 높습니다.</td><td>상담 앨범과 블로그로 깊게 보여 줍니다.</td></tr>
+</table></div>
+<p class="mute">숙제 4번(팔고 싶은 상품)과 5번(실제로 팔릴 상품)이 다르면 5번을 입구에, 4번을 핵심에 둡니다. 실제로 팔리는 것으로 손님을 들이고, 팔고 싶은 것은 믿음이 생긴 다음에 권합니다.</p>
+
+<h2>매장 광고가 작동하는 원리 (피드백의 근거)</h2>
+<div class="tw"><table>
+<tr><th>원리</th><th>무엇인가</th><th>씨엘로에 의미</th></tr>
+<tr><td><b>자리에 맞는 손님</b></td><td>매장 광고는 그 자리를 실제로 지나가는 사람에게만 닿습니다. 검색해서 찾아오는 손님이 원하는 시술은 온라인에 둡니다.</td><td>네일 손님에게는 속눈썹·눈썹을, SMP처럼 찾아오는 시술은 앨범과 플레이스에 둡니다.</td></tr>
+<tr><td><b>체류 시간</b></td><td>오래 머무는 자리일수록 긴 메시지를 읽습니다. 유리문은 3초, 앉은 자리는 1시간입니다.</td><td>유리문은 한 줄, 벽면은 걱정·기준·증거까지 담습니다.</td></tr>
+<tr><td><b>걱정이 먼저</b></td><td>사람은 "좋아 보인다"보다 "걱정이 풀렸다"일 때 결정합니다.</td><td>숙제 2번(망설이는 이유)이 배너 첫 줄이 됩니다.</td></tr>
+<tr><td><b>증거</b></td><td>말보다 전후 사진, 실제 손님 리뷰가 믿음을 줍니다.</td><td>같은 조명의 전후 사진, 리뷰 키워드(유지력 263)를 씁니다. 사진은 게시 동의를 받습니다.</td></tr>
+<tr><td><b>이미 있는 믿음 옮기기</b></td><td>이미 믿는 샵에서 새 상품을 고르는 것이 새 샵을 찾는 것보다 쉽습니다.</td><td>네일 손님의 믿음을 뷰티로 옮깁니다. 네일 원장님의 한마디가 가장 강한 광고입니다.</td></tr>
+<tr><td><b>습관 붙이기</b></td><td>이미 오는 날에 하나를 더 붙이면 새 습관이 쉽게 생깁니다.</td><td>네일 2번에 속눈썹펌 1번 주기를 붙입니다.</td></tr>
+<tr><td><b>작은 경험 → 큰 결정</b></td><td>작은 시술로 실력을 겪은 다음 큰 시술을 고릅니다.</td><td>속눈썹펌 → 눈썹 상담 → 눈썹문신 → 입술·헤어라인 순서입니다.</td></tr>
+</table></div>
+<p class="mute">배너 문구에도 온라인과 같은 법규가 적용됩니다. '치료·영구·부작용 없음·100%'를 쓰지 않고, 전후 사진은 보정하지 않으며 게시 동의를 받습니다. 유리문 시트지는 건물 관리 규약을 확인합니다.</p>
+
+</section>
+<section class="tab" id="t2">
+<h2 id="ox">실행 순서</h2>
+<div class="grid">
+  <div class="card"><h4 style="margin-top:0"><span class="tag t-bad">이번 주</span></h4><ul class="check">
+    <li>유리문 SMP 배너 떼기(SMP 사진은 상담 앨범용으로 보관)</li>
+    <li>벽면 입술문신 메뉴판 내리기</li>
+    <li>숙제 회수 → 입구·핵심·확장 상품 확정</li>
+    <li>눈썹·속눈썹 전후 사진 모으기(게시 동의)</li></ul></div>
+  <div class="card"><h4 style="margin-top:0"><span class="tag t-warn">2주</span></h4><ul class="check">
+    <li>배너 문구 확정(아래 초안에 숙제 답 넣기)</li>
+    <li>디자인 → 인쇄 → 벽면·유리문 설치</li>
+    <li>카운터 예약 카드 · 소개 카드 · 리뷰 QR</li>
+    <li>네일 원장님께 "옆에서 속눈썹도 해요" 한마디 부탁</li></ul></div>
+  <div class="card"><h4 style="margin-top:0"><span class="tag t-a">4주~</span></h4><ul class="check">
+    <li>테이블 상담 앨범(고가 시술 전후 · 가격 · Q&amp;A)</li>
+    <li>무료 눈썹 디자인 상담 운영</li>
+    <li>소묘 작품 전시(브랜딩 전략)</li>
+    <li>월말 측정: 네일 손님 중 뷰티 이용 수</li></ul></div>
+</div>
+
+<h2 id="oa">실행 상세</h2>
+<p class="mute">항목을 누르면 펼쳐집니다. 대괄호 [ ] 부분은 원장님 숙제 답으로 채웁니다.</p>
+
+<details id="b1" open><summary>배너 ① 네일 테이블 앞 벽면 — 속눈썹펌 (주 광고판)</summary><div class="dbody">
+<p><b>목표:</b> 네일 받는 손님이 "속눈썹도 잘하네? 오늘 같이 해 볼까"라고 생각하게 합니다.</p>
+<div class="tpl">[제목]  네일 받는 날, 속눈썹도 함께 올려 보세요
+
+[걱정 → 답]  "속눈썹 상할까 봐 걱정이세요?"   ← 숙제 2번 답
+            영양 펌으로 결을 지키면서, 뿌리부터 자연스럽게 올려 드려요.
+
+[결정 기준]  씨엘로 속눈썹펌을 고르시는 이유 — 유지력   ← 숙제 1번 답
+            손님 리뷰 '유지력이 좋아요' 263회
+
+[증거]  전후 사진 3장 (같은 조명 · 처진 속눈썹 / 짧은 속눈썹 / 렌즈 착용자)
+
+[주기]  네일 2번에 속눈썹펌 1번 — 같은 날 받으면 더 편해요
+        네일 3~4주 · 속눈썹펌 6~8주
+
+[가격]  영양 펌 44,000원 · 마스카라 펌 50,000원
+        오늘 네일 받으시는 분 [혜택: 예) ○천 원 할인 / 클리닉 추가]
+
+[행동]  QR → 네이버 예약 '은재원장'   ·   "지금 원장님께 물어보세요"</div>
+<ul>
+<li><b>크기:</b> 앉은 눈높이에서 3m 거리에서도 제목이 읽히게 합니다. A1(594×841mm) 정도에 제목 글자 높이 6cm 이상이 기준입니다.</li>
+<li><b>사진:</b> 얼굴 전체 대신 눈 부위만 위(전)·아래(후)로 붙입니다(브로우산산 형식).</li>
+<li><b>왜 이 순서인가:</b> 걱정이 풀려야 기준이 들리고, 기준이 서야 가격이 납득됩니다. 그리고 QR이 바로 앞에 있어야 행동으로 이어집니다.</li>
+</ul></div></details>
+
+<details id="b2"><summary>배너 ② 같은 벽면 옆 — 눈썹문신 (핵심 상품)</summary><div class="dbody">
+<div class="tpl">[제목]  눈썹은 그리기 전에, 얼굴부터 봅니다
+
+[걱정 → 답]  "짱구 눈썹 · 진한 눈썹 될까 봐 망설여지세요?"   ← 숙제 2번 답
+            얼굴 비율과 원래 눈썹 결을 먼저 보고, 펜슬로 그려 보면서 함께 정해요.
+
+[과정]  ① 얼굴 비율 보기  ② 펜슬 디자인(원장 스케치)  ③ 색 고르기  ④ 시술  ⑤ 리터치
+        — 미술을 전공한 원장이 직접 디자인합니다
+
+[증거]  전후 사진 3장 (자연결 / 콤보 / 옛 눈썹 정리)
+
+[가격]  자연결 180,000 · 그라데이션·콤보 200,000 · 헤어스트록 300,000 (리터치 [포함 여부])
+
+[행동]  "무료 눈썹 디자인 상담 — 네일 받는 동안 물어보세요"  ·  QR</div>
+<p class="mute">'과정' 칸에 원장님 디자인 스케치 사진을 넣으면 브랜딩 전략(미대 출신 감각)과 이어집니다.</p></div></details>
+
+<details id="b3"><summary>배너 ③ 유리문 — 첫인상 한 장</summary><div class="dbody">
+<div class="tpl">씨엘로네일 &amp; 눈썹문신
+눈썹문신 · 속눈썹 · 네일
+[전후 사진 1장]
+QR 네이버 예약</div>
+<ul>
+<li>글자는 최소로 합니다. 지나가며 2~3초 안에 "네일과 눈썹을 하는 곳"이 보이면 성공입니다.</li>
+<li>상호 변경(온라인 전략의 A안) 시기에 맞춰 새 이름으로 붙이면, 네이버 업체명 수정 신청의 간판 사진으로도 쓸 수 있습니다.</li>
+<li>SMP 배너는 떼고, 그 사진은 상담 앨범으로 옮깁니다.</li>
+</ul></div></details>
+
+<details id="b4"><summary>카운터 카드 · 테이블 상담 앨범</summary><div class="dbody">
+<h4>카운터 예약 카드 (명함 크기)</h4>
+<div class="tpl">다음 네일 날, 속눈썹펌도 함께 예약해 드릴까요?
+다음 방문 ____월 ____일   □ 네일  □ 속눈썹펌  □ 눈썹 상담
+씨엘로네일 &amp; 눈썹문신 · 네이버 예약 QR</div>
+<h4>소개 카드</h4>
+<div class="tpl">소개해 주신 분과 오신 분 모두 [혜택]
+(리뷰 작성과는 상관없는 혜택입니다)</div>
+<h4>테이블 상담 앨범 (A5, 10~16쪽)</h4>
+<ol>
+<li>원장님 소개(미대 · 경력 · 디자인 원칙) 1쪽</li>
+<li>눈썹문신 기법별 전후(자연결 · 그라데이션 · 콤보 · 헤어스트록 · 옛 눈썹 정리)</li>
+<li>아이라인 · 입술 전후</li>
+<li>헤어라인 · 두피 SMP 전후 ← 유리문에서 옮긴 SMP</li>
+<li>속눈썹펌 · 연장 전후</li>
+<li>가격표와 리터치 안내 · 자주 묻는 질문(숙제 2번의 걱정에 대한 답)</li>
+<li>뷰티 전용 회원권(30·50·70만 원권, 반영구·왁싱·속눈썹 전용)</li>
+</ol></div></details>
+
+<details id="b5"><summary>네일 ↔ 속눈썹 주기 연결 운영</summary><div class="dbody">
+<ul>
+<li><b>주기표:</b> 네일 3~4주, 속눈썹펌 6~8주 → "네일 2번에 속눈썹펌 1번". 벽면 배너와 카운터 카드에 같은 문장을 씁니다.</li>
+<li><b>같은 날 예약:</b> 네일이 끝나는 시간에 속눈썹펌을 이어서 잡습니다. 네일 예약을 받을 때 "속눈썹도 같이 잡아 드릴까요?" 한 문장을 묻습니다.</li>
+<li><b>혜택:</b> 같은 날 받으면 작은 혜택(예: 클리닉 추가)을 줍니다. 네일 쪽 할인이 걸리면 네일 원장님과 정합니다.</li>
+<li><b>알림:</b> 속눈썹펌 손님에게는 6~8주 뒤 카카오 채널로 알립니다(수신 동의 고객만).</li>
+</ul></div></details>
+
+<details id="b6"><summary>측정 — 매장 광고가 효과가 있는지</summary><div class="dbody">
+<div class="tw"><table>
+<tr><th>지표</th><th>재는 법</th><th>목표(안)</th></tr>
+<tr><td>네일 손님 중 뷰티를 받은 사람 수</td><td>월말에 예약 장부에서 셉니다</td><td>배너를 설치하기 전 한 달 대비 증가</td></tr>
+<tr><td>같은 날 네일+속눈썹 예약 수</td><td>예약 장부</td><td>월 [ ]건</td></tr>
+<tr><td>무료 눈썹 상담 → 눈썹문신 결정</td><td>상담 기록</td><td>상담 3건 중 1건</td></tr>
+<tr><td>QR 스캔</td><td>QR마다 다른 링크(카카오 채널 링크 등)를 써서 구분합니다</td><td>참고용</td></tr>
+<tr><td>"어떻게 알고 오셨어요?"</td><td>신규 뷰티 손님에게 묻고 적습니다(네일 손님 / 네이버 / 소개 / 지나가다)</td><td>경로별 비율</td></tr>
+</table></div></div></details>
+
+<details id="b7"><summary>담당 (안)</summary><div class="dbody">
+<div class="tw"><table>
+<tr><th>누구</th><th>할 일</th></tr>
+<tr><td>은재원장님</td><td>숙제 · 전후 사진 촬영과 동의 · 상담 멘트 · 무료 눈썹 상담</td></tr>
+<tr><td>본인</td><td>배너 문구 확정 · 디자인 파일 · 인쇄 · QR 링크 · 측정표</td></tr>
+<tr><td>민경 원장님</td><td>디자인 검수(뷰티 현장 관점) · 플레이스 사진과 배너 톤 맞추기</td></tr>
+<tr><td>네일 원장님(협조)</td><td>벽면 사용 · 교차 안내 한마디 · 같은 날 예약</td></tr>
+</table></div></div></details>
+
+</section>
+</main>
+<footer>기준일 2026-11-07 · 내부 공유용 문서 · 외부 전달 금지</footer>
+<script>
+document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('nav button').forEach(x=>x.setAttribute('aria-selected',x===b));
+  document.querySelectorAll('.tab').forEach(s=>s.classList.toggle('on',s.id===b.dataset.t));
+  try{localStorage.setItem('tab-'+document.title,b.dataset.t)}catch(e){}
+  window.scrollTo(0,0);
+}));
+function openTarget(h){const el=h&&document.getElementById(h.slice(1));if(!el)return;const sec=el.closest('section.tab');if(sec&&!sec.classList.contains('on')){const b=document.querySelector('nav button[data-t="'+sec.id+'"]');b&&b.click()}const d=el.tagName==='DETAILS'?el:el.closest('details');if(d)d.open=true;setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),30)}
+document.addEventListener('click',e=>{const a=e.target.closest('a[href^="#"]');if(a){e.preventDefault();openTarget(a.getAttribute('href'))}});
+function cp(id){const t=document.getElementById(id).innerText;navigator.clipboard.writeText(t).then(()=>{document.getElementById(id+'-ok').textContent='복사됨'},()=>{const r=document.createRange();r.selectNodeContents(document.getElementById(id));const sel=getSelection();sel.removeAllRanges();sel.addRange(r);document.getElementById(id+'-ok').textContent='선택됨 — Cmd+C'})}
+try{const t=localStorage.getItem('tab-'+document.title);if(t){const b=document.querySelector(`nav button[data-t="${t}"]`);b&&b.click()}}catch(e){}
+</script>
+</body>
+</html>

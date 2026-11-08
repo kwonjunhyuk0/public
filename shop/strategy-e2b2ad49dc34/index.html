@@ -1,0 +1,573 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="googlebot" content="noindex, nofollow">
+<meta name="Yeti" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>구름왁싱 전략</title>
+<style>
+:root{
+  --bg:#faf8f5; --panel:#ffffff; --ink:#1f1d1a; --mute:#5c564e; --line:#ddd5c9; --accent:#8a5a2b; --accent-soft:#f3e7d8; --cloud:#245a91; --cloud-soft:#e2ecf8; --ok:#1f6b3a; --ok-soft:#e1f1e6; --warn:#875300; --warn-soft:#fbefd6; --bad:#a1261b; --bad-soft:#f8e0dc; --link:#1b5fa8;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#131211; --panel:#1d1c1a; --ink:#f2eee7; --mute:#bdb5aa; --line:#3c3934; --accent:#e5b583; --accent-soft:#3a2e21; --cloud:#a3cdf7; --cloud-soft:#1d3247; --ok:#86e0a6; --ok-soft:#173120; --warn:#f6cb72; --warn-soft:#382d17; --bad:#ffa092; --bad-soft:#3d211e; --link:#93c9ff;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#131211; --panel:#1d1c1a; --ink:#f2eee7; --mute:#bdb5aa; --line:#3c3934; --accent:#e5b583; --accent-soft:#3a2e21; --cloud:#a3cdf7; --cloud-soft:#1d3247; --ok:#86e0a6; --ok-soft:#173120; --warn:#f6cb72; --warn-soft:#382d17; --bad:#ffa092; --bad-soft:#3d211e; --link:#93c9ff;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.7 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Noto Sans KR",sans-serif;word-break:keep-all}
+header{padding:28px 16px 8px;max-width:1080px;margin:0 auto}
+header h1{margin:0 0 4px;font-size:24px;letter-spacing:-.02em}
+header p{margin:0;color:var(--mute);font-size:13.5px}
+nav{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+nav .in{max-width:1080px;margin:0 auto;padding:0 16px;display:flex;gap:4px;overflow-x:auto}
+nav button{flex:none;border:0;background:none;color:var(--mute);font:inherit;font-weight:600;padding:14px 14px 12px;border-bottom:3px solid transparent;cursor:pointer}
+nav button[aria-selected="true"]{color:var(--ink);border-color:var(--accent)}
+nav button.cl[aria-selected="true"]{border-color:var(--cloud)}
+main{max-width:1080px;margin:0 auto;padding:8px 16px 80px}
+.tab{display:none}.tab.on{display:block}
+h2{font-size:20px;margin:40px 0 12px;letter-spacing:-.02em;padding-top:4px}
+h3{font-size:16.5px;margin:28px 0 8px}
+h4{font-size:15px;margin:18px 0 6px}
+p{margin:8px 0}
+.lead{font-size:16px;color:var(--ink)}
+.mute{color:var(--mute);font-size:13.5px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.grid:has(.kpi){grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.kpi b{display:block;font-size:24px;letter-spacing:-.02em}
+.kpi span{color:var(--mute);font-size:13px}
+.callout{border-radius:12px;padding:14px 16px;margin:14px 0;border:1px solid}
+.callout.bad{background:var(--bad-soft);border-color:var(--bad);}
+.callout.warn{background:var(--warn-soft);border-color:var(--warn)}
+.callout.ok{background:var(--ok-soft);border-color:var(--ok)}
+.callout.info{background:var(--accent-soft);border-color:var(--accent)}
+.callout.cl{background:var(--cloud-soft);border-color:var(--cloud)}
+.callout strong:first-child{display:block;margin-bottom:4px}
+.tw{overflow-x:auto;margin:10px 0;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:560px}
+th,td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:var(--accent-soft);font-weight:700;white-space:nowrap}
+.cl-t th{background:var(--cloud-soft)}
+tr:last-child td{border-bottom:0}
+td.n{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.tag{display:inline-block;font-size:12px;font-weight:700;padding:1px 8px;border-radius:99px;margin:0 2px 2px 0;white-space:nowrap}
+.t-ok{background:var(--ok-soft);color:var(--ok)}.t-warn{background:var(--warn-soft);color:var(--warn)}.t-bad{background:var(--bad-soft);color:var(--bad)}
+.t-a{background:var(--accent-soft);color:var(--accent)}.t-c{background:var(--cloud-soft);color:var(--cloud)}
+ul,ol{padding-left:22px;margin:8px 0}li{margin:4px 0}
+.check li{list-style:none;margin-left:-20px}
+.check li::before{content:"☐ ";color:var(--accent);font-weight:700}
+code,.mono{font-family:ui-monospace,Menlo,monospace;font-size:13px;background:var(--accent-soft);padding:1px 5px;border-radius:5px}
+.tpl{white-space:pre-wrap;font-family:ui-monospace,Menlo,monospace;font-size:13px;background:var(--panel);border:1px dashed var(--line);border-radius:10px;padding:14px;line-height:1.65}
+.week{border-left:4px solid var(--accent);padding-left:12px;margin:14px 0}
+.cl-w{border-color:var(--cloud)}
+.toc{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
+.toc a{font-size:13px;text-decoration:none;color:var(--ink);border:1px solid var(--line);background:var(--panel);border-radius:99px;padding:4px 11px}
+.req td:first-child{white-space:nowrap;font-weight:700}
+details{background:var(--panel);border:1px solid var(--line);border-radius:12px;margin:10px 0}
+details>summary{cursor:pointer;padding:14px 18px;font-weight:700;font-size:16px;list-style:none;display:flex;justify-content:space-between;gap:12px}
+details>summary::-webkit-details-marker{display:none}
+details>summary::after{content:"펼치기 ▾";font-size:12.5px;font-weight:600;color:var(--mute);white-space:nowrap}
+details[open]>summary::after{content:"접기 ▴"}
+details[open]>summary{border-bottom:1px solid var(--line)}
+.dbody{padding:4px 18px 16px}
+.dbody h3:first-child{margin-top:14px}
+footer{max-width:1080px;margin:0 auto;padding:0 16px 40px;color:var(--mute);font-size:12.5px}
+@media print{nav{display:none}.tab{display:block!important;page-break-before:always}}
+
+nav button[aria-selected="true"]{border-color:var(--cloud)}
+a{color:var(--link);text-decoration:underline;text-underline-offset:2px;font-weight:600}
+a:visited{color:var(--link)}
+.tag{border:1px solid currentColor}
+details>summary{color:var(--ink)}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>구름 왁싱, 속눈썹 (민경 원장 · 부평 동수역) 네이버 성장 전략</h1>
+  <p>왁싱 · 속눈썹 · 눈썹 | 플레이스: 구름 왁싱, 속눈썹 (ID 1072345050)</p>
+</header>
+<nav><div class="in" role="tablist">
+  <button role="tab" data-t="t1" aria-selected="true">전략 설명</button>
+  <button role="tab" data-t="t2" aria-selected="false">액션 플랜</button>
+</div></nav>
+<main>
+<section class="tab on" id="t1">
+
+<div class="callout cl"><strong>한 줄 진단</strong>리뷰 1,421건·평점 4.95로 부평 최상위권의 신뢰를 이미 갖고 있습니다. 그런데 <b>마케팅업체의 배포 원고와 업종 설정 때문에 그 자산이 노출로 이어지지 않습니다.</b> 업체 작업을 바로잡고, 플레이스 설정을 고치고, 이길 수 있는 동수역·남성 시장부터 잡습니다.</div>
+<div class="grid">
+  <div class="kpi"><b>1,421</b><span>방문자 리뷰 · 평점 4.95</span></div>
+  <div class="kpi"><b>20위</b><span>'부평 왁싱' (동수역 왁싱은 2위)</span></div>
+  <div class="kpi"><b>100위 밖</b><span>부평 속눈썹·눈썹문신·남자왁싱</span></div>
+  <div class="kpi"><b>16개+</b><span>대가 표기 없는 배포형 블로그 계정</span></div>
+</div>
+
+<h2 id="gp">문제점 · 원인 · 개선 방향</h2>
+<p class="mute">우선순위: <span class="tag t-bad">이번 주</span> · <span class="tag t-warn">이번 달</span> · <span class="tag t-a">90일</span>. '원인' 칸의 굵은 글씨는 네이버 요인입니다('네이버 작동 원리' 항목).</p>
+<div class="tw cl-t"><table>
+<tr><th>#</th><th>문제점</th><th>원인</th><th>개선 방향</th><th>우선</th></tr>
+<tr><td>1</td><td>배포형 블로그 원고가 최소 16개 계정에 올라가 있다(10월 초~, 표기 없음)</td><td>마케팅업체가 작업 계정에 원고를 뿌리는 방식으로 진행합니다. <b>C-Rank</b>: 업종을 가리지 않는 계정이라 노출이 안 됩니다. <b>유사문서</b>: 같은 틀이라 걸러집니다. <b>법</b>: 대가 표기가 없어 샵도 책임을 집니다.</td><td>업체에 근거와 함께 중단·삭제·전체 목록 제출을 요구하고, 일의 범위를 바꿉니다. <a href="#g0">근거·이유</a> · 보낼 문안: 액션 플랜의 '업체 피드백 문안'</td><td><span class="tag t-bad">이번 주</span></td></tr>
+<tr><td>2</td><td>방문자 리뷰에 의심 패턴이 있다(최근 10건 중 7건이 384~402자)</td><td>업체가 손님에게 문안을 줬거나 대신 써 줬을 가능성이 있습니다(확인 필요). <b>어뷰징</b>: 걸리면 삭제·노출 제한, 진짜 리뷰까지 의심받습니다.</td><td>업체에 서면 확인을 받습니다. 앞으로는 QR만 건네고 "느낀 대로" 쓰게 하며, 리뷰를 할인 조건으로 걸지 않습니다. <a href="#g0">자세히</a></td><td><span class="tag t-bad">이번 주</span></td></tr>
+<tr><td>3</td><td>속눈썹·눈썹문신 검색 목록에 아예 없다</td><td>업종이 '왁싱,제모' 하나뿐입니다. <b>적합도</b>: 업종이 다르면 다른 신호가 아무리 좋아도 목록에 들어가지 못합니다. 상호에 '속눈썹'이 있어도 소용없습니다.</td><td>스마트플레이스에서 업종을 추가할 수 있는지 확인합니다(대표 업종 '왁싱'은 유지). 그동안은 블로그 스마트블록으로 우회합니다. <a href="#g4">자세히</a> · 확인 방법: '업종 화면 캡처 방법'</td><td><span class="tag t-bad">이번 주</span></td></tr>
+<tr><td>4</td><td>리뷰는 1위권인데 '부평 왁싱' 20위다</td><td>8~9월 이전 직후라 부평 생활권의 <b>인기도</b> 신호(클릭·저장·예약)가 아직 적습니다. <b>거리</b>: 상위 샵은 부평역 상권에 몰려 있고 구름은 동수역 쪽입니다.</td><td>'동수역 왁싱'(2위)부터 1위로 올립니다. QR 카드로 저장·리뷰를 유도하고, 진짜 블로그 후기를 쌓습니다. <a href="#g1">진단</a> · <a href="#g3">키워드 맵</a></td><td><span class="tag t-warn">이번 달</span></td></tr>
+<tr><td>5</td><td>플레이스 정보에 빈칸과 엇나간 부분이 있다</td><td>메뉴에 가격 없는 홍보 문구 3개, 예약 상품 1개뿐("실제 가능 시간과 다를 수 있다" 문구 포함), 영업시간 누락 표시(데이터 값, 실제 누락인지 확인 필요), 키워드 5칸 중 속눈썹 3개(무효). <b>적합도·정보 충실도</b>: 네이버는 홍보 낱말을 반영하지 않고, 빈칸은 누락으로 표시합니다.</td><td>메뉴를 실제 시술과 가격으로, 예약 상품을 시술별로 나누고 문구를 지웁니다. 영업시간 칸이 빠졌는지 확인하고, 키워드를 동수역·남성으로 바꿉니다. <a href="#g4">체크리스트</a></td><td><span class="tag t-bad">이번 주</span></td></tr>
+<tr><td>6</td><td>공식 블로그가 없다</td><td>개설하지 않았습니다. 업체 원고가 그 자리를 대신하고 있습니다. <b>C-Rank·D.I.A.+</b>: 원장이 직접 쓰는 미용 블로그가 가장 오래 효과가 납니다.</td><td>'구름원장 정민경' 블로그를 열어 첫 90일은 주 4회(월 왁싱 · 수 남성 · 금 속눈썹 · 일 눈썹/원장) 씁니다. 처음 4주는 경쟁이 약한 롱테일부터 씁니다. <a href="#g5">운영 설계</a> · <a href="#g6">4주 발행표</a></td><td><span class="tag t-warn">이번 달</span></td></tr>
+<tr><td>7</td><td>진짜 강점이 노출되지 않는다</td><td>밤 12시 영업, 남성 왁싱, 강남 15년, 고양이 꼬미가 소개문 첫머리와 글에 없습니다. 경력 표기도 '15년'과 '강남 8년'이 섞여 있습니다(<b>신뢰</b>).</td><td>소개문 첫 문단에 넣고, 경력을 "경력 15년(강남 운영 8년)"으로 통일합니다. 블로그 시리즈(「밤 10시의 왁싱룸」, 「강남에서 따라온 손님」)로 씁니다. <a href="#g2">포지셔닝</a></td><td><span class="tag t-warn">이번 달</span></td></tr>
+<tr><td>8</td><td>이길 수 있는 틈새를 놓치고 있다</td><td>'부평 남자왁싱'·'임산부왁싱'은 상위 샵 리뷰가 적은데, 구름은 메뉴(남성·마미)가 있으면서도 100위 밖입니다.</td><td>남성 전용 카테고리 글 주 1편, 마미 왁싱 사례 글, 남성 예약 상품. <a href="#g3">키워드 맵</a></td><td><span class="tag t-a">90일</span></td></tr>
+</table></div>
+
+<h2>90일 목표</h2><div class="tw"><table><tr><th>지표</th><th>현재 → 90일</th></tr><tr><td>핵심 플레이스 순위</td><td>부평 왁싱 20위 → 10위 안 · 동수역 왁싱 2위 → 1위 · 부평 남자왁싱 100위 밖 → 20위 안</td></tr><tr><td>공식 블로그 발행</td><td>0 → 48편 (주 4회)</td></tr><tr><td>실고객 블로그 리뷰</td><td>배포 원고 0건 · 실고객·표기된 체험단 +30</td></tr><tr><td>플레이스 → 예약 전환</td><td>스마트플레이스 통계로 시작값을 잰 뒤 정합니다(데이터 요청 탭 참고)</td></tr></table></div><h2 id="sd">근거와 배경 — 자세히 보기</h2><p class="mute">항목을 누르면 펼쳐집니다.</p><details id="g0"><summary>마케팅업체 피드백 — 근거와 이유 (블로그·리뷰·플레이스)</summary>
+<div class="dbody">
+<p class="mute">2026-11-07 조사입니다. 네이버 블로그 검색('구름왁싱 부평', '부평 구름 왁싱 속눈썹', '동수로 36 구름 왁싱'), 플레이스 블로그 리뷰, 방문자 리뷰를 확인했습니다. 업체에 그대로 보낼 문안은 액션 플랜의 '업체 피드백 문안'에 있습니다.</p>
+
+<h3>① 블로그 — 배포형 원고, 최소 16개 계정</h3>
+<div class="tw cl-t"><table>
+<tr><th>확인한 사실</th><th>근거</th></tr>
+<tr><td>구름을 다룬 최근 블로그 글 중 <b>16개 계정이 배포형</b>입니다(검색 결과 앞쪽 30건 표본 기준이라 실제로는 더 있을 수 있습니다).</td><td>계정: usl0lkf1, eskwqw6ko3, v2dxtxmdy, d04tozej, uejzbfe7p, a7caqiq3, ut0j4rw1s, s5ht957c, u8i95w20n4, o6xbo7eq, zw54yfao4, fy41aps4o, jvfct60l, z8eu6oz1, lkatyog7p, i26osg7j, v3bt25ob, uaziamsb98, vy8edbvh 외. 대부분 의미 없는 영문·숫자 조합입니다.</td></tr>
+<tr><td>시작 시기는 <b>10월 초로 추정</b>되고, 최근 사흘에 10건이 몰렸습니다.</td><td>글 번호로 추정했습니다(가장 이른 표본 224440460789, 플레이스에 '3일 전'으로 뜬 글 224465082132).</td></tr>
+<tr><td>같은 계정이 <b>전국의 모든 업종</b>을 씁니다.</td><td>대전 전자담배, 압구정 미용실, 처인구 커튼, 이천 수면치과, 신경차단술, 진주 사주, 부천 도배, 동탄 영어학원, 춘천 펜션 등.</td></tr>
+<tr><td>제목과 도입부가 <b>같은 틀</b>입니다.</td><td>"부평 속눈썹연장 — 소요 시간 후기", "부평 속눈썹펌 — 진행 과정 정리", "부평 왁싱, 느낀 점 중심 짧은 감상", "부평 속눈썹펌, 내 눈매의 온전한 매력을 발견하는 시간". 다른 업종 글도 "○○ 중심 짧은 감상", "그래서 고른 ○○" 같은 같은 틀을 씁니다.</td></tr>
+<tr><td>확인한 글 모두 <b>대가 표기가 없습니다</b>.</td><td>협찬·제공·원고료·체험단 문구 0건.</td></tr>
+<tr><td><b>사실과 다른 묘사</b>가 있습니다.</td><td>"디자이너님", "쌍꺼풀 라인", "나무 소재 가구", "은은한 향기". 진짜 강점(강남 15년, 밤 12시, 남성, 꼬미)은 없습니다.</td></tr>
+<tr><td>주제가 <b>속눈썹에 쏠려</b> 있습니다.</td><td>표본 16건 중 속눈썹 12건, 왁싱 4건, 남성·눈썹 0건.</td></tr>
+</table></div>
+<h4>왜 문제인가 — 네이버 요인별</h4>
+<ul>
+<li><span class="tag t-a">요인: C-Rank</span> 네이버는 블로그마다 '이 주제에서 믿을 만한가'를 매깁니다. 점집·치과·커튼을 오가는 계정은 미용 신뢰도가 거의 없어 <b>검색에 뜨지 않습니다.</b> 돈을 내도 손님 눈에 닿지 않습니다.</li>
+<li><span class="tag t-a">요인: 유사문서 필터</span> 같은 틀의 제목과 도입부를 대량으로 찍으면 복제 글로 분류됩니다. 그 글이 걸러질 뿐 아니라 함께 걸린 업체명도 '작업 대상'으로 묶일 위험이 있습니다.</li>
+<li><span class="tag t-a">요인: D.I.A.+</span> 경험이 없는 일반론이라 경험 평가에서 점수가 나오지 않습니다. 매장과 다른 묘사는 실제 방문자가 읽으면 오히려 신뢰를 깎습니다.</li>
+<li><span class="tag t-a">요인: 플레이스 신뢰·어뷰징</span> 플레이스의 '블로그 리뷰' 수는 늘어 보입니다. 하지만 짧은 기간에 몰리고 출처가 작업 계정이면 인기도 계산에서 빠지거나 감점 요인이 될 수 있습니다. '부평 속눈썹펌'에 아무리 글을 쌓아도 <b>업종이 왁싱이라 플레이스 목록에는 들어가지 못합니다.</b> 블로그 원고로 순위를 올린다는 설명이 맞지 않는 이유입니다.</li>
+<li><span class="tag t-a">요인: 법</span> 대가를 준 후기에 표기가 없으면 표시광고법상 기만 광고가 될 수 있고, 광고주인 구름도 책임을 집니다.</li>
+</ul>
+
+<h3>② 방문자 리뷰 — 확인이 필요한 의심 신호</h3>
+<div class="callout warn"><strong>단정할 수는 없습니다. 하지만 업체에 반드시 물어야 할 패턴이 있습니다</strong>
+<ul>
+<li>지금 화면에 보이는 최근 글 리뷰 10건 중 <b>7건의 길이가 384~402자</b>로 거의 같습니다(실제 손님 리뷰는 보통 길이가 들쭉날쭉합니다).</li>
+<li>문장 구조가 비슷합니다. "처음이라 긴장했는데 → 원장님이 하나하나 → 특히 ○○가 제일 만족 → 매장도 깔끔 → 다음에도 방문할게요."</li>
+<li>사진은 8~14장씩으로 많습니다.</li>
+<li>내용 자체는 실제 방문 경험처럼 구체적인 것이 많습니다(꼬미, 강남 이전, 인그로운). 그래서 <b>실제 손님에게 문안을 건넸거나 '리뷰 써 주기'를 대행했을 가능성</b>을 업체에 확인해야 합니다.</li>
+</ul></div>
+<ul>
+<li><span class="tag t-a">요인: 신뢰·어뷰징</span> <b>왜 확인해야 하나:</b> 네이버는 문안을 나눠 준 리뷰나 대리 작성을 조작으로 보고 삭제하거나 노출을 제한합니다. 걸리면 1,421건 중 진짜 리뷰까지 의심받습니다. 구름의 가장 큰 자산은 진짜 리뷰입니다.</li>
+<li><span class="tag t-a">요인: 법</span> 리뷰를 써 주는 대가로 할인이나 서비스를 줬다면 표기 의무가 생깁니다. 써 주지 않은 문장을 손님 이름으로 올리면 소비자 기만이 됩니다.</li>
+<li><b>안전한 방식:</b> 시술 직후 QR을 건네고 "편하게 느낀 대로 써 주세요"라고만 말합니다. 문장을 대신 써 주지 않습니다. 리뷰를 할인 조건으로 걸지 않습니다.</li>
+</ul>
+
+<h3>③ 플레이스 정보 (업체가 손댔을 수 있는 부분)</h3>
+<ul>
+<li><b>메뉴의 홍보 문구 3개</b>("🏆15년경력 남녀 1:1맞춤케어🥇" 등, 가격 없음). <span class="tag t-a">요인: 적합도·정보 충실도</span> 메뉴는 시술명과 가격으로 검색 낱말을 맞추고 가격 비교에 답하는 자리입니다. 네이버는 홍보성 낱말을 반영하지 않습니다. 그 자리를 '남성 브라질리언'·'눈썹문신' 같은 실제 시술로 채워야 합니다.</li>
+<li><b>소개문:</b> 키워드는 잘 넣었습니다. 하지만 '동수역'·'밤 12시'·'남성'·'꼬미'가 없습니다. 소개문은 '15년 경력'인데 리뷰에는 '강남 8년 운영'이 나오므로, "경력 15년(강남 운영 8년)"처럼 일관되게 맞춥니다. <span class="tag t-a">요인: 신뢰</span> 정보가 서로 다르면 손님이 의심합니다.</li>
+<li><b>키워드 5칸 중 속눈썹 3개:</b> 업종이 왁싱이라 효과가 없습니다('키워드 맵'의 교체안 참고).</li>
+</ul>
+
+<h3>④ 업체에 요구할 것</h3>
+<ol>
+<li>배포형 블로그 원고 즉시 중단, 이미 올린 글 삭제, 전체 목록(주소·계정·날짜) 제출.</li>
+<li>방문자 리뷰와 관련해 무엇을 했는지(문안 제공, 리뷰 이벤트, 대리 작성, 계정 작업) 서면으로 답변.</li>
+<li>계속 맡긴다면 일의 범위를 바꿉니다. 원고 발행 대신 <b>플레이스 정보 정비 · 업종 추가 신청 · 예약 상품 분리 · 실제 체험단(표기 의무, 월 4~6건) · 격주 순위 리포트(같은 좌표 기준)</b>로 바꾸고, 성과 지표는 '발행 건수'가 아니라 '순위·예약 수'로 정합니다.</li>
+</ol>
+
+</div></details>
+<details id="g1"><summary>근거 데이터 — 왜 리뷰 1위권인데 20위인가</summary>
+<div class="dbody">
+<div class="grid">
+  <div class="kpi"><b>1,421</b><span>방문자 리뷰 · 평점 4.95 · 사진 837</span></div>
+  <div class="kpi"><b>20위</b><span>'부평 왁싱' (295곳 중)</span></div>
+  <div class="kpi"><b>2위</b><span>'동수역 왁싱' (1위 미소스튜디오, 리뷰 173)</span></div>
+  <div class="kpi"><b>100위 밖</b><span>부평 속눈썹펌 · 속눈썹연장 · 눈썹문신 · 남자왁싱 · 눈썹왁싱 · 임산부왁싱</span></div>
+</div>
+<h3>왜 리뷰 1위권인데 20위인가</h3>
+<ol>
+<li><b>이전한 지 얼마 안 됐습니다.</b> 후기를 보면 강남에서 8년 운영하다 2026년 8~9월에 부평으로 옮겼습니다. 리뷰 1,421건 대부분이 강남 시절 것이고, 부평 생활권 안에서 쌓인 클릭·저장·예약 같은 인기도 신호는 아직 적습니다.</li>
+<li><b>업종이 '왁싱,제모' 하나뿐입니다.</b> 상호에 '속눈썹'이 들어 있어도 속눈썹 업종 검색에는 나오지 않습니다. 매출의 큰 축인 속눈썹과 눈썹문신이 플레이스에서 보이지 않습니다.</li>
+<li><b>블로그 리뷰가 질에서 밀립니다.</b> 1~3위 샵의 블로그 리뷰는 231~1,043건이고, 구름은 329건입니다. 그런데 최근 글은 걸러지는 배포 원고입니다.</li>
+<li><b>위치.</b> '부평 왁싱'의 상위 샵은 대부분 부평역 지하상가와 문화의거리 쪽(600~800m)에 몰려 있습니다. 구름은 동수역 쪽이라 거리 점수에서 불리합니다. 그래서 <b>동수역·해링턴플레이스 생활권을 먼저 장악</b>하는 것이 맞습니다.</li>
+</ol>
+<h3>강점</h3>
+<ul>
+<li><b>리뷰 키워드가 '실력'입니다.</b> 꼼꼼해요 826, 손이 빨라요 604. 왁싱에서 가장 중요한 "덜 아프고 빨리 끝난다"는 신호가 이미 있습니다.</li>
+<li><b>강남 단골이 따라왔습니다.</b> "8년째 다니는 찐단골", "강남에서 부평까지 따라왔다". 강남 15년 경력을 증명하는 가장 강한 소재입니다.</li>
+<li><b>매일 10시~24시, 연중무휴.</b> 퇴근 후 직장인, 특히 남성 고객에게 결정적인 차별점입니다. 상위 경쟁 샵 대부분은 21~22시에 닫습니다.</li>
+<li><b>고양이 '꼬미'와 강아지.</b> 리뷰에 계속 나옵니다. 기억에 남는 브랜드 장치입니다.</li>
+<li><b>왁싱·속눈썹·눈썹을 한 번에.</b> "우리 동네에도 왁싱이랑 속눈썹 동시에 가능한 곳이 생겼다"는 후기가 있습니다.</li>
+<li><b>남성 메뉴와 산모 메뉴가 이미 있습니다.</b> 남자 브라질리언, 남자 눈썹문신(배너도 있음), 마미 올누드(산모 전용 릴렉싱케어).</li>
+<li><b>새 아파트 상가 1층.</b> '부평역 해링턴플레이스'가 자동완성에 뜰 만큼 검색되는 단지입니다. 입주민이 가장 가까운 잠재 고객입니다.</li>
+</ul>
+
+</div></details>
+<details id="g2"><summary>포지셔닝 — "강남 15년, 부평 동수역에서 밤 12시까지"</summary>
+<div class="dbody">
+<div class="callout cl"><strong>한 줄 정의</strong>"강남에서 15년 다듬은 손으로, 원장이 직접 빠르고 꼼꼼하게. 밤 12시까지 여는 부평 동수역 왁싱·속눈썹."</div>
+<div class="grid">
+  <div class="card"><h4 style="margin-top:0">① 강남 출신 실력</h4>"강남에서 부평까지 따라온 단골"을 이야기의 중심에 둡니다. 경력 숫자보다 <b>따라온 고객</b>이 더 강한 증거입니다.</div>
+  <div class="card"><h4 style="margin-top:0">② 빠르고 덜 아프게</h4>리뷰 2·3위 키워드를 시술 과정 설명으로 바꿉니다. 브라질리언 소요 시간, 통증을 줄이는 순서, 인그로운헤어 처리 같은 것들입니다.</div>
+  <div class="card"><h4 style="margin-top:0">③ 퇴근 후 밤 시술</h4>직장인과 남성 고객의 장벽을 없앱니다. 블로그 제목과 플레이스 소식에 '밤 12시까지'를 반복해 씁니다.</div>
+  <div class="card"><h4 style="margin-top:0">④ 원장 1인 · 편한 샵</h4>예약제 1:1, 꼬미가 있는 아늑한 공간. 처음 받는 사람과 남성 고객이 느끼는 민망함을 줄여 줍니다.</div>
+</div>
+<p><b>타깃 우선순위:</b> ① 동수역·해링턴플레이스 반경 1km 2030 여성(속눈썹+왁싱 묶음) → ② 퇴근 후 남성(브라질리언·눈썹 정리·눈썹문신) → ③ 산모·임산부 → ④ 서울에서 오는 강남 단골.</p>
+
+</div></details>
+<details id="g3"><summary>키워드 맵</summary>
+<div class="dbody">
+<div class="tw cl-t"><table>
+<tr><th>등급</th><th>키워드</th><th>현재</th><th>지면</th><th>할 일</th></tr>
+<tr><td><span class="tag t-ok">먼저 1위</span></td><td><b>동수역 왁싱</b> · 동수역 속눈썹펌 · 동수역 브라질리언</td><td>2위 / – / –</td><td><span class="tag t-a">플레이스</span> <span class="tag t-c">블로그</span></td><td>모든 글의 위치 안내에 '동수역 2번 출구 도보 5분'을 넣고 동수역 제목 글을 매달 2편 씁니다.</td></tr>
+<tr><td><span class="tag t-ok">틈새</span></td><td><b>부평 남자왁싱</b> · 부평 남자 제모 · 부평 남자 브라질리언 · 부평 남자 눈썹 반영구</td><td>100위 밖</td><td><span class="tag t-c">블로그</span> → <span class="tag t-a">플레이스</span></td><td>남성 전용 카테고리를 만들어 주 1편 씁니다. 상위 경쟁 샵의 리뷰가 30~330건이라 진입이 쉽습니다.</td></tr>
+<tr><td><span class="tag t-ok">틈새</span></td><td>부평 임산부왁싱 · 산모왁싱 · 출산 전 브라질리언</td><td>100위 밖</td><td><span class="tag t-c">블로그</span></td><td>마미 올누드 메뉴를 사례 글로 씁니다(안전 수칙, 자세, 소요 시간).</td></tr>
+<tr><td><span class="tag t-warn">본 경기</span></td><td>부평 왁싱 · 부평 왁싱샵 · 부평 브라질리언왁싱 · 부평역 왁싱</td><td>20 / 20 / 31 / 44위</td><td><span class="tag t-a">플레이스</span></td><td>부평 생활권의 인기도 신호(저장·예약·실리뷰)를 쌓습니다. 블로그는 이를 받쳐 줍니다.</td></tr>
+<tr><td><span class="tag t-warn">우회</span></td><td>부평 속눈썹펌 잘하는 곳 · 부평 속눈썹연장 · 부평 속눈썹샵 · 부평 속눈썹 추천</td><td>100위 밖</td><td><span class="tag t-c">블로그</span></td><td>플레이스 목록에 안 나오니 블로그 스마트블록으로 받습니다. '잘하는 곳'·'추천'은 자동완성에 뜨는 실수요입니다.</td></tr>
+<tr><td><span class="tag t-warn">우회</span></td><td>부평 눈썹문신 가격 · 부평 눈썹 반영구 · 부평 눈썹왁싱 · 부평 눈썹 정리</td><td>100위 밖</td><td><span class="tag t-c">블로그</span></td><td>가격 공개 글과 남성 눈썹 사례를 씁니다.</td></tr>
+<tr><td><span class="tag t-a">정보형</span></td><td>브라질리언왁싱 주의사항 · 종류 · 디자인 · 남자브라질리언왁싱 · 인그로운헤어 · 속눈썹펌 주기 · 속눈썹펌 세수</td><td>–</td><td><span class="tag t-c">블로그</span></td><td>전국 검색량을 받는 Q&amp;A형 글입니다. C-Rank를 쌓고 AI 브리핑 인용을 노립니다. 끝에 '부평 동수역 구름'으로 연결합니다.</td></tr>
+<tr><td><span class="tag t-a">생활권</span></td><td>부평역 해링턴플레이스 · 해링턴 상가 · 부평동 · 동수동 · 십정동</td><td>–</td><td><span class="tag t-c">블로그</span></td><td>입주민 혜택과 주차 안내 글을 씁니다.</td></tr>
+</table></div>
+<h4>플레이스 키워드 5개 교체안</h4>
+<div class="tw cl-t"><table>
+<tr><th>현재</th><th>제안</th><th>이유</th></tr>
+<tr><td>부평왁싱 · 부평속눈썹 · 부평속눈썹펌 · 부평속눈썹연장 · 부평브라질리언왁싱</td><td><b>부평왁싱 · 동수역왁싱 · 부평남자왁싱 · 부평브라질리언왁싱 · 부평속눈썹펌</b></td><td>업종 때문에 속눈썹 키워드 세 개를 모두 넣어도 효과가 없습니다. 속눈썹은 하나만 남기고, 이길 수 있는 동수역과 남성으로 바꿉니다.</td></tr>
+</table></div>
+
+</div></details>
+<details id="np"><summary>네이버 작동 원리 — 피드백의 근거가 되는 요인</summary>
+<div class="dbody">
+<h2>네이버가 무엇을 보고 순서를 정하나</h2>
+<p class="lead">이 문서의 모든 피드백은 아래 요인 중 하나를 움직이려는 것입니다. 각 피드백 옆의 <span class="tag t-a">요인</span> 표시가 어느 요인인지 가리킵니다.</p>
+<p class="mute">표시 구분: <span class="tag t-ok">공개</span> 네이버 고객센터·공식 블로그가 밝힌 원칙 · <span class="tag t-warn">관찰</span> 공식 발표는 없지만 순위 실측과 업계에서 반복 확인되는 신호. 네이버는 가중치(어느 것이 몇 %인지)를 공개하지 않습니다.</p>
+
+<h3>1. 네이버 플레이스 · 네이버 지도 (같은 데이터, 같은 순위)</h3>
+<p>'의왕 눈썹문신'처럼 <b>지역 + 업종</b>으로 검색하면 지도 목록이 뜹니다. 지도 앱의 검색 결과와 통합검색의 플레이스 영역은 같은 업체 데이터를 씁니다.</p>
+<div class="tw"><table>
+<tr><th>요인</th><th>무엇을 보나</th><th>왜 그런가</th><th>우리 샵에 의미</th></tr>
+<tr><td><b>적합도</b> <span class="tag t-ok">공개</span></td><td>검색어의 낱말이 <b>업체명 · 업종 · 대표 키워드 · 메뉴명</b>에 들어 있는지. 네이버는 홍보성·주관적 낱말("최고", "15년경력")은 반영하지 않고 지역·업종처럼 객관적인 낱말만 맞춘다고 밝혔습니다.</td><td>검색한 사람이 찾는 '그 업종'의 가게를 보여 주는 것이 1차 목표라서, 업종이 다르면 목록에 아예 넣지 않습니다.</td><td>구름은 업종이 '왁싱'이라 속눈썹 검색에서 빠집니다. 씨엘로는 이름에 '눈썹문신'이 없어 떠도 눌리지 않습니다. 메뉴명에 반영구가 없어 적합도 재료도 부족합니다.</td></tr>
+<tr><td><b>인기도</b> <span class="tag t-ok">공개</span> / 세부 <span class="tag t-warn">관찰</span></td><td>방문자 리뷰(특히 최근 것), 블로그 리뷰, 저장, 클릭, 예약, 전화, 길찾기, 머문 시간.</td><td>실제 손님이 많이 찾고 만족한 곳일수록 다음 사람에게도 맞을 확률이 높다고 보기 때문입니다.</td><td><b>클릭률이 핵심입니다.</b> 1위에 떠도 이름과 사진이 맞지 않아 안 눌리면 클릭·저장 신호가 쌓이지 않습니다. 그러면 1위를 오래 지키기 어렵습니다(씨엘로의 '의왕 반영구').</td></tr>
+<tr><td><b>거리·지역</b> <span class="tag t-ok">공개</span></td><td>검색한 사람의 위치, 또는 검색어 속 지역(역·동)과 매장 사이의 거리.</td><td>지역 검색은 '가까운 곳'을 원하는 경우가 대부분입니다.</td><td>구름이 '부평 왁싱'에서 밀리고 '동수역 왁싱'에서 2위인 이유입니다. 이길 수 있는 생활권 낱말부터 잡습니다.</td></tr>
+<tr><td><b>정보 충실도</b> <span class="tag t-warn">관찰</span></td><td>메뉴·가격, 사진 수와 최근성, 영업시간, 소개문, 찾아오는 길, 소식, 예약 연결.</td><td>정보가 많으면 손님이 더 오래 보고 예약까지 가서 인기도 신호가 따라옵니다. 빈칸은 '누락'으로 표시됩니다.</td><td>구름은 영업시간 누락 표시가 잡혀 있습니다. 씨엘로는 뷰티 메뉴가 없습니다.</td></tr>
+<tr><td><b>신뢰·어뷰징</b> <span class="tag t-warn">관찰</span></td><td>짧은 기간에 몰린 리뷰, 비슷한 문장, 작업 계정, 대가 미표기, 정보와 실물의 불일치.</td><td>조작을 거르지 않으면 순위 자체가 쓸모없어지므로, 걸리면 그 리뷰를 빼고 셉니다. 심하면 노출을 제한합니다.</td><td>구름의 배포형 블로그 후기와 비슷한 길이의 리뷰는 효과가 없을 뿐 아니라 감점 위험이 있습니다.</td></tr>
+</table></div>
+
+<h3>2. 네이버 블로그 검색 (통합검색 '인기글·스마트블록')</h3>
+<div class="tw"><table>
+<tr><th>요인</th><th>무엇을 보나</th><th>왜 그런가</th><th>우리 샵에 의미</th></tr>
+<tr><td><b>C-Rank</b> <span class="tag t-ok">공개</span></td><td>블로그 전체가 <b>한 주제</b>를 꾸준히, 깊게 다루는지. 그 주제에서 반응(읽힘·공감·댓글·이웃)이 쌓였는지.</td><td>'이 블로그는 미용에 대해 믿을 만하다'는 출처 신뢰도를 매겨 두고 새 글에도 적용합니다.</td><td>점집·치과·커튼 글이 섞인 배포 계정은 미용 신뢰도가 0에 가깝습니다. 원장 블로그는 미용만 써야 쌓입니다.</td></tr>
+<tr><td><b>D.I.A.+</b> <span class="tag t-ok">공개</span></td><td>글이 <b>직접 겪은 경험</b>과 구체적인 정보(시간·과정·사진·고민)를 담았는지. 검색 의도에 답하는지.</td><td>같은 주제라도 실제 경험이 있는 글이 독자에게 더 쓸모 있기 때문입니다.</td><td>원장이 시술 과정을 직접 설명하는 글이 가장 유리합니다. 매장에 없는 '나무 가구'가 나오는 원고는 반대입니다.</td></tr>
+<tr><td><b>유사문서·어뷰징 필터</b> <span class="tag t-ok">공개</span></td><td>같은 틀의 제목과 도입부 반복, 키워드 억지 반복, 퍼온 사진, 짧은 기간 대량 발행.</td><td>복제 글이 검색을 채우는 것을 막으려는 것입니다.</td><td>"○○ 중심 짧은 감상", "— 전체 흐름 이야기" 같은 틀은 걸러집니다.</td></tr>
+<tr><td><b>스마트블록</b> <span class="tag t-warn">관찰</span></td><td>검색어를 세부 의도(가격, 잘하는 곳, 후기, 주의사항)로 나눠 블록마다 맞는 글을 보여 줍니다.</td><td>한 검색어 안의 서로 다른 궁금증에 각각 답하려는 것입니다.</td><td>"부평 속눈썹펌 잘하는 곳", "의왕 눈썹문신 가격"처럼 의도별 글을 하나씩 쓰면 블록마다 노릴 수 있습니다.</td></tr>
+</table></div>
+
+<h3>3. 리뷰 (방문자 리뷰 · 블로그 리뷰)</h3>
+<div class="tw"><table>
+<tr><th>요인</th><th>무엇을 보나</th><th>왜 그런가</th><th>우리 샵에 의미</th></tr>
+<tr><td><b>인증된 방문</b> <span class="tag t-ok">공개</span></td><td>영수증이나 네이버 예약으로 방문이 확인된 리뷰.</td><td>방문하지 않은 리뷰를 막으려는 장치입니다.</td><td>현장 결제 손님도 영수증 리뷰를 남길 수 있게 QR을 건넵니다.</td></tr>
+<tr><td><b>리뷰 글 내용</b> <span class="tag t-warn">관찰</span></td><td>리뷰에 쓰인 낱말(시술명·특징)이 키워드 칩, 리뷰 검색, AI 브리핑 요약의 재료가 됩니다.</td><td>사람들이 실제로 말한 내용으로 가게를 요약하려는 것입니다.</td><td>씨엘로 리뷰 칩이 '아트가 멋져요' 같은 네일 언어로 채워진 이유입니다. 뷰티 손님에게 시술명을 넣어 써 달라고 부탁합니다.</td></tr>
+<tr><td><b>최근성·꾸준함</b> <span class="tag t-warn">관찰</span></td><td>최근 리뷰가 꾸준히 들어오는지.</td><td>지금도 영업이 잘되는 곳인지를 보려는 것입니다.</td><td>한 번에 몰아서 받는 것보다 매주 조금씩이 낫습니다. 몰리면 조작으로 의심받습니다.</td></tr>
+<tr><td><b>사장님 답글</b> <span class="tag t-warn">관찰</span></td><td>답글 비율과 내용.</td><td>손님에게 신뢰를 주고, 답글의 낱말도 페이지 내용이 됩니다.</td><td>답글에 시술명과 지역을 자연스럽게 한 번 넣습니다.</td></tr>
+<tr><td><b>법</b></td><td>대가(무료 시술·할인·원고료)를 받은 리뷰는 그 사실을 첫머리에 밝혀야 합니다.</td><td>공정위 추천·보증 심사지침과 표시광고법 때문입니다. 위반하면 광고주(샵)도 책임을 집니다.</td><td>마케팅업체가 진행한 글도 샵의 광고로 봅니다.</td></tr>
+</table></div>
+
+<h3>4. AI 브리핑 (검색 상단 요약)</h3>
+<p><span class="tag t-warn">관찰</span> 검색 결과 맨 위에 AI가 요약을 띄우고 출처로 블로그·리뷰·플레이스 정보를 인용합니다. <b>질문에 첫 문단에서 바로 답하는 글</b>, 숫자(가격·소요 시간·주기)가 분명한 글, 플레이스 메뉴·소개문처럼 정리된 정보가 인용되기 쉽습니다. 그래서 블로그 템플릿 ①번이 '첫 3줄에 답'이고, 메뉴에 가격을 글자로 넣으라는 것입니다.</p>
+</div></details>
+<details id="law"><summary>법규·정책 — 반드시 지킬 것</summary>
+<div class="dbody">
+<div class="tw"><table>
+<tr><th>주제</th><th>지킬 것</th></tr>
+<tr><td>대가 표기</td><td>서비스·할인·원고료를 준 후기는 <b>제목이나 본문 첫머리</b>에 표기합니다(공정위 추천·보증 심사지침). 맨 아래에만 적으면 안 됩니다. 표기하지 않은 대량 원고는 쓰지 않습니다.</td></tr>
+<tr><td>반영구(눈썹문신)</td><td>문신사법은 2027-10-29에 시행됩니다. 그 전까지는 광고 표현을 보수적으로 씁니다. '치료', '부작용 없음', '영구', '100%', '의학적 효과' 같은 표현을 쓰지 않습니다. 의료 시술처럼 보이는 연출(가운, 의료 용어)도 피합니다. 법 시행 일정과 면허 준비 과정은 오히려 신뢰 콘텐츠가 될 수 있습니다(원장님 동의 후).</td></tr>
+<tr><td>왁싱</td><td>'영구 제모', '피부질환 개선', '인그로운 치료' 같은 단정을 쓰지 않습니다. '관리', '정리', '도움' 정도로 씁니다.</td></tr>
+<tr><td>리뷰 정책</td><td>리뷰 작성을 할인 조건으로 걸지 않습니다. 가짜 리뷰나 지인 대량 리뷰를 쓰지 않습니다. 부정 리뷰는 지우려 하지 말고 정중하게 답글을 답니다.</td></tr>
+<tr><td>개인정보</td><td>고객 이름, 얼굴, 연락처는 동의 없이 쓰지 않습니다. 예약 화면 캡처는 모자이크합니다.</td></tr>
+<tr><td>블로그 운영</td><td>블로그 지수를 사거나 '최적화 블로그'를 매입하지 않습니다. 같은 글을 두 지점에 복붙하지 않습니다. 글을 대량으로 지우거나 고치지 않습니다. 미용 외 주제를 섞지 않습니다.</td></tr>
+</table></div>
+
+</div></details>
+
+</section>
+<section class="tab" id="t2">
+<h2 id="gx">실행 순서</h2>
+<div class="grid">
+  <div class="card"><h4 style="margin-top:0"><span class="tag t-bad">이번 주</span></h4><ul class="check">
+    <li>업체에 피드백 문안 보내기('업체 피드백 문안')</li>
+    <li>업종 추가 가능 여부 캡처('업종 화면 캡처 방법')</li>
+    <li>메뉴 홍보 문구를 실제 시술로 교체</li>
+    <li>예약 상품 시술별로 분리, 안내 문구 삭제</li>
+    <li>영업시간 빈칸 확인, 키워드 5칸 교체</li>
+    <li>통계 캡처('통계 캡처 방법')</li></ul></div>
+  <div class="card"><h4 style="margin-top:0"><span class="tag t-warn">2~4주</span></h4><ul class="check">
+    <li>원장 블로그 개설, 이전 공지 글 고정</li>
+    <li>주 4회 발행(동수역·남성·롱테일 위주)</li>
+    <li>QR 카드(리뷰+저장), 입주민·남성 쿠폰</li>
+    <li>소개문 첫 문단과 경력 표기 정리</li>
+    <li>업체 회신 확인, 계약 범위 결정</li></ul></div>
+  <div class="card"><h4 style="margin-top:0"><span class="tag t-a">2~3개월</span></h4><ul class="check">
+    <li>'부평 왁싱'·'부평 속눈썹펌' 제목 글 확대</li>
+    <li>실고객 블로그 후기 월 4~6건(표기)</li>
+    <li>격주 순위 재측정</li>
+    <li>목표: 동수역 왁싱 1위, 부평 왁싱 10위 안, 부평 남자왁싱 20위 안</li></ul></div>
+</div>
+
+<h2 id="ad">실행 상세</h2><p class="mute">항목을 누르면 펼쳐집니다.</p><details id="x1"><summary>A. 구름왁싱 → 마케팅업체 피드백 (복사해서 보내기)</summary>
+<div class="dbody">
+<p>근거와 이유는 전략 설명의 '마케팅업체 피드백 — 근거와 이유'에 자세히 적었습니다. 아래는 업체에 보낼 요약본입니다.</p>
+<p class="mute">2026-11-07에 확인한 근거를 담았습니다. 카카오톡이나 메일에 그대로 붙여 넣으세요. 업체 이름과 계약일만 채우면 됩니다.</p>
+<p><button type="button" onclick="cp('fb')" style="font:inherit;font-weight:700;border:1px solid var(--cloud);background:var(--cloud-soft);color:var(--ink);border-radius:8px;padding:6px 14px;cursor:pointer">피드백 전문 복사</button> <span id="fb-ok" class="mute"></span></p>
+<div class="tpl" id="fb">안녕하세요, 구름 왁싱, 속눈썹(부평 동수역) 정민경입니다.
+진행 중인 블로그·리뷰 작업을 확인해 보니 문제가 있어 아래와 같이 요청드립니다. (2026-11-07 확인)
+
+■ 1. 블로그 후기
+[확인한 내용]
+- 저희 샵을 다룬 블로그 글 중 최소 16개 계정이 같은 방식의 원고입니다(10월 초부터, 최근 사흘 동안 10건).
+  예: usl0lkf1, eskwqw6ko3, v2dxtxmdy, d04tozej, uejzbfe7p, a7caqiq3, ut0j4rw1s, s5ht957c, u8i95w20n4, o6xbo7eq, zw54yfao4, fy41aps4o, jvfct60l, z8eu6oz1, lkatyog7p, i26osg7j, v3bt25ob 등
+- 모든 글에 협찬·제공·원고료 표기가 없습니다.
+- 같은 계정이 전자담배, 커튼, 치과, 사주, 도배, 학원 등 업종을 가리지 않고 글을 씁니다.
+- 제목과 도입부가 같은 틀입니다("부평 속눈썹펌 — 진행 과정 정리", "부평 왁싱, 느낀 점 중심 짧은 감상" 등).
+- 저희 매장과 다른 내용이 있습니다("디자이너님", "쌍꺼풀 라인", "나무 가구", "은은한 향기"). 원장 1인 샵입니다.
+- 실제 강점(강남 15년, 밤 12시 영업, 남성 왁싱, 매장 고양이)은 하나도 없고, 속눈썹에만 몰려 있습니다.
+
+[왜 문제인지]
+- 네이버는 한 주제를 꾸준히 쓰는 블로그만 신뢰하므로(C-Rank), 여러 업종을 오가는 계정의 글은 검색에 거의 노출되지 않습니다.
+- 같은 틀의 글은 유사문서로 걸러지고, 짧은 기간에 몰린 후기는 플레이스 인기도 계산에서 빠지거나 감점될 수 있습니다.
+- 저희 플레이스 업종은 '왁싱,제모'라서, '부평 속눈썹펌' 원고를 아무리 올려도 속눈썹 플레이스 목록에는 들어가지 못합니다.
+- 대가 표기가 없는 후기는 표시광고법 위반 소지가 있고, 광고주인 저희도 책임을 집니다.
+
+■ 2. 방문자 리뷰
+최근 리뷰 여러 건이 380~400자 정도로 길이와 문장 구조가 비슷합니다.
+손님께 리뷰 문안을 드렸는지, 리뷰 이벤트나 대리 작성, 계정 작업을 진행했는지 서면으로 알려 주세요.
+네이버는 문안을 나눠 주거나 대신 쓴 리뷰를 조작으로 보고 삭제하거나 노출을 제한합니다. 그러면 진짜 리뷰까지 의심받게 됩니다.
+그런 작업이 있었다면 즉시 중단해 주세요.
+
+■ 3. 플레이스 정보
+- 메뉴의 홍보 문구 3개(가격 없음)는 검색에 반영되지 않습니다. 실제 시술명과 가격으로 바꿔야 합니다.
+- 키워드 5칸 중 속눈썹 3개는 업종이 왁싱이라 효과가 없습니다. 동수역·남성 키워드로 바꾸겠습니다.
+
+■ 요청 사항
+1. 배포형 블로그 원고를 즉시 중단하고, 이미 올린 글을 삭제한 뒤 처리 결과를 주소와 함께 알려 주세요.
+2. 지금까지 진행한 전체 목록(블로그 주소·계정·날짜, 리뷰 관련 작업 내역)과 계약 내용을 보내 주세요.
+3. 계속 진행한다면 일의 범위를 아래처럼 바꿔 주셔야 합니다.
+   - 원고 발행 대신: 플레이스 정보 정비, 업종 추가 신청 지원, 예약 상품 정리
+   - 체험단은 실제 방문 고객만, 대가 표기는 제목 또는 첫머리에, 월 4~6건 이하로 분산
+   - 작성 계정은 최근 3개월 글의 30% 이상이 미용인 개인 블로그, 발행 전에 저희가 사실 확인
+   - 격주로 순위 리포트(같은 위치 기준)와 예약 수 변화 보고
+   - 성과 기준은 발행 건수가 아니라 순위와 예약 수
+
+이 조건이 어렵다면 계약을 정리하겠습니다. 확인 후 회신 부탁드립니다. 감사합니다.</div>
+
+</div></details>
+<details id="g4"><summary>플레이스 최적화 체크리스트</summary>
+<div class="dbody">
+<ul class="check">
+<li><b>업종 추가 확인 (가장 큰 레버).</b> 스마트플레이스 업종 설정에서 '속눈썹증모,연장'이나 '미용문신,반영구화장'을 추가할 수 있는지 봅니다. 씨엘로 플레이스는 업종코드가 7개로 잡혀 네일과 속눈썹·반영구 검색에 모두 노출되고 있습니다. 대표 업종 '왁싱,제모'는 유지합니다(리뷰가 가장 강한 곳). 업종 자체를 속눈썹으로 바꾸는 것은 권하지 않습니다.</li>
+<li><b>메뉴 정리.</b> 가격 없는 홍보 문구 3개("🏆15년경력 남녀 1:1맞춤케어🥇" 등)를 내리고 실제 시술로 채웁니다: 여성 올누드 55,000 · 남성 올누드 90,000 · 마미 올누드 55,000 · 속눈썹펌 45,000 · 블랙/초코틴팅펌 55,000 · 플랫 연장 55,000 · 남자 자연눈썹 200,000 · 여자 자연눈썹 180,000 · 눈썹왁싱 25,000/35,000 · 3·5회권. 홍보 문구는 소개문으로 옮깁니다.</li>
+<li><b>'영업시간 누락' 표시 확인.</b> 플레이스 데이터에 <code>isBizHourMissing: true</code>가 잡혀 있습니다. 다만 씨엘로도 같은 값이라 실제 누락이 아닐 수 있습니다. 스마트플레이스 영업시간 화면에서 휴게시간·공휴일 칸이 비어 있는지만 확인합니다.</li>
+<li><b>소개문 조정.</b> 지금도 잘 써 있습니다. 첫 문단에 '동수역'·'밤 12시까지'·'남성 왁싱'·'강남 15년'을 넣고, 장점 세 가지를 맨 위로 올립니다.</li>
+<li><b>찾아오는 길.</b> '부평역 2번 출구 10분, 동수역 2번 출구 5분'에 해링턴플레이스 상가2동 1층 위치, 주차장 진입 방법을 더합니다.</li>
+<li><b>대표 사진 10장.</b> 1장 원장 시술 장면, 2장 매장 로비(밝음), 3장 꼬미, 4장 속눈썹 결과, 5장 눈썹 결과, 6장 왁싱룸(위생), 7장 샤워실, 8장 외관·간판, 9장 가격표, 10장 남성 고객용 안내. 매장사진 폴더(로비·큰방·작은방·샤워실·카운터)를 활용합니다.</li>
+<li><b>예약 상품 나누기.</b> 지금은 '정민경 원장 예약하기' 하나뿐입니다. 시술별로 나눕니다: '브라질리언 왁싱(여성)', '남성 왁싱 · 밤 12시까지', '속눈썹펌', '눈썹문신 상담'. 상품명이 검색 관련성을 높이고, 손님은 바로 고를 수 있습니다. 상품 안내의 "보이는 시간과 실제 가능 시간이 다를 수 있다"는 문구는 예약을 망설이게 합니다. 예약 가능 시간을 실제와 맞추고 이 문구는 지웁니다.</li>
+<li><b>소식 주 1~2회.</b> 이번 주 남은 밤 시간대, 이벤트, 블로그 글 요약.</li>
+<li><b>쿠폰.</b> 지금 1개가 있습니다. 해링턴플레이스 입주민 쿠폰(첫 방문 10%)과 남성 첫 방문 쿠폰을 더합니다.</li>
+<li><b>저장·알림받기 유도.</b> 매장 안 QR 카드에 '네이버 저장'을 함께 넣습니다. 저장 수는 인기도 신호입니다.</li>
+<li><b>리뷰 답글.</b> 지금처럼 100%를 유지하고, 답글에 '동수역'이나 시술명을 자연스럽게 한 번 넣습니다.</li>
+</ul>
+
+</div></details>
+<details id="g5"><summary>블로그 운영 설계</summary>
+<div class="dbody">
+<h3>계정 — 새로 만들기</h3>
+<ul>
+<li>블로그명은 '구름왁싱 | 부평 동수역 왁싱·속눈썹·눈썹', 닉네임은 '구름원장 정민경', 주제는 '패션·미용'으로 정하고 스마트플레이스에 연결합니다.</li>
+<li>새 블로그는 처음 1~2개월 동안 노출이 약합니다. 그래서 <b>처음 4주는 경쟁이 약한 롱테일·동수역·남성 키워드</b>로 지수를 쌓고, 그다음에 '부평 왁싱' 같은 큰 키워드로 갑니다.</li>
+<li>카테고리 7개: <code>브라질리언·바디왁싱</code> · <code>남성 왁싱·눈썹</code> · <code>속눈썹펌·연장</code> · <code>눈썹(왁싱·문신)</code> · <code>왁싱 Q&amp;A</code> · <code>원장 이야기·꼬미</code> · <code>공지·오시는 길</code>.</li>
+<li>인스타그램 @9room_waxinglash와 역할을 나눕니다. 인스타는 결과 사진과 꼬미, 블로그는 과정과 이유와 Q&amp;A를 맡습니다. 인스타 프로필 링크는 블로그의 '처음 오시는 분 안내' 글로 연결합니다.</li>
+</ul>
+<h3>업로드 주기 — 첫 90일 주 4회 (월·수·금·일 저녁 8~9시), 이후 주 3회</h3>
+<div class="tw cl-t"><table>
+<tr><th>요일</th><th>필러</th><th>비중</th><th>내용</th></tr>
+<tr><td>월</td><td>왁싱 사례·Q&amp;A</td><td>30%</td><td>브라질리언, 바디, 인그로운, 첫 방문. 전국 정보형과 부평 지역형을 번갈아 씁니다.</td></tr>
+<tr><td>수</td><td>남성</td><td>25%</td><td>남자 브라질리언, 눈썹 정리, 남자 눈썹문신, 퇴근 후 밤 시술. 이번 분기의 성장 엔진입니다.</td></tr>
+<tr><td>금</td><td>속눈썹</td><td>25%</td><td>펌·연장 사례. 처진 속눈썹, 렌즈 착용자, 연말·웨딩.</td></tr>
+<tr><td>일</td><td>눈썹 또는 원장·꼬미·공지</td><td>20%</td><td>눈썹왁싱·문신 사례, 강남 단골 이야기, 입주민 안내.</td></tr>
+</table></div>
+<p class="mute">발행 시각을 저녁으로 잡은 이유: 구름의 핵심 고객(직장인·남성)이 예약을 알아보는 시간대이고, 밤 12시까지 영업하므로 "오늘 밤 예약"으로 바로 이어질 수 있습니다.</p>
+<h3>시리즈 아이디어</h3>
+<ul>
+<li><b>「강남에서 따라온 손님」</b>: 동의를 받은 단골 인터뷰. "왜 부평까지 오세요?"</li>
+<li><b>「밤 10시의 왁싱룸」</b>: 퇴근 후 방문 남성·직장인 사례.</li>
+<li><b>「15년 원장의 왁싱 Q&amp;A」</b>: 실제 상담 질문 한 개에 글 한 편. AI 브리핑 인용을 노리고 첫 문단에 답을 씁니다.</li>
+<li><b>「꼬미의 출근 일지」</b>: 가벼운 공지 글에 꼬미 사진. 재방문 고객과 정을 쌓습니다(반려동물 알레르기 안내 포함).</li>
+<li><b>「해링턴 이웃」</b>: 입주민 혜택, 주차, 상가 위치 안내.</li>
+</ul>
+
+</div></details>
+<details id="g6"><summary>첫 4주 발행표 (11월 셋째 주 시작 예시)</summary>
+<div class="dbody">
+<div class="week cl-w"><b>1주 — 기반 글</b>
+<ul><li>월 · [공지] 구름왁싱, 강남에서 부평 동수역으로 — 오시는 길·주차·밤 12시까지 (상단 고정)</li>
+<li>수 · 남자 브라질리언 왁싱 처음이라면, 15년 원장이 답하는 7가지 | 부평 남자왁싱</li>
+<li>금 · 동수역 속눈썹펌 — 처지는 속눈썹, 뿌리부터 세우는 컬 고르기</li>
+<li>일 · 강남에서 8년 다니던 손님이 부평까지 오는 이유 (단골 인터뷰)</li></ul></div>
+<div class="week cl-w"><b>2주</b>
+<ul><li>월 · 브라질리언왁싱 주의사항, 전날·당일·다음 날 체크리스트</li>
+<li>수 · 퇴근하고 밤 10시에 받은 남자 눈썹 정리 | 부평 남자 제모</li>
+<li>금 · 속눈썹펌 후 세수·화장, 몇 시간부터 괜찮을까</li>
+<li>일 · 부평역 해링턴플레이스 입주민 안내 — 상가2동 1층 구름, 주차와 첫 방문 혜택</li></ul></div>
+<div class="week cl-w"><b>3주</b>
+<ul><li>월 · 인그로운헤어, 혼자 짜면 안 되는 이유와 왁싱 후 관리 | 부평 브라질리언왁싱</li>
+<li>수 · 남자 눈썹문신 가격과 과정 — 자연눈썹 리터치 포함 | 부평 남자 눈썹 반영구</li>
+<li>금 · 연말 모임 전 속눈썹 연장, 플랫·볼륨 차이 | 부평 속눈썹연장</li>
+<li>일 · 「꼬미의 출근 일지」 + 12월 밤 시간 예약 안내</li></ul></div>
+<div class="week cl-w"><b>4주</b>
+<ul><li>월 · 임산부 브라질리언왁싱, 가능한 시기와 자세·시간 | 부평 산모왁싱</li>
+<li>수 · 남자 브라질리언 디자인, 올누드와 디자인 중 무엇이 맞을까</li>
+<li>금 · 부평 속눈썹펌 잘하는 곳 고르는 기준 5가지 (원장의 시선)</li>
+<li>일 · 겨울에 시작해야 여름에 편한 이유 — 왁싱 주기와 회원권 안내 | 부평 왁싱</li></ul></div>
+<h4>4주 이후 주제 모음</h4>
+<p>슈가링과 왁싱의 차이 · 왁싱 통증 줄이는 순서 · 겨드랑이 왁싱 vs 레이저 · 브라질리언 첫 방문 복장 · 생리 중 왁싱 · 속눈썹펌 주기 · 렌즈 끼고 속눈썹펌 · 언더래쉬 · 브로우리프트펌 · 눈썹왁싱으로 인상 바꾸기 · 남자 등·가슴 왁싱 · 커플 왁싱 · 연간 멤버십 계산법 · 야간 예약 꿀팁 · 위생과 일회용품 · 반려동물이 있는 샵 안내 · 강남 시절 이야기</p>
+
+</div></details>
+<details id="tpl"><summary>블로그 글 한 편 템플릿 · 사진 원칙</summary>
+<div class="dbody">
+<div class="tpl">제목: [핵심 키워드] + [구체적 고민/숫자]
+   예) 부평 남자왁싱 | 브라질리언 처음이라면 15년 원장이 답하는 7가지
+
+① 첫 3줄 — 질문에 대한 답부터 (AI 브리핑 인용용)
+   "처음이라도 15~20분이면 끝납니다. 통증은 ○○ 순서로 줄입니다."
+② 이런 분이 오셨어요 — 고객 고민 (동의 범위 안에서, 개인정보 없이)
+③ 상담에서 본 것 — 원장의 판단 근거 (모질·피부·얼굴 비율·색)
+④ 과정 — 사진 3~5장 + 단계 설명
+⑤ 결과 — 사진 2~3장, 과장 없이
+⑥ 관리법 — 날짜별 체크리스트
+⑦ 자주 묻는 질문 2~3개
+⑧ 위치·예약 — 지도, 네이버 예약 링크, 영업시간 (매번 같은 형식)
+
+분량 1,500~2,500자 · 직접 찍은 사진 10~20장 · 소제목 4~6개
+키워드: 제목 1회, 본문 2~4회 (억지 반복 금지)</div>
+
+<h3>사진 원칙</h3>
+<ul>
+<li><b>원본만 씁니다.</b> 퍼온 사진이나 AI 이미지는 블로그 신뢰도를 깎습니다. 홍보용 AI 메뉴판 모델 사진도 블로그 본문에는 쓰지 않습니다.</li>
+<li>전후 사진은 같은 조명, 같은 각도, 같은 거리로 찍고 보정하지 않습니다.</li>
+<li>얼굴이나 민감 부위 사진은 <b>블로그 게시 동의서</b>를 따로 받습니다. 범위(눈가만, 얼굴 전체, 신체 부위)를 체크하고, 고객이 철회하면 바로 내립니다. 브라질리언은 결과 사진 대신 도구, 공간, 과정 설명으로 대신합니다.</li>
+<li>위생 장면(소독, 일회용품 개봉)은 모든 업종에서 강한 신뢰 신호입니다.</li>
+</ul>
+
+</div></details>
+<details id="g7"><summary>리뷰·후기 늘리기 (배포 원고 대체안)</summary>
+<div class="dbody">
+<ul>
+<li><b>실고객 블로그 후기:</b> 블로그를 하는 단골에게만 부탁합니다. 대가를 주면 글 첫머리에 대가 표기를 합니다. 한 달 4~6건이면 충분합니다. 많이 받는 것보다 진짜인 것이 중요합니다.</li>
+<li><b>지역 체험단 (선택):</b> 부평·인천에 실제로 사는 생활 블로거를 월 3명 이하로 고릅니다. 고르는 기준은 최근 3개월 글 중 미용이 30% 이상이고, 원고를 받지 않고 직접 쓰는 사람입니다. 표기를 의무로 합니다.</li>
+<li><b>방문자 리뷰 루틴:</b> 시술 직후 결과를 확인할 때 QR 카드를 건넵니다. 사진 리뷰를 부탁하고, 남성 고객에게는 '사진 없이 텍스트만'도 괜찮다고 안내해 부담을 줄입니다.</li>
+<li><b>원장 공식 블로그가 후기를 대신합니다:</b> 고객 동의를 받은 사례 글은 원장이 직접 쓰는 것이 가장 안전하고 효과도 오래갑니다.</li>
+</ul>
+
+</div></details>
+<details id="g8"><summary>90일 로드맵 (완료 기준 포함)</summary>
+<div class="dbody">
+<div class="tw cl-t"><table>
+<tr><th>기간</th><th>할 일</th><th>완료 기준</th></tr>
+<tr><td>이번 주</td><td>배포 원고 발주처 확인·중단 · 업종 추가 가능 여부 확인 · 메뉴 정리 · 예약 상품 분리 · 영업시간 빈칸 확인</td><td>새 배포 원고 0 · 메뉴에 가격 없는 항목 0</td></tr>
+<tr><td>1–2주</td><td>블로그 개설·연결 · 공지 글 · 키워드 5개 교체 · 대표사진 재배치 · 입주민·남성 쿠폰 · QR 카드</td><td>플레이스에 블로그 영역 노출</td></tr>
+<tr><td>3–6주</td><td>주 4회 발행(롱테일·동수역·남성 위주) · 소식 주 1~2회</td><td>16편 · 동수역 왁싱 1위</td></tr>
+<tr><td>7–10주</td><td>'부평 왁싱'·'부평 속눈썹펌' 제목 글 확대 · 실고객 블로그 후기 월 4~6건</td><td>32편 · 부평 남자왁싱 30위 안</td></tr>
+<tr><td>11–13주</td><td>순위를 다시 재서 잘 된 글의 후속편 · 주 3회로 전환할지 결정</td><td>48편 · 부평 왁싱 10위 안</td></tr>
+</table></div>
+</div></details>
+<details id="rt"><summary>운영 루틴 · 계절 달력</summary>
+<div class="dbody">
+<div class="tw"><table>
+<tr><th>주기</th><th>할 일</th><th>시간</th></tr>
+<tr><td>매일</td><td>시술 사진 저장(동의 확인) · 음성 메모 30초 · 리뷰 답글</td><td>10분</td></tr>
+<tr><td>매주</td><td>블로그 3~4편 · 플레이스 소식 1~2개 · 예약 가능 시간 정리</td><td>3~4시간(초안 대행 시 1시간)</td></tr>
+<tr><td>격주</td><td>순위 측정(내부 자료) · 블로그 통계 유입 검색어 확인</td><td>20분</td></tr>
+<tr><td>매월</td><td>KPI 표 갱신 · 잘 된 글 후속편 기획 · 키워드 5개 조정 · 계절 주제 준비(4~6주 앞서)</td><td>1시간</td></tr>
+</table></div>
+
+<h3>계절 달력</h3>
+<div class="tw"><table><tr><th>시기</th><th>구름</th></tr>
+<tr><td>11월 말–12월</td><td>연말 속눈썹 연장 · 겨울 왁싱 시작 · 회원권</td></tr>
+<tr><td>1월–2월 초</td><td>새해 남성 눈썹 정리 · 설 전 눈썹 · 졸업 시즌</td></tr>
+<tr><td>3월–4월</td><td><b>여름 대비 왁싱 시작</b>(4월부터 브라질리언 수요 상승) · 웨딩</td></tr>
+<tr><td>5월</td><td>왁싱 최성수기 진입 · 남성 바디왁싱</td></tr></table></div>
+</div></details>
+<details id="x2"><summary>B. 스마트플레이스 통계 캡처하는 법</summary>
+<div class="dbody">
+<div class="callout info"><strong>준비</strong>그 업체의 <b>스마트플레이스 관리자</b> 네이버 아이디로 로그인해야 통계가 보입니다. 씨엘로는 관리자가 네일 원장님 아이디일 수 있습니다. 그 경우 네일 원장님께 캡처를 부탁하거나, 관리자 화면의 '매니저 초대'로 은재원장님 아이디를 추가해 달라고 하세요.</div>
+<h3>PC로 하기</h3>
+<ol>
+<li>인터넷 창에서 <b>smartplace.naver.com</b>에 접속해 관리자 아이디로 로그인합니다.</li>
+<li>'내 업체' 목록에서 해당 샵(구름 왁싱, 속눈썹 / 씨엘로네일&amp;뷰티 벨포레스퀘어점)을 누릅니다.</li>
+<li>왼쪽 메뉴에서 <b>'통계'</b>를 누릅니다.</li>
+<li>위쪽 기간을 <b>최근 3개월</b>(가능하면 최대 기간)로 바꿉니다. 구름은 이전 시점(8~9월)이 보이게 해 주세요.</li>
+<li>아래 화면들을 하나씩 캡처합니다. Mac은 <code>Shift + Command + 4</code>를 누른 뒤 드래그하면 바탕화면에 저장됩니다.</li>
+</ol>
+<div class="tw"><table>
+<tr><th>#</th><th>캡처할 화면</th><th>왜 필요한가</th></tr>
+<tr><td>1</td><td><b>플레이스 유입</b> — 일별·주별 유입수 그래프</td><td>이전·리뉴얼 전후 흐름, 시작값</td></tr>
+<tr><td>2</td><td><b>유입 채널</b> — 네이버 검색, 지도, 블로그, 인스타 등</td><td>어디서 들어오는지</td></tr>
+<tr><td>3</td><td><b>유입 키워드(검색어)</b> — 순위 표, '더보기'를 끝까지 펼친 상태</td><td>가장 중요합니다. 키워드 맵을 실제 데이터로 고칩니다.</td></tr>
+<tr><td>4</td><td><b>예약·주문</b> — 예약 수, 예약 상품별 건수</td><td>전환율 계산, 어떤 시술이 예약되는지</td></tr>
+<tr><td>5</td><td><b>리뷰</b> 통계</td><td>리뷰가 늘어나는 속도</td></tr>
+<tr><td>6</td><td>(보이면) <b>저장 · 알림받기 · 전화 · 길찾기</b> 같은 행동 지표</td><td>인기도 신호. 메뉴에 없으면 건너뛰어도 됩니다.</td></tr>
+</table></div>
+<h3>휴대폰으로 하기</h3>
+<ol>
+<li>앱스토어에서 <b>'네이버 스마트플레이스'</b> 앱을 설치하고 관리자 아이디로 로그인합니다.</li>
+<li>업체를 선택하고 <b>'통계'</b> 메뉴로 들어갑니다.</li>
+<li>위 표의 1~6번 화면을 휴대폰 캡처(측면 버튼 + 볼륨 올림)로 찍어 보내 주세요.</li>
+</ol>
+<p class="mute">네이버가 메뉴 이름이나 위치를 자주 바꿉니다. 화면이 설명과 다르면 지금 보이는 화면을 아무거나 캡처해 보내 주세요. 다음에 어디를 누르면 되는지 알려 드리겠습니다.</p>
+
+</div></details>
+<details id="x3"><summary>C. 업종 설정 화면 캡처하는 법 (보기만, 바꾸지 않기)</summary>
+<div class="dbody">
+<div class="callout warn"><strong>저장 버튼은 누르지 마세요</strong>업종을 바꾸면 지금 1위인 키워드를 잃을 수 있습니다. 이번에는 <b>무엇을 선택할 수 있는지 확인만</b> 합니다.</div>
+<ol>
+<li>smartplace.naver.com(또는 앱) → 해당 업체 → 왼쪽 메뉴 <b>'업체정보'</b>.</li>
+<li><b>'기본 정보'</b>에서 <b>'업종'</b> 항목을 찾아 지금 화면을 캡처합니다 <b>(캡처 ①)</b>.</li>
+<li>업종 옆 <b>'수정'</b>을 누릅니다. 업종 검색창이나 목록이 열리면 그 화면을 캡처합니다 <b>(캡처 ②)</b>.</li>
+<li>검색창에 '속눈썹'을 입력해 나오는 목록 <b>(캡처 ③)</b>, '반영구'를 입력해 나오는 목록 <b>(캡처 ④)</b>을 캡처합니다. '업종 추가'나 '+' 버튼이 보이면 그것도 함께 찍어 주세요.</li>
+<li><b>'취소'</b>나 뒤로 가기로 나옵니다. 저장하지 않습니다.</li>
+</ol>
+<p>구름은 업종을 하나 더 추가할 수 있는지가 속눈썹·눈썹문신 노출을 좌우합니다. 씨엘로는 별도 플레이스가 필요한지 판단하는 근거가 됩니다.</p>
+
+</div></details>
+<details id="x4"><summary>D. 시술별 매출 비중 — 고객카드로는 뽑을 수 없습니다</summary>
+<div class="dbody">
+<div class="callout warn"><strong>확인 결과</strong>지금 고객카드(<code>고객카드_태블릿.html</code>)는 건강 체크와 동의서를 받는 화면입니다. <b>금액이나 결제 항목이 없고</b>, 응답을 쌓아 둘 구글 시트 연동도 주소가 비어 있습니다(<code>여기에_배포_URL</code>). 그래서 지금까지의 시술·매출 기록이 남아 있지 않습니다.</div>
+<p>대신 아래 중 하나로 받으면 됩니다. 쉬운 순서입니다.</p>
+<ol>
+<li><b>원장님 체감 비율:</b> "지난 3개월 매출에서 왁싱 ○% · 속눈썹 ○% · 눈썹문신 ○% · 기타 ○%". 대략이어도 발행 비중을 맞추기에는 충분합니다.</li>
+<li><b>네이버 예약 내역:</b> 스마트플레이스 → 예약(또는 '예약자 관리') → 기간을 정해 엑셀로 내려받습니다. 예약 상품별 건수가 나옵니다. 지금은 구름의 예약 상품이 '정민경 원장 예약하기' 하나라서 시술 구분이 안 됩니다. 예약 상품을 나누면 다음 달부터 자동으로 쌓입니다.</li>
+<li><b>결제 기록:</b> 카드 단말기 앱이나 매장 관리 앱(예: 공비서·핸드SOS 등)을 쓰신다면 매출 내역 내보내기 파일.</li>
+</ol>
+<p>앞으로 계속 쌓이게 하려면 고객카드에 '오늘 시술'과 '금액'을 원장 확인 칸으로 넣고 시트 연동을 켜는 방법이 있습니다. 원하시면 따로 만들어 드리겠습니다.</p>
+
+</div></details>
+<details id="req"><summary>추가로 필요한 데이터</summary>
+<div class="dbody"><div class="tw req"><table><tr><th>#</th><th>요청</th><th>대상</th><th>왜 필요한가 / 받는 방법</th></tr><tr><td>2</td><td>배포 원고 발주처</td><td>구름</td><td><span class="tag t-ok">받음</span> 마케팅업체. 보낼 피드백 전문은 액션 플랜의 '업체 피드백 문안'에 있습니다. <b>남은 것:</b> 업체의 회신과 전체 진행 목록.</td></tr><tr><td>3</td><td>스마트플레이스 통계 (최근 3개월)</td><td>두 곳</td><td><span class="tag t-warn">방법 안내</span> 액션 플랜의 '통계 캡처 방법'의 순서대로 1~6번 화면을 캡처해 보내 주세요.</td></tr><tr><td>4</td><td>네이버 검색광고 키워드 도구 조회수</td><td>두 곳</td><td>searchad.naver.com → 도구 → 키워드 도구에서 키워드 맵의 월간 검색수를 내려받은 CSV. 로그인이 필요해 직접 볼 수 없습니다. 계정이 없으면 무료로 만들 수 있습니다.</td></tr><tr><td>5</td><td>시술별 매출 비중</td><td>두 곳</td><td><span class="tag t-warn">대체 필요</span> 고객카드에는 금액 기록이 없습니다. 액션 플랜의 '시술별 매출 비중'의 세 방법 중 하나(가장 쉬운 것은 원장님 체감 비율)로 알려 주세요. 씨엘로뷰티는 최근 3개월 뷰티 손님 수와 재방문 수만 있어도 됩니다.</td></tr><tr><td>6</td><td>업종 설정 화면</td><td>두 곳</td><td><span class="tag t-warn">방법 안내</span> 액션 플랜의 '업종 화면 캡처 방법'. 저장하지 말고 캡처만 해 주세요.</td></tr><tr><td>7</td><td>원장 이력</td><td>두 곳</td><td>씨엘로: 미대 전공, 경력 연수, 교육 이수(언제, 무엇을). 구름: 강남 시절 샵 이름, 15년 경력의 구성(8년 운영과 그 전 경력). 블로그·소개문 문구를 확정하는 데 씁니다.</td></tr><tr><td>9</td><td>블로그 계정 상태</td><td>두 곳</td><td>씨엘로: mdrt38 로그인 가능 여부. 구름: 원장 명의 네이버 아이디로 새 블로그를 열지, 기존 개인 블로그가 있는지.</td></tr><tr><td>10</td><td>고객 연령·성별·거주지 분포</td><td>두 곳</td><td>예약 데이터나 체감. 구름의 남성 비중, 해링턴 입주민 비중, 강남 단골 비중. 씨엘로의 4050 비중.</td></tr><tr><td>11</td><td>사진 게시 동의 가능 고객</td><td>두 곳</td><td>첫 4주 사례 글에 쓸 고객이 있는지. 동의서 양식이 필요하면 고객카드에 문항을 추가할 수 있습니다.</td></tr><tr><td>12</td><td>인스타그램 현황</td><td>두 곳</td><td>팔로워, 게시물 주기, 반응 좋은 게시물. 블로그와 역할을 나누는 데 씁니다.</td></tr><tr><td>13</td><td>목표와 예산</td><td>두 곳</td><td>월 신규 고객 목표, 광고비(플레이스 광고·파워링크) 사용 여부와 금액, 블로그 초안 작성을 누가 할지.</td></tr><tr><td>14</td><td>의식하는 경쟁 샵</td><td>두 곳</td><td>원장님이 직접 비교하는 샵. 순위표 밖에 있는 실제 경쟁자를 함께 추적합니다.</td></tr></table></div></div></details>
+
+</section>
+</main>
+<footer>기준일 2026-11-07 · 내부 공유용 문서 · 외부 전달 금지</footer>
+<script>
+document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('nav button').forEach(x=>x.setAttribute('aria-selected',x===b));
+  document.querySelectorAll('.tab').forEach(s=>s.classList.toggle('on',s.id===b.dataset.t));
+  try{localStorage.setItem('tab-'+document.title,b.dataset.t)}catch(e){}
+  window.scrollTo(0,0);
+}));
+function openTarget(h){const el=h&&document.getElementById(h.slice(1));if(!el)return;const sec=el.closest('section.tab');if(sec&&!sec.classList.contains('on')){const b=document.querySelector('nav button[data-t="'+sec.id+'"]');b&&b.click()}const d=el.tagName==='DETAILS'?el:el.closest('details');if(d)d.open=true;setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),30)}
+document.addEventListener('click',e=>{const a=e.target.closest('a[href^="#"]');if(a){e.preventDefault();openTarget(a.getAttribute('href'))}});
+function cp(id){const t=document.getElementById(id).innerText;navigator.clipboard.writeText(t).then(()=>{document.getElementById(id+'-ok').textContent='복사됨'},()=>{const r=document.createRange();r.selectNodeContents(document.getElementById(id));const sel=getSelection();sel.removeAllRanges();sel.addRange(r);document.getElementById(id+'-ok').textContent='선택됨 — Cmd+C'})}
+try{const t=localStorage.getItem('tab-'+document.title);if(t){const b=document.querySelector(`nav button[data-t="${t}"]`);b&&b.click()}}catch(e){}
+</script>
+</body>
+</html>

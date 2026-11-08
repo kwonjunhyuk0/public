@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="googlebot" content="noindex, nofollow">
+<meta name="Yeti" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>씨엘로 브랜딩 전략</title>
+<style>
+:root{
+  --bg:#faf8f5; --panel:#ffffff; --ink:#1f1d1a; --mute:#5c564e; --line:#ddd5c9; --accent:#8a5a2b; --accent-soft:#f3e7d8; --cloud:#245a91; --cloud-soft:#e2ecf8; --ok:#1f6b3a; --ok-soft:#e1f1e6; --warn:#875300; --warn-soft:#fbefd6; --bad:#a1261b; --bad-soft:#f8e0dc; --link:#1b5fa8;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#131211; --panel:#1d1c1a; --ink:#f2eee7; --mute:#bdb5aa; --line:#3c3934; --accent:#e5b583; --accent-soft:#3a2e21; --cloud:#a3cdf7; --cloud-soft:#1d3247; --ok:#86e0a6; --ok-soft:#173120; --warn:#f6cb72; --warn-soft:#382d17; --bad:#ffa092; --bad-soft:#3d211e; --link:#93c9ff;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#131211; --panel:#1d1c1a; --ink:#f2eee7; --mute:#bdb5aa; --line:#3c3934; --accent:#e5b583; --accent-soft:#3a2e21; --cloud:#a3cdf7; --cloud-soft:#1d3247; --ok:#86e0a6; --ok-soft:#173120; --warn:#f6cb72; --warn-soft:#382d17; --bad:#ffa092; --bad-soft:#3d211e; --link:#93c9ff;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.7 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Noto Sans KR",sans-serif;word-break:keep-all}
+header{padding:28px 16px 8px;max-width:1080px;margin:0 auto}
+header h1{margin:0 0 4px;font-size:24px;letter-spacing:-.02em}
+header p{margin:0;color:var(--mute);font-size:13.5px}
+nav{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+nav .in{max-width:1080px;margin:0 auto;padding:0 16px;display:flex;gap:4px;overflow-x:auto}
+nav button{flex:none;border:0;background:none;color:var(--mute);font:inherit;font-weight:600;padding:14px 14px 12px;border-bottom:3px solid transparent;cursor:pointer}
+nav button[aria-selected="true"]{color:var(--ink);border-color:var(--accent)}
+nav button.cl[aria-selected="true"]{border-color:var(--cloud)}
+main{max-width:1080px;margin:0 auto;padding:8px 16px 80px}
+.tab{display:none}.tab.on{display:block}
+h2{font-size:20px;margin:40px 0 12px;letter-spacing:-.02em;padding-top:4px}
+h3{font-size:16.5px;margin:28px 0 8px}
+h4{font-size:15px;margin:18px 0 6px}
+p{margin:8px 0}
+.lead{font-size:16px;color:var(--ink)}
+.mute{color:var(--mute);font-size:13.5px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.grid:has(.kpi){grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.kpi b{display:block;font-size:24px;letter-spacing:-.02em}
+.kpi span{color:var(--mute);font-size:13px}
+.callout{border-radius:12px;padding:14px 16px;margin:14px 0;border:1px solid}
+.callout.bad{background:var(--bad-soft);border-color:var(--bad);}
+.callout.warn{background:var(--warn-soft);border-color:var(--warn)}
+.callout.ok{background:var(--ok-soft);border-color:var(--ok)}
+.callout.info{background:var(--accent-soft);border-color:var(--accent)}
+.callout.cl{background:var(--cloud-soft);border-color:var(--cloud)}
+.callout strong:first-child{display:block;margin-bottom:4px}
+.tw{overflow-x:auto;margin:10px 0;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:560px}
+th,td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:var(--accent-soft);font-weight:700;white-space:nowrap}
+.cl-t th{background:var(--cloud-soft)}
+tr:last-child td{border-bottom:0}
+td.n{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.tag{display:inline-block;font-size:12px;font-weight:700;padding:1px 8px;border-radius:99px;margin:0 2px 2px 0;white-space:nowrap}
+.t-ok{background:var(--ok-soft);color:var(--ok)}.t-warn{background:var(--warn-soft);color:var(--warn)}.t-bad{background:var(--bad-soft);color:var(--bad)}
+.t-a{background:var(--accent-soft);color:var(--accent)}.t-c{background:var(--cloud-soft);color:var(--cloud)}
+ul,ol{padding-left:22px;margin:8px 0}li{margin:4px 0}
+.check li{list-style:none;margin-left:-20px}
+.check li::before{content:"☐ ";color:var(--accent);font-weight:700}
+code,.mono{font-family:ui-monospace,Menlo,monospace;font-size:13px;background:var(--accent-soft);padding:1px 5px;border-radius:5px}
+.tpl{white-space:pre-wrap;font-family:ui-monospace,Menlo,monospace;font-size:13px;background:var(--panel);border:1px dashed var(--line);border-radius:10px;padding:14px;line-height:1.65}
+.week{border-left:4px solid var(--accent);padding-left:12px;margin:14px 0}
+.cl-w{border-color:var(--cloud)}
+.toc{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
+.toc a{font-size:13px;text-decoration:none;color:var(--ink);border:1px solid var(--line);background:var(--panel);border-radius:99px;padding:4px 11px}
+.req td:first-child{white-space:nowrap;font-weight:700}
+details{background:var(--panel);border:1px solid var(--line);border-radius:12px;margin:10px 0}
+details>summary{cursor:pointer;padding:14px 18px;font-weight:700;font-size:16px;list-style:none;display:flex;justify-content:space-between;gap:12px}
+details>summary::-webkit-details-marker{display:none}
+details>summary::after{content:"펼치기 ▾";font-size:12.5px;font-weight:600;color:var(--mute);white-space:nowrap}
+details[open]>summary::after{content:"접기 ▴"}
+details[open]>summary{border-bottom:1px solid var(--line)}
+.dbody{padding:4px 18px 16px}
+.dbody h3:first-child{margin-top:14px}
+footer{max-width:1080px;margin:0 auto;padding:0 16px 40px;color:var(--mute);font-size:12.5px}
+@media print{nav{display:none}.tab{display:block!important;page-break-before:always}}
+
+nav button[aria-selected="true"]{border-color:var(--accent)}
+a{color:var(--link);text-decoration:underline;text-underline-offset:2px;font-weight:600}
+a:visited{color:var(--link)}
+.tag{border:1px solid currentColor}
+details>summary{color:var(--ink)}
+</style>
+</head>
+<body>
+<div style="max-width:1080px;margin:0 auto;padding:10px 16px 0;font-size:13.5px"><a href="../">목차</a> · <a href="../online/">① 온라인</a> · <a href="../offline/">② 오프라인</a> · <a href="../branding/" aria-current="page" style="font-weight:800;text-decoration:none">③ 브랜딩</a></div>
+
+<header>
+  <h1>씨엘로뷰티 브랜딩 전략 <span style="font-size:15px;font-weight:600;color:var(--mute)">· 3축 중 ③ 원장 브랜딩</span></h1>
+  <p>은재원장 자기 브랜딩 · 말하는 톤 · 미대 출신 감각(얼굴 소묘) · 네이버 플레이스와 매장에 똑같이 보이게</p>
+</header>
+<nav><div class="in" role="tablist">
+  <button role="tab" data-t="t1" aria-selected="true">전략 설명</button>
+  <button role="tab" data-t="t2" aria-selected="false">액션 플랜</button>
+</div></nav>
+<main>
+<section class="tab on" id="t1">
+<div class="callout info"><strong>한 줄 진단</strong>은재원장님에게는 다른 샵이 흉내 낼 수 없는 강점이 있습니다. 미대 출신의 감각, 오랜 경력, 오래 다니는 단골입니다. 하지만 지금은 <b>네이버에도, 매장에도 '은재원장'이라는 사람이 보이지 않습니다.</b> 플레이스 상호는 네일이고, 말투는 정해져 있지 않으며, 감각은 말로만 남아 있습니다.</div>
+<div class="callout ok"><strong>최종 목표</strong>원장님의 자기 브랜딩이 <b>네이버 플레이스(온라인)와 샵(오프라인)에서 똑같이 보이게</b> 합니다. 같은 말투, 같은 핵심 메시지, 같은 증거(작품·전후·리뷰)를 씁니다. 손님이 어디서 보든 "그림 그리던 원장님이 디자인해 주는 곳"으로 기억하게 합니다.</div>
+
+<h2 id="bp">문제점 · 원인 · 개선 방향</h2>
+<div class="tw"><table>
+<tr><th>#</th><th>문제점</th><th>원인</th><th>개선 방향</th><th>우선</th></tr>
+<tr><td>1</td><td><b>원장님이라는 사람이 보이지 않는다</b></td><td>플레이스 상호·사진·소개문이 네일 중심입니다. '은재원장'은 예약 상품명에만 있습니다. <b>사람에 대한 신뢰</b>: 눈썹문신처럼 얼굴에 남는 시술은 "누가 하느냐"를 보고 고릅니다.</td><td>플레이스 소개문 맨 위 단락, 대표사진 1장(작업하는 원장님), 블로그 화자, 매장 안 작품으로 <b>원장님을 앞에 세웁니다.</b></td><td><span class="tag t-warn">2주</span></td></tr>
+<tr><td>2</td><td><b>말하는 톤이 정해져 있지 않다</b></td><td>블로그, 리뷰 답글, 배너, 상담 멘트를 쓸 때마다 말투가 달라질 수 있습니다. 특히 젊은 말투를 흉내 내면 경력이 가려집니다. <b>일관성</b>: 같은 사람이 말하는 것처럼 들려야 믿음이 쌓입니다.</td><td><b>자신감 있고, 경력과 연령에 맞는 말투</b>로 정합니다. 단정한 존댓말, 근거를 먼저, 과장 없이 씁니다(아래 말투 가이드). 블로그·리뷰 스킬에 그대로 넣습니다.</td><td><span class="tag t-bad">이번 주</span></td></tr>
+<tr><td>3</td><td><b>미대 출신 감각이 '증거'로 보이지 않는다</b></td><td>"감각 있어요"는 누구나 하는 말입니다. <b>보여 주기</b>: 감각은 말이 아니라 작품과 과정으로 보여야 믿습니다.</td><td>원장님의 <b>얼굴 소묘 작품</b>을 매장에 감상 요소로 두는 것을 검토합니다. 그 작품을 '소묘 → 눈썹 디자인 스케치 → 결과'로 이어 보여 줍니다.</td><td><span class="tag t-a">4주~</span></td></tr>
+<tr><td>4</td><td><b>온라인과 오프라인의 메시지가 따로 논다</b></td><td>플레이스, 블로그, 배너, 상담을 각자 만들면 서로 다른 말을 하게 됩니다.</td><td>브랜드 핵심(한 줄 정의 · 메시지 3개 · 증거 3개)을 먼저 정하고, 모든 채널이 그 문장에서 출발합니다(아래 채널별 적용표).</td><td><span class="tag t-warn">2주</span></td></tr>
+<tr><td>5</td><td><b>원장님 연령이 약점처럼 숨겨질 수 있다</b></td><td>젊은 원장이 많은 업종이라 연령을 드러내기 망설일 수 있습니다.</td><td>연령을 <b>경험과 감각의 깊이</b>로 말합니다. 4050 손님에게는 "내 얼굴을 아는 원장"이고, 3040 손님에게는 "새 기법을 공부하는 베테랑"입니다.</td><td><span class="tag t-warn">2주</span></td></tr>
+</table></div>
+
+<h2>브랜드 핵심 (초안 — 숙제 3번으로 확정)</h2>
+<div class="tw"><table>
+<tr><th>항목</th><th>초안</th></tr>
+<tr><td>한 줄 정의</td><td>"얼굴을 그려 온 손으로 디자인하는 눈썹 — 씨엘로뷰티 은재원장"</td></tr>
+<tr><td>핵심 메시지 ①</td><td><b>그리기 전에 얼굴을 봅니다.</b> 비율·대칭·피부 톤·머리색을 먼저 보고 디자인합니다(미대 출신).</td></tr>
+<tr><td>핵심 메시지 ②</td><td><b>자연스럽고 오래갑니다.</b> 과하지 않은 디자인과 유지력(리뷰 키워드 '유지력이 좋아요' 263).</td></tr>
+<tr><td>핵심 메시지 ③</td><td><b>오래 다니는 샵.</b> 가족이 함께, 몇 년씩 다니는 단골이 증거입니다.</td></tr>
+<tr><td>증거</td><td>얼굴 소묘 작품 · 디자인 스케치와 전후 사진 · 실제 리뷰 문장("N년째 단골", "가족이 다 여기서 눈썹")</td></tr>
+<tr><td>확인할 사실</td><td>[미대 전공 · 경력 연수 · 교육 이수 · 자격] — 숙제 3번과 원장님 확인 뒤에만 씁니다</td></tr>
+</table></div>
+
+<h2>말투 가이드 — 자신감 있고, 경력과 연령에 맞게</h2>
+<div class="grid">
+  <div class="card"><h4 style="margin-top:0">원칙</h4><ul>
+  <li><b>단정한 존댓말:</b> "~합니다/~해요"를 섞되 끝을 흐리지 않습니다.</li>
+  <li><b>근거를 먼저:</b> "예뻐요"보다 "얼굴 비율을 보고 ○○하게 잡았어요"라고 씁니다.</li>
+  <li><b>권하는 말투:</b> 부탁하거나 매달리지 않고, 전문가로서 권합니다.</li>
+  <li><b>과장하지 않기:</b> '최고·완벽·100%·영구·부작용 없음'을 쓰지 않습니다(법규).</li>
+  <li><b>절제:</b> 이모지는 글 하나에 1~2개, 'ㅎㅎ·~♡' 같은 유행 표현은 쓰지 않습니다.</li></ul></div>
+  <div class="card"><h4 style="margin-top:0">자주 쓸 말</h4><ul>
+  <li>"그리기 전에 얼굴부터 봐 드릴게요."</li>
+  <li>"이 얼굴에는 ○○한 결이 어울려요."</li>
+  <li>"과하지 않게, 오래가게 잡았습니다."</li>
+  <li>"처음이시면 펜슬로 먼저 그려 보고 정해요."</li>
+  <li>"관리는 이렇게 하시면 됩니다."</li></ul></div>
+</div>
+<div class="tw"><table>
+<tr><th>상황</th><th>피할 말투</th><th>쓸 말투</th></tr>
+<tr><td>블로그 첫 문장</td><td>"안녕하세요~ 오늘도 예쁜 눈썹 하고 가셨어요 ㅎㅎ 많이 찾아 주세요♡"</td><td>"오늘 오신 고객님은 눈썹 숱이 적고 결이 흩어져 있었어요. 얼굴 비율을 먼저 보고 자연결로 잡았습니다."</td></tr>
+<tr><td>리뷰 답글</td><td>"감사합니다!! 또 와 주세요~~"</td><td>"자연스럽게 자리 잡았다니 다행이에요. 2~3일 지나면 색이 한 번 더 차분해져요. 리터치 때 뵐게요 😊"</td></tr>
+<tr><td>상담 멘트</td><td>"원하시는 대로 해 드릴게요~"</td><td>"원하시는 느낌을 듣고, 얼굴에 맞게 제가 한 번 그려 볼게요. 마음에 드실 때까지 고칩니다."</td></tr>
+<tr><td>배너</td><td>"눈썹문신 최저가! 이벤트 중!"</td><td>"눈썹은 그리기 전에, 얼굴부터 봅니다."</td></tr>
+</table></div>
+<p class="mute">원장님 실제 말투 샘플(카톡·상담 멘트)을 받으면 이 표를 원장님 표현으로 고칩니다. 이 가이드는 블로그 글·리뷰 답글 스킬의 '문체 규칙'으로 그대로 들어갑니다.</p>
+
+<h2>얼굴 소묘 작품 전시 — 검토</h2>
+<div class="tw"><table>
+<tr><th>항목</th><th>내용</th><th>왜</th></tr>
+<tr><td>효과</td><td>미대 출신 감각을 말이 아니라 작품으로 보여 줍니다. 기다리는 손님의 대화 소재가 되고, 사진을 찍고 싶은 지점이 됩니다.</td><td><b>증거</b>: 직접 그린 그림은 누구도 흉내 낼 수 없는 신뢰 근거입니다. 손님이 찍은 사진은 리뷰 사진과 플레이스 사진이 됩니다.</td></tr>
+<tr><td>구성</td><td>2~4점만 둡니다. <b>얼굴 소묘 → 눈썹 디자인 스케치 → 시술 결과(전후)</b>로 이어지는 한 줄 연작이면 가장 좋습니다.</td><td>그림 실력이 곧 눈썹 디자인 실력이라는 연결을 손님이 스스로 하게 합니다.</td></tr>
+<tr><td>위치</td><td>입구 안쪽이나 대기 벽, 시술실 벽에 둡니다. <b>네일 테이블 앞 벽면(광고판)과는 겹치지 않게</b> 합니다.</td><td>광고와 작품이 섞이면 둘 다 약해집니다.</td></tr>
+<tr><td>캡션</td><td>작품마다 한 줄: "얼굴을 그리던 손으로, 눈썹을 디자인합니다 — 은재원장"</td><td>보는 사람이 의미를 바로 읽게 합니다.</td></tr>
+<tr><td>온라인 연결</td><td>작품 사진 1장을 플레이스 업체사진에, 블로그 「원장의 스케치북」 첫 글에 씁니다.</td><td>온라인과 오프라인이 같은 증거를 씁니다.</td></tr>
+<tr><td>확인할 것</td><td>네일 원장님과 벽 사용 합의, 액자 크기, 조명, 작품 보관 상태</td><td>공동 매장이기 때문입니다.</td></tr>
+</table></div>
+
+<h2>채널별 적용 — 같은 원장님이 보이게</h2>
+<div class="tw"><table>
+<tr><th>채널</th><th>보여 줄 것</th><th>말투·메시지</th></tr>
+<tr><td>네이버 플레이스</td><td>소개문 맨 위 '[미술을 전공한 원장의 1:1 맞춤 디자인]' 단락 · 대표사진(작업하는 원장님, 소묘 작품 1장) · 예약 상품 '[눈썹문신·반영구·속눈썹] 은재원장'</td><td>핵심 메시지 ①②③ · 리뷰 답글은 말투 가이드대로</td></tr>
+<tr><td>은재원장 블로그</td><td>화자 '은재원장' 1인칭 · 시리즈 「원장의 스케치북」, 「60대 원장의 공부 노트」</td><td>말투 가이드 = 블로그 스킬의 문체 규칙</td></tr>
+<tr><td>매장</td><td>소묘 작품 · 벽면 배너(디자인 과정에 스케치 넣기) · 상담 앨범 첫 쪽(원장님 소개)</td><td>배너 문구는 단정한 한 문장</td></tr>
+<tr><td>상담·카톡</td><td>펜슬로 먼저 그려 보는 상담 · 카카오 채널 프로필에 한 줄 정의</td><td>"얼굴부터 봐 드릴게요"</td></tr>
+</table></div>
+
+</section>
+<section class="tab" id="t2">
+<h2 id="bx">실행 순서</h2>
+<div class="grid">
+  <div class="card"><h4 style="margin-top:0"><span class="tag t-bad">이번 주</span></h4><ul class="check">
+    <li>숙제 3번(강점) 회수</li>
+    <li>원장님 실제 말투 샘플 3~5개 모으기(카톡, 상담 멘트)</li>
+    <li>말투 가이드 확정 → 블로그·리뷰 스킬에 반영</li></ul></div>
+  <div class="card"><h4 style="margin-top:0"><span class="tag t-warn">2주</span></h4><ul class="check">
+    <li>브랜드 핵심(한 줄 정의·메시지 3·증거 3) 확정</li>
+    <li>사실 확인: 전공, 경력 연수, 교육 이수</li>
+    <li>작업하는 원장님 사진 촬영(플레이스 대표사진용)</li>
+    <li>플레이스 소개문 첫 단락과 예약 상품명 반영</li></ul></div>
+  <div class="card"><h4 style="margin-top:0"><span class="tag t-a">4주~</span></h4><ul class="check">
+    <li>소묘 작품 2~4점 고르기, 액자, 위치 합의</li>
+    <li>작품 사진을 플레이스와 블로그 첫 글에</li>
+    <li>상담 앨범 첫 쪽에 원장님 소개</li>
+    <li>카카오 채널 프로필 한 줄 정의</li></ul></div>
+</div>
+
+<h2 id="ba">실행 상세</h2>
+<details id="k1" open><summary>원장님께 받을 것</summary><div class="dbody">
+<div class="tw"><table>
+<tr><th>#</th><th>받을 것</th><th>어디에 쓰나</th></tr>
+<tr><td>1</td><td>숙제 3번: 브랜딩·강점·경쟁력</td><td>브랜드 핵심 · 소개문 첫 단락 · 블로그 화자 설정</td></tr>
+<tr><td>2</td><td>평소 말투 샘플 3~5개(손님께 보낸 카톡, 상담할 때 자주 하는 말)</td><td>말투 가이드를 원장님 표현으로 고치기 · 스킬 문체 규칙</td></tr>
+<tr><td>3</td><td>사실: 미대 전공(학교·전공 공개 여부), 뷰티 경력 연수, 교육·자격</td><td>모든 채널의 경력 문구. 확인 전에는 쓰지 않습니다.</td></tr>
+<tr><td>4</td><td>얼굴 소묘 작품 사진(있는 만큼)</td><td>전시할 작품 고르기 · 플레이스·블로그 사진</td></tr>
+<tr><td>5</td><td>디자인 스케치 습관(펜슬 가이드, 종이 스케치 등)</td><td>배너 '과정' 칸 · 블로그 「원장의 스케치북」</td></tr>
+</table></div></div></details>
+
+<details id="k2"><summary>사진 촬영 가이드 — 원장님 대표사진</summary><div class="dbody">
+<ul>
+<li><b>찍을 장면:</b> ① 고객 얼굴 비율을 보며 펜슬로 눈썹을 그리는 손과 옆얼굴 ② 소묘 작품 앞에 선 원장님 ③ 정돈된 시술실에서 도구를 준비하는 모습</li>
+<li><b>조명:</b> 창가 자연광이나 시술 조명을 씁니다. 과한 보정은 하지 않습니다.</li>
+<li><b>옷:</b> 단정한 작업복이나 앞치마를 입습니다. 의료 가운처럼 보이는 차림은 피합니다(반영구 광고 법규).</li>
+<li><b>쓰임:</b> 플레이스 업체사진, 블로그 프로필, 상담 앨범 첫 쪽, 카카오 채널 프로필에 같은 사진을 씁니다(일관성).</li>
+</ul></div></details>
+
+<details id="k3"><summary>스킬에 넣을 문체 규칙 (요약)</summary><div class="dbody">
+<div class="tpl">화자: 은재원장 1인칭 (씨엘로뷰티 · 의왕 내손동)
+범위: 눈썹문신 · 반영구 · 속눈썹 · 왁싱 (네일 제외)
+톤: 자신감 있고 경력·연령에 맞는 단정한 존댓말 / 근거 먼저 / 권하는 말투 / 과장 없음
+자주 쓸 말: "그리기 전에 얼굴부터 봐요" "과하지 않게, 오래가게" "펜슬로 먼저 그려 보고 정해요"
+금지: 최고·완벽·100%·영구·부작용 없음·치료 / ㅎㅎ·~♡ 같은 유행 표현 / 손님인 척하는 후기체
+이모지: 글 하나에 1~2개 · 해시태그 1~2개
+고객 호칭: [원장님 표현으로 확정 — 예) 고객님]</div>
+<p class="mute">말투 샘플과 숙제 3번을 받은 뒤 확정합니다. 확정되면 블로그 글·리뷰 답글 스킬에 그대로 넣습니다.</p></div></details>
+
+</section>
+</main>
+<footer>기준일 2026-11-07 · 내부 공유용 문서 · 외부 전달 금지</footer>
+<script>
+document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('nav button').forEach(x=>x.setAttribute('aria-selected',x===b));
+  document.querySelectorAll('.tab').forEach(s=>s.classList.toggle('on',s.id===b.dataset.t));
+  try{localStorage.setItem('tab-'+document.title,b.dataset.t)}catch(e){}
+  window.scrollTo(0,0);
+}));
+function openTarget(h){const el=h&&document.getElementById(h.slice(1));if(!el)return;const sec=el.closest('section.tab');if(sec&&!sec.classList.contains('on')){const b=document.querySelector('nav button[data-t="'+sec.id+'"]');b&&b.click()}const d=el.tagName==='DETAILS'?el:el.closest('details');if(d)d.open=true;setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),30)}
+document.addEventListener('click',e=>{const a=e.target.closest('a[href^="#"]');if(a){e.preventDefault();openTarget(a.getAttribute('href'))}});
+function cp(id){const t=document.getElementById(id).innerText;navigator.clipboard.writeText(t).then(()=>{document.getElementById(id+'-ok').textContent='복사됨'},()=>{const r=document.createRange();r.selectNodeContents(document.getElementById(id));const sel=getSelection();sel.removeAllRanges();sel.addRange(r);document.getElementById(id+'-ok').textContent='선택됨 — Cmd+C'})}
+try{const t=localStorage.getItem('tab-'+document.title);if(t){const b=document.querySelector(`nav button[data-t="${t}"]`);b&&b.click()}}catch(e){}
+</script>
+</body>
+</html>
