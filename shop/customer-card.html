@@ -102,6 +102,7 @@ button.go:disabled{background:#c3ccd3}
 .ex{font-size:12.5px;color:var(--sub);margin-top:9px;line-height:1.6}
 .ex.calm{background:var(--acbg);border-radius:9px;padding:8px 11px;color:#35506f}
 .follow{display:none;margin-top:4px}
+#hsec [hidden]{display:none!important}
 .follow label.f{margin-top:14px}
 em.opt{font-style:normal;font-weight:500;color:var(--sub)}
 details.why{margin-top:9px;font-size:12.5px;color:var(--sub)}
@@ -374,21 +375,23 @@ details.why[open]{background:#fff;border:1px solid var(--line);border-radius:9px
 
 <section id="hsec">
   <h2><b>4</b>건강 체크</h2>
-  <div class="hint">묶음마다 해당하는 것을 눌러 주세요. 없으면 <b>없음</b> 한 번이면 됩니다.<br>
+  <div class="hint">2번에서 고른 시술에 필요한 것만 여쭤요. 묶음마다 해당하는 것을 눌러 주세요.
+    없으면 <b>없음</b> 한 번이면 됩니다.<br>
     체크하셨다고 거절하지 않아요. <b>방법이나 날짜를 원장과 함께 정해요.</b></div>
 
+  <div class="ex" id="hNoCat">2번에서 <b>시술 카테고리</b>를 먼저 골라 주세요. 고른 시술에 맞는 질문이 나와요.</div>
   <div class="hg">
     <h3><span class="hn">①</span>오늘 몸 상태</h3>
     <div class="chips" data-g="hToday">
-      <div class="chip warn" data-k="preg" data-preg="1">임신 중이거나 가능성 있음</div>
-      <div class="chip warn" data-k="nurse">수유 중</div>
-      <div class="chip warn" data-k="fever">열·오한·감기 기운</div>
-      <div class="chip warn" data-k="alcohol">24시간 안에 술을 마심</div>
-      <div class="chip warn" data-k="fasting">오늘 식사를 거의 못 함</div>
-      <div class="chip warn" data-k="period">생리 중</div>
+      <div class="chip warn" data-k="preg" data-c="*" data-preg="1">임신 중이거나 가능성 있음</div>
+      <div class="chip warn" data-k="nurse" data-c="p">수유 중</div>
+      <div class="chip warn" data-k="fever" data-c="p w">열·오한·감기 기운</div>
+      <div class="chip warn" data-k="alcohol" data-c="p w">24시간 안에 술을 마심</div>
+      <div class="chip warn" data-k="fasting" data-c="p w">오늘 식사를 거의 못 함</div>
+      <div class="chip warn" data-k="period" data-c="w">생리 중</div>
       <div class="chip" data-none="1">없음</div>
     </div>
-    <details class="why"><summary>왜 묻나요?</summary>
+    <details class="why" data-c="p w"><summary>왜 묻나요?</summary>
       열이 있거나 술을 마신 날은 피가 더 나고 회복이 늦어요. 굶고 오시면 시술 중 어지러울 수 있어
       사탕이나 음료를 먼저 드려요.</details>
   </div>
@@ -396,21 +399,21 @@ details.why[open]{background:#fff;border:1px solid var(--line);border-radius:9px
   <div class="hg">
     <h3><span class="hn">②</span>진단받았거나 치료 중인 병</h3>
     <div class="chips" data-g="hDx">
-      <div class="chip warn" data-k="htn">고혈압</div>
-      <div class="chip warn" data-k="dm">당뇨</div>
-      <div class="chip warn" data-k="heart">심장 질환</div>
-      <div class="chip warn" data-k="stroke">뇌졸중</div>
-      <div class="chip warn" data-k="seizure">뇌전증 · 쓰러진 적 있음</div>
-      <div class="chip warn" data-k="liver">간 질환</div>
-      <div class="chip warn" data-k="bleed">피가 잘 안 멈추는 병</div>
-      <div class="chip warn" data-k="cancer">암 치료 중</div>
-      <div class="chip warn" data-k="skinca">피부암 · 모양이 변하는 점</div>
-      <div class="chip warn" data-k="bbp">B형·C형 간염 · HIV</div>
+      <div class="chip warn" data-k="htn" data-c="p">고혈압</div>
+      <div class="chip warn" data-k="dm" data-c="p w">당뇨</div>
+      <div class="chip warn" data-k="heart" data-c="p">심장 질환</div>
+      <div class="chip warn" data-k="stroke" data-c="p">뇌졸중</div>
+      <div class="chip warn" data-k="seizure" data-c="p">뇌전증 · 쓰러진 적 있음</div>
+      <div class="chip warn" data-k="liver" data-c="p">간 질환</div>
+      <div class="chip warn" data-k="bleed" data-c="p w">피가 잘 안 멈추는 병</div>
+      <div class="chip warn" data-k="cancer" data-c="p w">암 치료 중</div>
+      <div class="chip warn" data-k="skinca" data-c="p w">피부암 · 모양이 변하는 점</div>
+      <div class="chip warn" data-k="bbp" data-c="p">B형·C형 간염 · HIV</div>
       <div class="chip" data-none="1">없음</div>
     </div>
-    <div class="ex">심장 질환은 특히 <b>인공판막·심내막염을 앓은 적·선천성 심장병</b>이면 꼭 눌러 주세요.
+    <div class="ex" data-c="p">심장 질환은 특히 <b>인공판막·심내막염을 앓은 적·선천성 심장병</b>이면 꼭 눌러 주세요.
       피가 잘 안 멈추는 병은 혈우병·혈소판 감소 등, 암 치료는 항암·방사선 치료를 말해요.</div>
-    <div class="ex calm">B형·C형 간염·HIV를 체크하셔도 <b>그 이유로 거절하지 않아요.</b>
+    <div class="ex calm" data-c="p">B형·C형 간염·HIV를 체크하셔도 <b>그 이유로 거절하지 않아요.</b>
       모든 고객께 같은 위생 기준으로 시술합니다.</div>
     <details class="why"><summary>왜 묻나요?</summary>
       피가 멎는 힘, 상처가 아무는 속도, 시술 중 쓰러질 위험이 병마다 달라요. 그에 맞춰 강도와 순서를 바꿔요.</details>
@@ -419,18 +422,18 @@ details.why[open]{background:#fff;border:1px solid var(--line);border-radius:9px
   <div class="hg">
     <h3><span class="hn">③</span>드시거나 바르는 약</h3>
     <div class="chips" data-g="hMed">
-      <div class="chip warn" data-k="thinner">피를 묽게 하는 약</div>
-      <div class="chip warn" data-k="painkiller">어제·오늘 먹은 진통제</div>
-      <div class="chip warn" data-k="bpmed">혈압약</div>
-      <div class="chip warn" data-k="dmmed">당뇨약 · 인슐린</div>
-      <div class="chip warn" data-k="steroid">스테로이드 · 면역억제제</div>
-      <div class="chip warn" data-k="isotret">먹는 여드름약</div>
-      <div class="chip warn" data-k="retinoid">바르는 레티놀·트레티노인</div>
-      <div class="chip warn" data-k="psych">우울·불안·수면 약</div>
-      <div class="chip warn" data-k="supp">오메가3·은행잎 영양제</div>
+      <div class="chip warn" data-k="thinner" data-c="p w">피를 묽게 하는 약</div>
+      <div class="chip warn" data-k="painkiller" data-c="p">어제·오늘 먹은 진통제</div>
+      <div class="chip warn" data-k="bpmed" data-c="p">혈압약</div>
+      <div class="chip warn" data-k="dmmed" data-c="p w">당뇨약 · 인슐린</div>
+      <div class="chip warn" data-k="steroid" data-c="p w">스테로이드 · 면역억제제</div>
+      <div class="chip warn" data-k="isotret" data-c="p w l">먹는 여드름약</div>
+      <div class="chip warn" data-k="retinoid" data-c="p w l">바르는 레티놀·트레티노인</div>
+      <div class="chip warn" data-k="psych" data-c="p">우울·불안·수면 약</div>
+      <div class="chip warn" data-k="supp" data-c="p">오메가3·은행잎 영양제</div>
       <div class="chip" data-none="1">없음</div>
     </div>
-    <div class="ex">피를 묽게 하는 약: 아스피린, 와파린, 엘리퀴스·자렐토·릭시아나, 클로피도그렐(플라빅스) 등.
+    <div class="ex" data-c="p w">피를 묽게 하는 약: 아스피린, 와파린, 엘리퀴스·자렐토·릭시아나, 클로피도그렐(플라빅스) 등.
       먹는 여드름약은 <b>지금 드시거나 끊은 지 6개월이 안 됐으면</b> 눌러 주세요(로아큐탄 등).</div>
     <div class="ex calm"><b>시술 때문에 약을 끊지 마세요.</b> 필요하면 처방한 의사와 상의하도록 안내해 드려요.</div>
     <div class="follow" data-for="hMed">
@@ -445,14 +448,16 @@ details.why[open]{background:#fff;border:1px solid var(--line);border-radius:9px
   <div class="hg">
     <h3><span class="hn">④</span>알레르기 · 예전에 겪은 반응</h3>
     <div class="chips" data-g="hAllergy">
-      <div class="chip warn" data-k="anesth">마취제 (치과 마취 때 이상했던 적 포함)</div>
-      <div class="chip warn" data-k="latex">라텍스(고무장갑)</div>
-      <div class="chip warn" data-k="metal">금속</div>
-      <div class="chip warn" data-k="disinf">소독용 알코올</div>
-      <div class="chip warn" data-k="cosme">화장품 · 염색약</div>
-      <div class="chip warn" data-k="drug">약 (항생제 등)</div>
-      <div class="chip warn" data-k="pigment">예전 문신·반영구 색소 반응</div>
-      <div class="chip warn" data-k="prior">과거 시술 후 이상반응</div>
+      <div class="chip warn" data-k="anesth" data-c="p">마취제 (치과 마취 때 이상했던 적 포함)</div>
+      <div class="chip warn" data-k="latex" data-c="*">라텍스(고무장갑)</div>
+      <div class="chip warn" data-k="metal" data-c="p">금속</div>
+      <div class="chip warn" data-k="disinf" data-c="p w">소독용 알코올</div>
+      <div class="chip warn" data-k="cosme" data-c="p l">화장품 · 염색약</div>
+      <div class="chip warn" data-k="drug" data-c="p">약 (항생제 등)</div>
+      <div class="chip warn" data-k="pigment" data-c="p">예전 문신·반영구 색소 반응</div>
+      <div class="chip warn" data-k="rosin" data-c="w">왁스·송진 (반창고에 붉어진 적 포함)</div>
+      <div class="chip warn" data-k="glue" data-c="l">속눈썹 글루</div>
+      <div class="chip warn" data-k="prior" data-c="*">과거 시술 후 이상반응</div>
       <div class="chip" data-none="1">없음</div>
     </div>
     <details class="why"><summary>왜 묻나요?</summary>
@@ -462,12 +467,12 @@ details.why[open]{background:#fff;border:1px solid var(--line);border-radius:9px
   <div class="hg">
     <h3><span class="hn">⑤</span>피부</h3>
     <div class="chips" data-g="hSkin">
-      <div class="chip warn" data-k="wound">시술 부위 상처·염증·뾰루지</div>
-      <div class="chip warn" data-k="scar">시술 부위에 아문 상처·흉터</div>
-      <div class="chip warn" data-k="keloid">흉터가 부풀어 오름(켈로이드)</div>
-      <div class="chip warn" data-k="herpes">입술 물집(헤르페스)이 되풀이됨</div>
-      <div class="chip warn" data-k="atopy">아토피·건선·습진 (최근 3개월 치료)</div>
-      <div class="chip warn" data-k="ointment">피부 연고 사용 중</div>
+      <div class="chip warn" data-k="wound" data-c="*">시술 부위 상처·염증·뾰루지</div>
+      <div class="chip warn" data-k="scar" data-c="p">시술 부위에 아문 상처·흉터</div>
+      <div class="chip warn" data-k="keloid" data-c="p">흉터가 부풀어 오름(켈로이드)</div>
+      <div class="chip warn" data-k="herpes" data-c="p w">입술 물집(헤르페스)이 되풀이됨</div>
+      <div class="chip warn" data-k="atopy" data-c="p w">아토피·건선·습진 (최근 3개월 치료)</div>
+      <div class="chip warn" data-k="ointment" data-c="p w">피부 연고 사용 중</div>
       <div class="chip" data-none="1">없음</div>
     </div>
     <details class="why"><summary>왜 묻나요?</summary>
@@ -477,11 +482,11 @@ details.why[open]{background:#fff;border:1px solid var(--line);border-radius:9px
   <div class="hg">
     <h3><span class="hn">⑥</span>최근에 받은 시술</h3>
     <div class="chips" data-g="hRecent">
-      <div class="chip warn" data-k="laser">레이저 · 필링</div>
-      <div class="chip warn" data-k="botox">보톡스 · 필러</div>
-      <div class="chip warn" data-k="thread">실 리프팅</div>
-      <div class="chip warn" data-k="eyesurg">눈 성형 · 라식 · 라섹</div>
-      <div class="chip warn" data-k="tan">태닝 · 햇볕에 많이 탐</div>
+      <div class="chip warn" data-k="laser" data-c="p w">레이저 · 필링</div>
+      <div class="chip warn" data-k="botox" data-c="p">보톡스 · 필러</div>
+      <div class="chip warn" data-k="thread" data-c="p">실 리프팅</div>
+      <div class="chip warn" data-k="eyesurg" data-c="p l">눈 성형 · 라식 · 라섹</div>
+      <div class="chip warn" data-k="tan" data-c="p w">태닝 · 햇볕에 많이 탐</div>
       <div class="chip" data-none="1">없음</div>
     </div>
     <div class="follow" data-for="hRecent">
@@ -491,18 +496,18 @@ details.why[open]{background:#fff;border:1px solid var(--line);border-radius:9px
         <div class="chip">3개월 안</div><div class="chip">3개월보다 전</div>
       </div>
     </div>
-    <details class="why"><summary>왜 묻나요?</summary>
+    <details class="why" data-c="p w"><summary>왜 묻나요?</summary>
       레이저 뒤 피부, 보톡스 뒤 눈썹 위치가 자리 잡을 때까지 기다려야 결과가 고르게 나와요.</details>
   </div>
 
-  <div class="hg" id="eyeGrp" hidden>
-    <h3><span class="hn">⑦</span>눈 <em class="tag">아이라인·속눈썹을 고르셔서 나와요</em></h3>
+  <div class="hg" id="eyeGrp">
+    <h3><span class="hn">⑦</span>눈</h3>
     <div class="chips" data-g="hEye">
-      <div class="chip warn" data-k="dryeye">안구건조증 · 인공눈물을 자주 넣음</div>
-      <div class="chip warn" data-k="eyeinfl">지금 다래끼·결막염·눈꺼풀 염증</div>
-      <div class="chip warn" data-k="lens">렌즈를 끼고 왔어요</div>
-      <div class="chip warn" data-k="lashext">속눈썹 연장을 하고 있어요</div>
-      <div class="chip warn" data-k="latisse">속눈썹 영양제(라티스 등)</div>
+      <div class="chip warn" data-k="dryeye" data-c="a l">안구건조증 · 인공눈물을 자주 넣음</div>
+      <div class="chip warn" data-k="eyeinfl" data-c="a l">지금 다래끼·결막염·눈꺼풀 염증</div>
+      <div class="chip warn" data-k="lens" data-c="a l">렌즈를 끼고 왔어요</div>
+      <div class="chip warn" data-k="lashext" data-c="a">속눈썹 연장을 하고 있어요</div>
+      <div class="chip warn" data-k="latisse" data-c="a">속눈썹 영양제(라티스 등)</div>
       <div class="chip" data-none="1">없음</div>
     </div>
     <details class="why"><summary>왜 묻나요?</summary>
@@ -669,17 +674,38 @@ $('#clr').onclick=()=>{cx.clearRect(0,0,cv.width,cv.height);drew=false;$('#sigph
    묶음 하나에 하나 이상(또는 '없음')을 눌러야 넘어간다.
    눈 묶음은 아이라인 · 속눈썹 연장 · 속눈썹 펌을 고른 경우에만 보인다. */
 const HG=[['hToday','오늘 몸 상태'],['hDx','진단받은 병'],['hMed','약'],
-          ['hAllergy','알레르기'],['hSkin','피부'],['hRecent','최근 시술']];
-const HG_EYE=['hEye','눈'];
-const eyeWork=()=>{
+          ['hAllergy','알레르기'],['hSkin','피부'],['hRecent','최근 시술'],['hEye','눈']];
+const NUM='①②③④⑤⑥⑦';
+/* 고른 시술 → 문항 코드. 반영구가 가장 많이 묻고, 왁싱·속눈썹·기타는 꼭 필요한 것만 */
+function careCodes(){
   const cats=$$('.chips[data-g="cat"] .chip.on').map(x=>x.textContent.trim());
-  const liner=$$('.chips[data-g="etc"] .chip.on').some(x=>x.textContent.trim()==='아이라인');
-  return liner || cats.indexOf('속눈썹 연장')>=0 || cats.indexOf('속눈썹 펌')>=0;
-};
+  const etc=$$('.chips[data-g="etc"] .chip.on').map(x=>x.textContent.trim());
+  const c=new Set();
+  if(cats.length) c.add('*');
+  if(cats.indexOf('반영구')>=0){ c.add('p'); if(etc.indexOf('아이라인')>=0) c.add('a'); }
+  if(cats.indexOf('왁싱')>=0) c.add('w');
+  if(cats.indexOf('속눈썹 연장')>=0 || cats.indexOf('속눈썹 펌')>=0) c.add('l');
+  return c;
+}
+const eyeWork=()=>{ const c=careCodes(); return c.has('a')||c.has('l'); };
+const hgEl=g=>$('.chips[data-g="'+g+'"]').closest('.hg');
 function healthSync(){
-  const eye=eyeWork(), g=$('#eyeGrp');
-  g.hidden=!eye;
-  if(!eye) $$('#eyeGrp .chip.on').forEach(x=>x.classList.remove('on'));
+  const c=careCodes();
+  /* 고른 시술에 해당하지 않는 문항·안내는 숨기고, 숨긴 문항의 체크는 지운다 */
+  $$('#hsec [data-c]').forEach(e=>{
+    const show=e.dataset.c.split(' ').some(x=>c.has(x));
+    e.hidden=!show;
+    if(!show && e.classList.contains('chip')) e.classList.remove('on');
+  });
+  /* 보일 문항이 하나도 없는 묶음은 통째로 숨기고, 남은 묶음에 번호를 다시 매긴다 */
+  let n=0;
+  HG.forEach(([g])=>{
+    const el=hgEl(g), show=$$('.chips[data-g="'+g+'"] .chip[data-k]').some(x=>!x.hidden);
+    el.hidden=!show;
+    if(!show) el.querySelectorAll('.chip.on').forEach(x=>x.classList.remove('on'));
+    else el.querySelector('.hn').textContent=NUM[n++];
+  });
+  $('#hNoCat').hidden=c.size>0;
   /* 묶음 안에서 '없음' 말고 하나라도 고르면 꼬리 질문을 연다 */
   $$('#hsec .follow').forEach(f=>{
     const any=$$('.chips[data-g="'+f.dataset.for+'"] .chip.on:not([data-none])').length>0;
@@ -689,7 +715,7 @@ function healthSync(){
   });
   $('#pregSec').style.display = $$('#hsec .chip[data-preg].on').length ? 'block' : 'none';
 }
-const healthGroups=()=>HG.concat(eyeWork()?[HG_EYE]:[]);
+const healthGroups=()=>HG.filter(([g])=>!hgEl(g).hidden);
 const hKeys=()=>new Set($$('#hsec .chip.on[data-k]').map(x=>x.dataset.k));
 
 /* 원장 확인 메모 — 고른 항목과 시술 종류를 맞춰 본다.
@@ -747,6 +773,8 @@ function healthFlags(){
   if(has('latex')) add('확인','라텍스','라텍스 장갑이 닿으면 가려움·두드러기부터 심한 반응까지 올 수 있어요. 라텍스 없는 장갑으로 바꾸고, 반영구는 폴리이소프렌·네오프렌 같은 라텍스 없는 멸균장갑을 써요.');
   if(has('metal')||has('disinf')||has('cosme')||has('drug')) add('참고','금속·소독제·화장품·약 알레르기','반응한 성분을 확인해 그 제품을 쓰지 않아요. 소독용 알코올이면 다른 성분 소독제로 바꾸고, 화장품 알레르기는 원인(향료·보존제·금속)이 색소 성분과 겹치는지 봐요.');
   if(has('pigment')) add('확인','예전 색소 반응','문신 알레르기는 몇 주·몇 년 뒤에도 생기는 늦은 면역 반응이 많고, 빨간 색소에서 가장 흔해요. 생기면 색소를 빼기 어려워요. 반응한 색·제품을 쓰지 않고, 패치 테스트 음성도 안전을 보장하지 못함을 알려요.');
+  if(has('rosin')) add('확인','왁스·송진','반창고에 붉어진 적이 있다면 송진(로진) 알레르기일 수 있고, 송진이 든 왁스에 같은 반응(붉음·가려움·물집)이 날 수 있어요. 송진 없는 왁스나 슈가링으로 바꿀 수 있는지 정하고, 작은 부위에 먼저 해 봐요.');
+  if(has('glue')) add('확인','속눈썹 글루','연장 글루(시아노아크릴레이트)는 눈꺼풀에 붓기·가려움을 일으키는 접촉 피부염과, 굳으며 나는 증기로 눈 따가움을 낼 수 있어요. 같은 글루는 쓰지 않고, 다른 방법(펌 등)으로 바꿀지 원장과 정해요.');
   if(has('prior')) add('참고','과거 시술 후 이상반응','어떤 시술 뒤 어떤 반응(붓기·물집·가려움·흉터)이었는지 물어, 같은 제품과 방법을 피해요.');
 
   if(has('wound')) add('미룸','시술 부위 상처·염증·뾰루지','염증이 있는 피부에 바늘·왁스를 쓰면 균이 깊이 들어가고 색소도 고르게 남지 않아요. 표준지침도 미루게 해요. 그 자리는 다 나은 뒤에 하고, 범위가 작으면 피해서 할 수 있는지 원장이 직접 봐요.');
